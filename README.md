@@ -2,6 +2,8 @@
 
 Just a few methods for helping string handing
 
+[![Build Status](https://travis-ci.org/torden/go-strutil.svg?branch=master)](https://travis-ci.org/torden/go-strutil)
+
 `go get github.com/torden/go-strutils`, import it as `"github.com/torden/go-strutils"`, use it as `stringutils`
 
 ## AddSlashes
