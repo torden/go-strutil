@@ -260,7 +260,7 @@ func TestPadding(t *testing.T) {
 
 	for _, v := range dataset {
 
-		retval := strutil.Padding(v.str, v.fill, v.m, v.mx)
+		retval := strutil.padding(v.str, v.fill, v.m, v.mx)
 		if v.okstr != retval {
 			t.Errorf("INPUT TEXT : %v\n", v.str)
 			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v.okstr)
