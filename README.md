@@ -129,13 +129,13 @@ strutil := strutils.NewStringUrils()
 
 example_str := "Life isn't always what one like."
 
-fmt.Printf("%v\n", strutil.PaddingBoth(example_str, "*", PAD_BOTH, 38))
-fmt.Printf("%v\n", strutil.PaddingLeft(example_str, "*", PAD_BOTH, 38))
-fmt.Printf("%v\n", strutil.PaddingRight(example_str, "*", PAD_BOTH, 38))
+fmt.Printf("%v\n", strutil.PaddingBoth(example_str, "*", 38))
+fmt.Printf("%v\n", strutil.PaddingLeft(example_str, "*", 38))
+fmt.Printf("%v\n", strutil.PaddingRight(example_str, "*", 38))
 
-fmt.Printf("%v\n", strutil.PaddingBoth(example_str, "*-=", PAD_BOTH, 37))
-fmt.Printf("%v\n", strutil.PaddingLeft(example_str, "*-=", PAD_BOTH, 37))
-fmt.Printf("%v\n", strutil.PaddingRight(example_str, "*-=", PAD_BOTH, 37))
+fmt.Printf("%v\n", strutil.PaddingBoth(example_str, "*-=", 37))
+fmt.Printf("%v\n", strutil.PaddingLeft(example_str, "*-=", 37))
+fmt.Printf("%v\n", strutil.PaddingRight(example_str, "*-=", 37))
 ```
 Run: 
 ```bash
