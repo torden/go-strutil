@@ -12,7 +12,7 @@ type stringUtils struct{}
 
 var numericPattern = regexp.MustCompile(`^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$`)
 
-// init.
+// init string processing utility
 func NewStringUtils() stringUtils {
 	return stringUtils{}
 }
@@ -241,10 +241,10 @@ func (s *stringUtils) NumberFmt(obj interface{}) (string, error) {
 	}
 
 	bufbyteStr := []byte(strNum)
-	bufbyteStr_len := len(bufbyteStr)
+	bufbyteStrLen := len(bufbyteStr)
 
 	//subffix after dot
-	bufbyteTail := make([]byte, bufbyteStr_len-1)
+	bufbyteTail := make([]byte, bufbyteStrLen-1)
 
 	//init.
 	foundDot := 0
@@ -253,7 +253,7 @@ func (s *stringUtils) NumberFmt(obj interface{}) (string, error) {
 	bufbyteSize := 0
 
 	//looking for dot
-	for i := bufbyteStr_len - 1; i >= 0; i-- {
+	for i := bufbyteStrLen - 1; i >= 0; i-- {
 		if bufbyteStr[i] == 46 {
 			copy(bufbyteTail, bufbyteStr[i:])
 			foundDot = i
@@ -264,23 +264,23 @@ func (s *stringUtils) NumberFmt(obj interface{}) (string, error) {
 
 	//make bufbyte size
 	if foundDot == 0 { //numeric without dot
-		bufbyteSize = int(math.Ceil(float64(bufbyteStr_len) + (float64(bufbyteStr_len) / 3)))
-		foundDot = bufbyteStr_len
+		bufbyteSize = int(math.Ceil(float64(bufbyteStrLen) + (float64(bufbyteStrLen) / 3)))
+		foundDot = bufbyteStrLen
 		foundPos = bufbyteSize - 2
 
 		bufbyteSize -= 1
 
 	} else { //with dot
 
-		var cal_foundDot int
+		var calFoundDot int
 
 		if bufbyteStr[0] == 45 { //if startwith "-"(45)
-			cal_foundDot = foundDot - 1
+			calFoundDot = foundDot - 1
 		} else {
-			cal_foundDot = foundDot
+			calFoundDot = foundDot
 		}
 
-		bufbyteSize = int(math.Ceil(float64(cal_foundDot) + (float64(cal_foundDot) / 3) + float64(bufbyteStr_len-cal_foundDot) - 1))
+		bufbyteSize = int(math.Ceil(float64(calFoundDot) + (float64(calFoundDot) / 3) + float64(bufbyteStrLen-calFoundDot) - 1))
 	}
 
 	//make a buffer byte
@@ -306,7 +306,7 @@ func (s *stringUtils) NumberFmt(obj interface{}) (string, error) {
 
 	//into dot to tail
 	intoPos = foundPos + 1
-	if foundDot != bufbyteStr_len {
+	if foundDot != bufbyteStrLen {
 		for _, v := range bufbyteTail {
 			if v == 0 { //NULL
 				break
@@ -347,8 +347,8 @@ func (s *stringUtils) PaddingRight(str string, fill string, mx int) string {
 func (s *stringUtils) padding(str string, fill string, m int, mx int) string {
 
 	byteStr := []byte(str)
-	byteStr_len := len(byteStr)
-	if byteStr_len >= mx || mx < 1 {
+	byteStrLen := len(byteStr)
+	if byteStrLen >= mx || mx < 1 {
 		return str
 	}
 
@@ -357,15 +357,15 @@ func (s *stringUtils) padding(str string, fill string, m int, mx int) string {
 
 	switch m {
 	case PAD_BOTH:
-		rlsize := float64(mx-byteStr_len) / 2
+		rlsize := float64(mx-byteStrLen) / 2
 		leftsize = int(rlsize)
 		rightsize = int(rlsize + math.Copysign(0.5, rlsize))
 
 	case PAD_LEFT:
-		leftsize = mx - byteStr_len
+		leftsize = mx - byteStrLen
 
 	case PAD_RIGHT:
-		rightsize = mx - byteStr_len
+		rightsize = mx - byteStrLen
 
 	}
 
