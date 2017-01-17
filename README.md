@@ -11,7 +11,7 @@ quote string with slashes.
 
 Example:
 ```go
-strutil := strutils.NewStringUrils()
+strutil := strutils.NewStringUtils()
 example_str := "a\bcdefgz"
 fmt.Println("%v", strutil.AddSlashes(example_str))
 ```
@@ -25,7 +25,7 @@ Un-quotes a quoted string.
 
 Example:
 ```go
-strutil := NewStringUrils()
+strutil := NewStringUtils()
 example_str := "a\\bcdefgz"
 fmt.Println("%v", strutil.StripSlashes(example_str))
 ```
@@ -39,7 +39,7 @@ breakstr inserted before looks like space (CRLF , LFCR, SPACE, NL).
 
 Example:
 ```go
-strutil := strutils.NewStringUrils()
+strutil := strutils.NewStringUtils()
 example_str := "abc\ndefgh"
 fmt.Println("%v", strutil.Nl2Br(example_str))
 ```
@@ -53,7 +53,7 @@ Wraps a string to a given number of characters using break characters (TAB, SPAC
 
 Example:
 ```go
-strutil := strutils.NewStringUrils()
+strutil := strutils.NewStringUtils()
 example_str := "The quick brown fox jumped over the lazy dog."
 fmt.Printf("%v\n", strutil.WordWrapSimple(example_str, 3, "*"))
 fmt.Printf("%v\n", strutil.WordWrapSimple(example_str, 8, "*"))
@@ -75,7 +75,7 @@ format a number with english notation grouped thousands
 
 Example:
 ```go
-strutil := strutils.NewStringUrils()
+strutil := strutils.NewStringUtils()
 dataset := map[interface{}]string{
     123456789101112: "123,456,789,101,112",
     123456.1234:     "123,456.1234",
@@ -125,7 +125,7 @@ pad a string to a certain length with another string
 
 Example:
 ```go
-strutil := strutils.NewStringUrils()
+strutil := strutils.NewStringUtils()
 
 example_str := "Life isn't always what one like."
 
