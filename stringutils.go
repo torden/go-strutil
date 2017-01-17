@@ -11,9 +11,6 @@ import (
 type stringUtils struct{}
 
 var numericPattern = regexp.MustCompile(`^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$`)
-var emailPattern = regexp.MustCompile("^[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[a-zA-Z0-9](?:[\\w-]*[\\w])?$")
-var domainPattern = regexp.MustCompile(`^(([a-zA-Z0-9-\p{L}]{1,63}\.)?(xn--)?[a-zA-Z0-9\p{L}]+(-[a-zA-Z0-9\p{L}]+)*\.)+[a-zA-Z\p{L}]{2,63}$`)
-var urlPattern = regexp.MustCompile(`^((((https?|ftps?|gopher|telnet|nntp)://)|(mailto:|news:))(%[0-9A-Fa-f]{2}|[-()_.!~*';/?:@#&=+$,A-Za-z0-9\p{L}])+)([).!';/?:,][[:blank:]])?$`)
 
 func NewStringUtils() stringUtils {
 	return stringUtils{}
@@ -405,4 +402,79 @@ func (s *stringUtils) padding(str string, fill string, m int, mx int) string {
 	}
 
 	return string(buf)
+}
+
+// Lowercase the first character of each word in a string
+// TOKEN : \t(9)\r(13)\n(10)\f(12)\v(11)\s(32)
+func (s *stringUtils) LowerCaseFirstWords(str string) string {
+
+	upper := 1
+	bufbyte_str := []byte(str)
+	retval := make([]byte, len(bufbyte_str))
+	for k, v := range bufbyte_str {
+
+		if upper == 1 && v >= 65 && v <= 90 {
+			v = v + 32
+		}
+
+		upper = 0
+
+		if (v >= 9 && v <= 13) || v == 32 {
+			upper = 1
+		}
+		retval[k] = v
+	}
+
+	return string(retval)
+}
+
+// Uppercase the first character of each word in a string
+// TOKEN : \t(9)\r(13)\n(10)\f(12)\v(11)\s(32)
+func (s *stringUtils) UpperCaseFirstWords(str string) string {
+
+	upper := 1
+	bufbyte_str := []byte(str)
+	retval := make([]byte, len(bufbyte_str))
+	for k, v := range bufbyte_str {
+
+		if upper == 1 && v >= 97 && v <= 122 {
+			v = v - 32
+		}
+
+		upper = 0
+
+		if (v >= 9 && v <= 13) || v == 32 {
+			upper = 1
+		}
+		retval[k] = v
+	}
+
+	return string(retval)
+}
+
+// Switch the first character case of each word in a string
+func (s *stringUtils) SwapCaseFirstWords(str string) string {
+
+	upper := 1
+	bufbyte_str := []byte(str)
+	retval := make([]byte, len(bufbyte_str))
+	for k, v := range bufbyte_str {
+
+		switch {
+		case upper == 1 && v >= 65 && v <= 90:
+			v = v + 32
+
+		case upper == 1 && v >= 97 && v <= 122:
+			v = v - 32
+		}
+
+		upper = 0
+
+		if (v >= 9 && v <= 13) || v == 32 {
+			upper = 1
+		}
+		retval[k] = v
+	}
+
+	return string(retval)
 }
