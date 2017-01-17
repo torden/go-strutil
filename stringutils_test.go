@@ -9,7 +9,7 @@ import (
 
 func TestAddSlashes(t *testing.T) {
 
-	strutil := NewStringUrils()
+	strutil := NewStringUtils()
 	dataset := map[string]string{
 		`대한민국만세`:     `대한민국만세`,
 		`대한\민국만세`:    `대한\\민국만세`,
@@ -30,7 +30,7 @@ func TestAddSlashes(t *testing.T) {
 
 func TestStripSlashes(t *testing.T) {
 
-	strutil := NewStringUrils()
+	strutil := NewStringUtils()
 	dataset := map[string]string{
 		`대한민국만세`:       `대한민국만세`,
 		`대한\\민국만세`:     `대한\민국만세`,
@@ -51,7 +51,7 @@ func TestStripSlashes(t *testing.T) {
 
 func TestNl2Br(t *testing.T) {
 
-	strutil := NewStringUrils()
+	strutil := NewStringUtils()
 	dataset := map[string]string{
 		"대한\n민국만세":     "대한<br />민국만세",
 		"대한\r\n민국만세":   "대한<br />민국만세",
@@ -76,7 +76,7 @@ func TestNl2Br(t *testing.T) {
 
 func BenchmarkNl2Br(b *testing.B) {
 
-	strutil := NewStringUrils()
+	strutil := NewStringUtils()
 	dataset := map[string]string{
 		"대한\n민국만세":     "대한<br />민국만세",
 		"대한\r\n민국만세":   "대한<br />민국만세",
@@ -131,7 +131,7 @@ func BenchmarkNl2BrUseStringReplace(b *testing.B) {
 
 func TestNumbertFmt(t *testing.T) {
 
-	strutil := NewStringUrils()
+	strutil := NewStringUtils()
 	dataset := map[interface{}]string{
 		123456789101112: "123,456,789,101,112",
 		123456.1234:     "123,456.1234",
@@ -161,7 +161,7 @@ func TestNumbertFmt(t *testing.T) {
 
 func BenchmarkTestNumbertFmt(b *testing.B) {
 
-	strutil := NewStringUrils()
+	strutil := NewStringUtils()
 	dataset := map[interface{}]string{
 		123456789101112: "123,456,789,101,112",
 		123456.1234:     "123,456.1234",
@@ -196,7 +196,7 @@ func BenchmarkTestNumbertFmt(b *testing.B) {
 //BenchmarkTestNumbertFmtInt64UseHumanUnits-8   	 2000000	       761 ns/op
 func BenchmarkTestNumbertFmtInt64(b *testing.B) {
 
-	strutil := NewStringUrils()
+	strutil := NewStringUtils()
 	dataset := map[interface{}]string{
 		123456789101112: "123,456,789,101,112",
 	}
@@ -241,7 +241,7 @@ type paddingTestVal struct {
 
 func TestPadding(t *testing.T) {
 
-	strutil := NewStringUrils()
+	strutil := NewStringUtils()
 	dataset := make(map[int]paddingTestVal)
 
 	dataset[0] = paddingTestVal{"Life isn't always what one like.", "*", PAD_BOTH, 38, "***Life isn't always what one like.***"}
