@@ -12,7 +12,7 @@ type stringUtils struct{}
 
 var numericPattern = regexp.MustCompile(`^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$`)
 
-func NewStringUrils() stringUtils {
+func NewStringUtils() stringUtils {
 	return stringUtils{}
 }
 
@@ -245,22 +245,45 @@ func (s *stringUtils) NumberFmt(obj interface{}) (string, error) {
 	//subffix after dot
 	bufbyte_tail := make([]byte, bufbyte_str_len-1)
 
-	//full
-	bufbyte_len := bufbyte_str_len + (bufbyte_str_len / 3) + 1
-	bufbyte := make([]byte, bufbyte_len+1)
+	//init.
+	found_dot := 0
+	found_pos := 0
+	dotcnt := 0
+	bufbyte_size := 0
 
 	//looking for dot
-	found_dot := bufbyte_str_len
-	found_pos := bufbyte_len - 1
-	dotcnt := 0
 	for i := bufbyte_str_len - 1; i >= 0; i-- {
 		if bufbyte_str[i] == 46 {
 			copy(bufbyte_tail, bufbyte_str[i:])
 			found_dot = i
-			found_pos -= i
+			found_pos = i
 			break
 		}
 	}
+
+	//make bufbyte size
+	if found_dot == 0 { //numeric without dot
+		bufbyte_size = int(math.Ceil(float64(bufbyte_str_len) + (float64(bufbyte_str_len) / 3)))
+		found_dot = bufbyte_str_len
+		found_pos = bufbyte_size - 2
+
+		bufbyte_size -= 1
+
+	} else { //with dot
+
+		var cal_found_dot int
+
+		if bufbyte_str[0] == 45 { //if startwith "-"(45)
+			cal_found_dot = found_dot - 1
+		} else {
+			cal_found_dot = found_dot
+		}
+
+		bufbyte_size = int(math.Ceil(float64(cal_found_dot) + (float64(cal_found_dot) / 3) + float64(bufbyte_str_len-cal_found_dot) - 1))
+	}
+
+	//make a buffer byte
+	bufbyte := make([]byte, bufbyte_size)
 
 	//skip : need to dot injection
 	if 4 > found_dot {
@@ -275,7 +298,6 @@ func (s *stringUtils) NumberFmt(obj interface{}) (string, error) {
 			into_pos--
 			dotcnt = 0
 		}
-
 		bufbyte[into_pos] = bufbyte_str[i]
 		into_pos--
 		dotcnt++
@@ -294,15 +316,7 @@ func (s *stringUtils) NumberFmt(obj interface{}) (string, error) {
 		}
 	}
 
-	//trimming
-	retval := make([]byte, 0, bufbyte_len+1)
-	for _, v := range bufbyte {
-		if v != 0 { //NULL
-			retval = append(retval, v)
-		}
-	}
-
-	return string(retval), nil
+	return string(bufbyte), nil
 }
 
 const (
@@ -388,4 +402,79 @@ func (s *stringUtils) padding(str string, fill string, m int, mx int) string {
 	}
 
 	return string(buf)
+}
+
+// Lowercase the first character of each word in a string
+// TOKEN : \t(9)\r(13)\n(10)\f(12)\v(11)\s(32)
+func (s *stringUtils) LowerCaseFirstWords(str string) string {
+
+	upper := 1
+	bufbyte_str := []byte(str)
+	retval := make([]byte, len(bufbyte_str))
+	for k, v := range bufbyte_str {
+
+		if upper == 1 && v >= 65 && v <= 90 {
+			v = v + 32
+		}
+
+		upper = 0
+
+		if (v >= 9 && v <= 13) || v == 32 {
+			upper = 1
+		}
+		retval[k] = v
+	}
+
+	return string(retval)
+}
+
+// Uppercase the first character of each word in a string
+// TOKEN : \t(9)\r(13)\n(10)\f(12)\v(11)\s(32)
+func (s *stringUtils) UpperCaseFirstWords(str string) string {
+
+	upper := 1
+	bufbyte_str := []byte(str)
+	retval := make([]byte, len(bufbyte_str))
+	for k, v := range bufbyte_str {
+
+		if upper == 1 && v >= 97 && v <= 122 {
+			v = v - 32
+		}
+
+		upper = 0
+
+		if (v >= 9 && v <= 13) || v == 32 {
+			upper = 1
+		}
+		retval[k] = v
+	}
+
+	return string(retval)
+}
+
+// Switch the first character case of each word in a string
+func (s *stringUtils) SwapCaseFirstWords(str string) string {
+
+	upper := 1
+	bufbyte_str := []byte(str)
+	retval := make([]byte, len(bufbyte_str))
+	for k, v := range bufbyte_str {
+
+		switch {
+		case upper == 1 && v >= 65 && v <= 90:
+			v = v + 32
+
+		case upper == 1 && v >= 97 && v <= 122:
+			v = v - 32
+		}
+
+		upper = 0
+
+		if (v >= 9 && v <= 13) || v == 32 {
+			upper = 1
+		}
+		retval[k] = v
+	}
+
+	return string(retval)
 }
