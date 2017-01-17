@@ -3,6 +3,7 @@
 Just a few methods for helping string handing
 
 [![Build Status](https://travis-ci.org/torden/go-strutil.svg?branch=master)](https://travis-ci.org/torden/go-strutil)
+[![Go Report Card](https://goreportcard.com/badge/github.com/torden/go-strutil)](https://goreportcard.com/report/github.com/torden/go-strutil)
 
 ## Installation
 `go get github.com/torden/go-strutils`, import it as `"github.com/torden/go-strutils"`, use it as `stringutils`
