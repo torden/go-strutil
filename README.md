@@ -1,4 +1,4 @@
-# Just String Util for Go-lang
+# Just String Processing Library for Go-lang
 
 Just a few methods for helping string handing
 
