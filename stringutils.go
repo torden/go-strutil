@@ -11,8 +11,11 @@ import (
 type stringUtils struct{}
 
 var numericPattern = regexp.MustCompile(`^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$`)
+var emailPattern = regexp.MustCompile("^[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[a-zA-Z0-9](?:[\\w-]*[\\w])?$")
+var domainPattern = regexp.MustCompile(`^(([a-zA-Z0-9-\p{L}]{1,63}\.)?(xn--)?[a-zA-Z0-9\p{L}]+(-[a-zA-Z0-9\p{L}]+)*\.)+[a-zA-Z\p{L}]{2,63}$`)
+var urlPattern = regexp.MustCompile(`^((((https?|ftps?|gopher|telnet|nntp)://)|(mailto:|news:))(%[0-9A-Fa-f]{2}|[-()_.!~*';/?:@#&=+$,A-Za-z0-9\p{L}])+)([).!';/?:,][[:blank:]])?$`)
 
-func NewStringUrils() stringUtils {
+func NewStringUtils() stringUtils {
 	return stringUtils{}
 }
 
@@ -245,22 +248,45 @@ func (s *stringUtils) NumberFmt(obj interface{}) (string, error) {
 	//subffix after dot
 	bufbyte_tail := make([]byte, bufbyte_str_len-1)
 
-	//full
-	bufbyte_len := bufbyte_str_len + (bufbyte_str_len / 3) + 1
-	bufbyte := make([]byte, bufbyte_len+1)
+	//init.
+	found_dot := 0
+	found_pos := 0
+	dotcnt := 0
+	bufbyte_size := 0
 
 	//looking for dot
-	found_dot := bufbyte_str_len
-	found_pos := bufbyte_len - 1
-	dotcnt := 0
 	for i := bufbyte_str_len - 1; i >= 0; i-- {
 		if bufbyte_str[i] == 46 {
 			copy(bufbyte_tail, bufbyte_str[i:])
 			found_dot = i
-			found_pos -= i
+			found_pos = i
 			break
 		}
 	}
+
+	//make bufbyte size
+	if found_dot == 0 { //numeric without dot
+		bufbyte_size = int(math.Ceil(float64(bufbyte_str_len) + (float64(bufbyte_str_len) / 3)))
+		found_dot = bufbyte_str_len
+		found_pos = bufbyte_size - 2
+
+		bufbyte_size -= 1
+
+	} else { //with dot
+
+		var cal_found_dot int
+
+		if bufbyte_str[0] == 45 { //if startwith "-"(45)
+			cal_found_dot = found_dot - 1
+		} else {
+			cal_found_dot = found_dot
+		}
+
+		bufbyte_size = int(math.Ceil(float64(cal_found_dot) + (float64(cal_found_dot) / 3) + float64(bufbyte_str_len-cal_found_dot) - 1))
+	}
+
+	//make a buffer byte
+	bufbyte := make([]byte, bufbyte_size)
 
 	//skip : need to dot injection
 	if 4 > found_dot {
@@ -275,7 +301,6 @@ func (s *stringUtils) NumberFmt(obj interface{}) (string, error) {
 			into_pos--
 			dotcnt = 0
 		}
-
 		bufbyte[into_pos] = bufbyte_str[i]
 		into_pos--
 		dotcnt++
@@ -294,15 +319,7 @@ func (s *stringUtils) NumberFmt(obj interface{}) (string, error) {
 		}
 	}
 
-	//trimming
-	retval := make([]byte, 0, bufbyte_len+1)
-	for _, v := range bufbyte {
-		if v != 0 { //NULL
-			retval = append(retval, v)
-		}
-	}
-
-	return string(retval), nil
+	return string(bufbyte), nil
 }
 
 const (
