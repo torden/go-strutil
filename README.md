@@ -8,6 +8,7 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
 [![Build Status](https://travis-ci.org/torden/go-strutil.svg?branch=master)](https://travis-ci.org/torden/go-strutil)
 [![Go Report Card](https://goreportcard.com/badge/github.com/torden/go-strutil)](https://goreportcard.com/report/github.com/torden/go-strutil)
 [![GoDoc](https://godoc.org/github.com/torden/go-strutil?status.svg)](https://godoc.org/github.com/torden/go-strutil)
+[![Coverage Status](https://coveralls.io/repos/github/torden/go-strutil/badge.svg?branch=master)](https://coveralls.io/github/torden/go-strutil?branch=master)
 
 ## Installation
 `go get github.com/torden/go-strutils`, import it as `"github.com/torden/go-strutils"`, use it as `StringProc or StringValidator`
