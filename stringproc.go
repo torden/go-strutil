@@ -211,7 +211,7 @@ func numberToString(obj interface{}) (string, error) {
 	case string:
 		strNum = obj.(string)
 		if numericPattern.MatchString(strNum) == false {
-			return "", fmt.Errorf("not support obj.(%v) := %v ", reflect.TypeOf(obj), strNum)
+			return "", fmt.Errorf("Not Support obj.(%v) := %v ", reflect.TypeOf(obj), strNum)
 		}
 	case int:
 		strNum = strconv.FormatInt(int64(obj.(int)), 10)
@@ -238,7 +238,7 @@ func numberToString(obj interface{}) (string, error) {
 	case float64:
 		strNum = fmt.Sprintf("%g", obj.(float64))
 	default:
-		return "", fmt.Errorf("not support obj.(%v)", reflect.TypeOf(obj))
+		return "", fmt.Errorf("Not Support obj.(%v)", reflect.TypeOf(obj))
 	}
 
 	return strNum, nil
@@ -335,29 +335,30 @@ func (s *StringProc) NumberFmt(obj interface{}) (string, error) {
 
 // padding contol const
 const (
-	padLeft  = 0 //left padding
-	padRight = 1 //right padding
-	padBoth  = 2 //both padding
+	PadLeft  = 0 //left padding
+	PadRight = 1 //right padding
+	PadBoth  = 2 //both padding
 )
 
-// PaddingBoth is Pad a string to a certain length with another string
+// PaddingBoth is Padding method alias with PadBoth Option
 func (s *StringProc) PaddingBoth(str string, fill string, mx int) string {
-	return s.padding(str, fill, padBoth, mx)
+	return s.Padding(str, fill, PadBoth, mx)
 }
 
-// PaddingLeft is Pad a string to a certain length with another string
+// PaddingLeft is Padding method alias with PadRight Option
 func (s *StringProc) PaddingLeft(str string, fill string, mx int) string {
-	return s.padding(str, fill, padLeft, mx)
+	return s.Padding(str, fill, PadLeft, mx)
 }
 
-// PaddingRight is Pad a string to a certain length with another string
+// PaddingRight is Padding method alias with PadRight Option
 func (s *StringProc) PaddingRight(str string, fill string, mx int) string {
-	return s.padding(str, fill, padRight, mx)
+	return s.Padding(str, fill, PadRight, mx)
 }
 
+// Padding is Pad a string to a certain length with another string
 // BenchmarkPadding-8                   10000000	       271 ns/op
 // BenchmarkPaddingUseStringRepeat-8   	 3000000	       418 ns/op
-func (s *StringProc) padding(str string, fill string, m int, mx int) string {
+func (s *StringProc) Padding(str string, fill string, m int, mx int) string {
 
 	byteStr := []byte(str)
 	byteStrLen := len(byteStr)
@@ -369,22 +370,22 @@ func (s *StringProc) padding(str string, fill string, m int, mx int) string {
 	var rightsize int
 
 	switch m {
-	case padBoth:
+	case PadBoth:
 		rlsize := float64(mx-byteStrLen) / 2
 		leftsize = int(rlsize)
 		rightsize = int(rlsize + math.Copysign(0.5, rlsize))
 
-	case padLeft:
+	case PadLeft:
 		leftsize = mx - byteStrLen
 
-	case padRight:
+	case PadRight:
 		rightsize = mx - byteStrLen
 
 	}
 
 	buf := make([]byte, 0, mx)
 
-	if m == padLeft || m == padBoth {
+	if m == PadLeft || m == PadBoth {
 		for i := 0; i < leftsize; {
 			for _, v := range []byte(fill) {
 				buf = append(buf, v)
@@ -402,7 +403,7 @@ func (s *StringProc) padding(str string, fill string, m int, mx int) string {
 		buf = append(buf, v)
 	}
 
-	if m == padRight || m == padBoth {
+	if m == PadRight || m == PadBoth {
 		for i := 0; i < rightsize; {
 			for _, v := range []byte(fill) {
 				buf = append(buf, v)
@@ -532,7 +533,7 @@ func (s *StringProc) HumanByteSize(obj interface{}, decimals int, unit uint8) (s
 	case string:
 		bufStrFloat64, err = strconv.ParseFloat(strNum, 64)
 		if err != nil {
-			return "", fmt.Errorf("not support %v (obj.(%v))", obj, reflect.TypeOf(obj))
+			return "", fmt.Errorf("Not Support %v (obj.(%v))", obj, reflect.TypeOf(obj))
 		}
 
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32:
@@ -541,7 +542,7 @@ func (s *StringProc) HumanByteSize(obj interface{}, decimals int, unit uint8) (s
 		tmpVal := reflect.Indirect(reflect.ValueOf(obj))
 
 		if tmpVal.Type().ConvertibleTo(float64Type) == false {
-			return "", fmt.Errorf("not support obj.(%v)", reflect.TypeOf(obj))
+			return "", fmt.Errorf("Not Support obj.(%v)", reflect.TypeOf(obj))
 		}
 
 		bufStrFloat64 = tmpVal.Convert(float64Type).Float()
@@ -550,7 +551,7 @@ func (s *StringProc) HumanByteSize(obj interface{}, decimals int, unit uint8) (s
 		bufStrFloat64 = obj.(float64)
 
 	default:
-		return "", fmt.Errorf("not support obj.(%v)", reflect.TypeOf(obj))
+		return "", fmt.Errorf("Not Support obj.(%v)", reflect.TypeOf(obj))
 	}
 
 	var sizeStr []string
@@ -615,7 +616,7 @@ func compareMap(compObj1 reflect.Value, compObj2 reflect.Value) (bool, error) {
 
 		//check : Type
 		if compObj1.MapIndex(k).Kind() != compObj2.MapIndex(k).Kind() {
-			return false, fmt.Errorf("different type : (obj1[%v] is  %v) != (obj2[%v] is  %v)", k, compObj1.MapIndex(k).Kind(), k, compObj1.MapIndex(k).Kind())
+			return false, fmt.Errorf("Different type : (obj1[%v] is  %v) != (obj2[%v] is  %v)", k, compObj1.MapIndex(k).Kind(), k, compObj1.MapIndex(k).Kind())
 		}
 
 		switch compObj1.MapIndex(k).Kind() {
@@ -664,16 +665,16 @@ func compareMap(compObj1 reflect.Value, compObj2 reflect.Value) (bool, error) {
 			}
 
 		default:
-			return false, fmt.Errorf("not support compare : (obj1[%v] := %v) != (obj2[%v] := %v)", k, compObj1.MapIndex(k), k, compObj2.MapIndex(k))
+			return false, fmt.Errorf("Not Support compare : (obj1[%v] := %v) != (obj2[%v] := %v)", k, compObj1.MapIndex(k), k, compObj2.MapIndex(k))
 		}
 
 		if valueCompareErr == true {
 			if recursiveDepth == 1 {
-				return false, fmt.Errorf("different value : (obj1[%v] := %v) != (obj2[%v] := %v)", recursiveDepth, k, compObj1.MapIndex(k), k, compObj2.MapIndex(k))
+				return false, fmt.Errorf("Different value : (obj1[%v] := %v) != (obj2[%v] := %v)", recursiveDepth, k, compObj1.MapIndex(k), k, compObj2.MapIndex(k))
 			}
 
 			depthStr := strings.Join(recursiveDepthKeypList, "][")
-			return false, fmt.Errorf("different value : (obj1[%v] := %v) != (obj2[%v] := %v)", depthStr, compObj1.MapIndex(k).Interface(), depthStr, compObj2.MapIndex(k))
+			return false, fmt.Errorf("Different value : (obj1[%v] := %v) != (obj2[%v] := %v)", depthStr, compObj1.MapIndex(k).Interface(), depthStr, compObj2.MapIndex(k))
 
 		}
 	}
@@ -687,7 +688,7 @@ func compareMap(compObj1 reflect.Value, compObj2 reflect.Value) (bool, error) {
 func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error) {
 
 	if reflect.TypeOf(obj1) != reflect.TypeOf(obj2) {
-		return false, fmt.Errorf("not compare type, obj1.(%v) != obj2.(%v)", obj1, obj2)
+		return false, fmt.Errorf("Not Compare type, obj1.(%v) != obj2.(%v)", obj1, obj2)
 	}
 
 	switch obj1.(type) {
@@ -703,7 +704,7 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 		compObj2 := reflect.ValueOf(obj2)
 
 		if compObj1.Len() != compObj2.Len() {
-			return false, fmt.Errorf("different size : obj1(%d) != obj2(%d)", compObj1.Len(), compObj2.Len())
+			return false, fmt.Errorf("Different size : obj1(%d) != obj2(%d)", compObj1.Len(), compObj2.Len())
 		}
 
 		switch {
@@ -712,7 +713,7 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 
 			for i := 0; i < compObj1.Len(); i++ {
 				if compObj1.Index(i).Interface() != compObj2.Index(i).Interface() {
-					return false, fmt.Errorf("different value : (obj1[%d] := %v) != (obj2[%d] := %v)", i, compObj1.Index(i).Interface(), i, compObj2.Index(i).Interface())
+					return false, fmt.Errorf("Different value : (obj1[%d] := %v) != (obj2[%d] := %v)", i, compObj1.Index(i).Interface(), i, compObj2.Index(i).Interface())
 				}
 			}
 
@@ -724,7 +725,7 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 			}
 
 		default:
-			return false, fmt.Errorf("not support compare : (obj1[%v]) , (obj2[%v])", compObj1.Kind(), compObj2.Kind())
+			return false, fmt.Errorf("Not Support compare : (obj1[%v]) , (obj2[%v])", compObj1.Kind(), compObj2.Kind())
 
 		}
 	}
