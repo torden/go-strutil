@@ -9,6 +9,7 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
 [![Go Report Card](https://goreportcard.com/badge/github.com/torden/go-strutil)](https://goreportcard.com/report/github.com/torden/go-strutil)
 [![GoDoc](https://godoc.org/github.com/torden/go-strutil?status.svg)](https://godoc.org/github.com/torden/go-strutil)
 [![Coverage Status](https://coveralls.io/repos/github/torden/go-strutil/badge.svg?branch=master)](https://coveralls.io/github/torden/go-strutil?branch=master)
+[![Go Walker](http://gowalker.org/api/v1/badge)](https://gowalker.org/github.com/torden/go-strutil)
 
 ## Installation
 `go get github.com/torden/go-strutils`, import it as `"github.com/torden/go-strutils"`, use it as `StringProc or StringValidator`
@@ -231,6 +232,101 @@ The above example will output:
 ```bash
 o sAY, cAN yOU sEE, bY tHE dAWN’S eARLY lIGHT,
 ```
+
+
+### HumanByteSize
+Byte Size convert to Easy Readable Size String
+
+```go
+func (s *StringProc) HumanByteSize(obj interface{}, decimals int, unit uint8) (string, error)
+```
+
+Example:
+```go
+strutil := strutils.NewStringProc()
+example_str := 3276537856
+fmt.Printf("%v\n", strutil.HumanByteSize(k, 2, CamelCaseDouble)
+```
+The above example will output:
+```bash
+3.05Gb
+```
+
+### HumanFileSize
+File Size convert to Easy Readable Size String
+
+```go
+func (s *StringProc) HumanFileSize(filepath string, decimals int, unit uint8) (string, error)
+```
+
+Example:
+```go
+strutil := strutils.NewStringProc()
+example_str := 3276537856
+fmt.Printf("%v\n", strutil.HumanFileSize("/tmp/java.tomcat.core", 2, CamelCaseDouble)
+```
+The above example will output:
+```bash
+3.05Gb
+```
+
+### AnyCompare
+
+AnyCompare is compares two same basic type (without prt) dataset (slice,map,single data).
+
+```go
+func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error)
+```
+
+Example:
+```go
+strutil := strutils.NewStringProc()
+
+testComplexMap1 := map[string]map[string]map[string]int{
+    "F": map[string]map[string]int{
+        "name": map[string]int{
+            "first": 1,
+            "last":  2,
+        },
+    },
+    "A": map[string]map[string]int{
+        "name": map[string]int{
+            "first": 11,
+            "last":  21,
+        },
+    },
+}
+
+testComplexMap2 := map[string]map[string]map[string]int{
+    "F": map[string]map[string]int{
+        "name": map[string]int{
+            "first": 11,
+            "last":  12222,
+        },
+    },
+    "A": map[string]map[string]int{
+        "name": map[string]int{
+            "first": 11,
+            "last":  21,
+        },
+    },
+}
+
+retval, err = strproc.AnyCompare(testComplexMap1, testComplexMap2)
+
+fmt.Println("Return : ", retval)
+fmt.Println("Error : ", err)
+
+
+```
+The above example will output:
+```bash
+Return :  false
+Error :  different value : (obj1[A][name][first][last][F][name][first] := 1) != (obj2[A][name][first][last][F][name][first] := 11)
+```
+
+
+
 ----
 
 
