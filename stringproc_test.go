@@ -1,5 +1,3 @@
-// Package strutils made by torden <https://github.com/torden/go-strutil>
-// license that can be found in the LICENSE file.
 package strutils
 
 import (
@@ -451,4 +449,304 @@ func TestSwapCaseFirstWords(t *testing.T) {
 			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 		}
 	}
+}
+
+func TestHumanByteSize(t *testing.T) {
+
+	strproc := NewStringProc()
+	dataset := map[interface{}]string{
+		1.7976931348623157e+308: "152270531428124968725096603469261934082567927321390584004196605238063615198482718997460353589210907119043200911085747810785909744915680620242659147418948017662928903247753430023357200398869394856103928002466673473125884404826265988290381563441726944871732658253337089007918982991007711232.00Yb",
+		1170:         "1.14Kb",
+		72125099:     "68.78Mb",
+		3276537856:   "3.05Gb",
+		27:           "27.00B",
+		93735736:     "89.39Mb",
+		937592:       "915.62Kb",
+		6715287:      "6.40Mb",
+		2856906752:   "2.66Gb",
+		7040152:      "6.71Mb",
+		22016:        "21.50Kb",
+		"1170":       "1.14Kb",
+		"72125099":   "68.78Mb",
+		"3276537856": "3.05Gb",
+		"27":         "27.00B",
+		"93735736":   "89.39Mb",
+		"937592":     "915.62Kb",
+		"6715287":    "6.40Mb",
+		"2856906752": "2.66Gb",
+		"7040152":    "6.71Mb",
+		"22016":      "21.50Kb",
+		3.40282346638528859811704183484516925440e+38: "288230358971842560.00Yb",
+	}
+
+	for k, v := range dataset {
+		retval, err := strproc.HumanByteSize(k, 2, CamelCaseDouble)
+		if v != retval {
+			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
+		}
+		if err != nil {
+			t.Errorf("Error : %v", err)
+		}
+	}
+}
+
+func TestAnyCompare(t *testing.T) {
+
+	var retval bool
+	var err error
+
+	strproc := NewStringProc()
+
+	testInt1 := []int{1, 2, 3}
+	testInt2 := []int{1, 2, 3}
+	retval, err = strproc.AnyCompare(testInt1, testInt2)
+	if retval == false {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
+	testIntFalse1 := []int{1, 2, 3}
+	testIntFalse2 := []int{1, 2, 1}
+	retval, err = strproc.AnyCompare(testIntFalse1, testIntFalse2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison.")
+	}
+
+	testMapStr1 := map[string]string{"a": "va", "vb": "vb"}
+	testMapStr2 := map[string]string{"a": "va", "vb": "vb"}
+	retval, err = strproc.AnyCompare(testMapStr1, testMapStr2)
+	if retval == false {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
+	testMapStrFalse1 := map[string]string{"a": "va", "vb": "vb"}
+	testMapStrFalse2 := map[string]string{"a": "va", "v": "vb"}
+	retval, err = strproc.AnyCompare(testMapStrFalse1, testMapStrFalse2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison.")
+	}
+
+	testMapBool1 := map[string]bool{"a": false, "vb": false}
+	testMapBool2 := map[string]bool{"a": false, "vb": true}
+	retval, err = strproc.AnyCompare(testMapBool1, testMapBool2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
+	testMultipleDepthMap1 := map[string]map[string]string{
+		"H": map[string]string{
+			"name":  "Hydrogen",
+			"state": "gas",
+		},
+		"He": map[string]string{
+			"name":  "Helium",
+			"state": "gas",
+		},
+		"Li": map[string]string{
+			"name":  "Lithium",
+			"state": "solid",
+		},
+		"Be": map[string]string{
+			"name":  "Beryllium",
+			"state": "solid",
+		},
+		"B": map[string]string{
+			"name":  "Boron",
+			"state": "solid",
+		},
+		"C": map[string]string{
+			"name":  "Carbon",
+			"state": "solid",
+		},
+		"N": map[string]string{
+			"name":  "Nitrogen",
+			"state": "gas",
+		},
+		"O": map[string]string{
+			"name":  "Oxygen",
+			"state": "gas",
+		},
+		"F": map[string]string{
+			"name":  "Fluorine",
+			"state": "gas",
+		},
+		"Ne": map[string]string{
+			"name":  "Neon",
+			"state": "gas",
+		},
+	}
+
+	testMultipleDepthMap2 := map[string]map[string]string{
+		"H": map[string]string{
+			"name":  "Hydrogen",
+			"state": "gas",
+		},
+		"He": map[string]string{
+			"name":  "Helium",
+			"state": "gas",
+		},
+		"Li": map[string]string{
+			"name":  "Lithium",
+			"state": "solid",
+		},
+		"Be": map[string]string{
+			"name":  "Beryllium",
+			"state": "solid",
+		},
+		"B": map[string]string{
+			"name":  "Boron",
+			"state": "solid",
+		},
+		"C": map[string]string{
+			"name":  "Carbon",
+			"state": "solid",
+		},
+		"N": map[string]string{
+			"name":  "Nitrogen",
+			"state": "gas",
+		},
+		"O": map[string]string{
+			"name":  "Oxygen",
+			"state": "gas",
+		},
+		"F": map[string]string{
+			"name":  "Fluorine",
+			"state": "gas",
+		},
+		"Ne": map[string]string{
+			"name":  "Neon",
+			"state": "gas",
+		},
+	}
+
+	retval, err = strproc.AnyCompare(testMultipleDepthMap1, testMultipleDepthMap2)
+	if retval == false {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
+	testMultipleDepthMapFalse1 := map[string]map[string]string{
+		"H": map[string]string{
+			"name":  "Hydrogen",
+			"state": "gas",
+		},
+		"He": map[string]string{
+			"name":  "Helium",
+			"state": "gas",
+		},
+		"Li": map[string]string{
+			"name":  "Lithium",
+			"state": "solid",
+		},
+		"Be": map[string]string{
+			"name":  "Beryllium",
+			"state": "solid",
+		},
+		"B": map[string]string{
+			"name":  "Boron",
+			"state": "solid",
+		},
+		"C": map[string]string{
+			"name":  "Carbon",
+			"state": "solid",
+		},
+		"N": map[string]string{
+			"name":  "Nitrogen",
+			"state": "gas",
+		},
+		"O": map[string]string{
+			"name":  "Oxygen",
+			"state": "gas",
+		},
+		"F": map[string]string{
+			"name":  "Fluorine",
+			"state": "gas",
+		},
+		"Ne": map[string]string{
+			"name":  "Neon",
+			"state": "gas",
+		},
+	}
+
+	testMultipleDepthMapFalse2 := map[string]map[string]string{
+		"H": map[string]string{
+			"name":  "Hydrogen",
+			"state": "gas",
+		},
+		"He": map[string]string{
+			"name":  "Helium",
+			"state": "gas",
+		},
+		"Li": map[string]string{
+			"name":  "Lithium",
+			"state": "solid",
+		},
+		"Be": map[string]string{
+			"name":  "Beryllium",
+			"state": "solid",
+		},
+		"B": map[string]string{
+			"name":  "Boron",
+			"state": "solid",
+		},
+		"C": map[string]string{
+			"name":  "Carbon",
+			"state": "solid",
+		},
+		"N": map[string]string{
+			"name":  "Nitrogen",
+			"state": "gas",
+		},
+		"O": map[string]string{
+			"name":  "Oxygen1",
+			"state": "gas",
+		},
+		"F": map[string]string{
+			"name":  "Fluorine",
+			"state": "gas",
+		},
+		"Ne": map[string]string{
+			"name1": "Neon",
+			"state": "gas",
+		},
+	}
+
+	retval, err = strproc.AnyCompare(testMultipleDepthMapFalse1, testMultipleDepthMapFalse2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison.")
+	}
+
+	testComplexMap1 := map[string]map[string]map[string]int{
+		"F": map[string]map[string]int{
+			"name": map[string]int{
+				"first": 1,
+				"last":  2,
+			},
+		},
+		"A": map[string]map[string]int{
+			"name": map[string]int{
+				"first": 11,
+				"last":  21,
+			},
+		},
+	}
+
+	testComplexMap2 := map[string]map[string]map[string]int{
+		"F": map[string]map[string]int{
+			"name": map[string]int{
+				"first": 11,
+				"last":  12222,
+			},
+		},
+		"A": map[string]map[string]int{
+			"name": map[string]int{
+				"first": 11,
+				"last":  21,
+			},
+		},
+	}
+
+	retval, err = strproc.AnyCompare(testComplexMap1, testComplexMap2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison.")
+	}
+
 }
