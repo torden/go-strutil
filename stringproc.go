@@ -1,13 +1,13 @@
-// Package strutils made by torden <https://github.com/torden/go-strutil>
-// license that can be found in the LICENSE file.
 package strutils
 
 import (
 	"fmt"
 	"math"
+	"os"
 	"reflect"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 var numericPattern = regexp.MustCompile(`^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$`)
@@ -202,9 +202,7 @@ func (s *StringProc) WordWrapAround(str string, wd int, breakstr string) string 
 	return string(buf)
 }
 
-// NumberFmt is format a number with english notation grouped thousands
-// TODO : support other country notation
-func (s *StringProc) NumberFmt(obj interface{}) (string, error) {
+func numberToString(obj interface{}) (string, error) {
 
 	var strNum string
 
@@ -241,6 +239,18 @@ func (s *StringProc) NumberFmt(obj interface{}) (string, error) {
 		strNum = fmt.Sprintf("%g", obj.(float64))
 	default:
 		return "", fmt.Errorf("not support obj.(%v)", reflect.TypeOf(obj))
+	}
+
+	return strNum, nil
+}
+
+// NumberFmt is format a number with english notation grouped thousands
+// TODO : support other country notation
+func (s *StringProc) NumberFmt(obj interface{}) (string, error) {
+
+	strNum, err := numberToString(obj)
+	if err != nil {
+		return "", err
 	}
 
 	bufbyteStr := []byte(strNum)
@@ -482,4 +492,241 @@ func (s *StringProc) SwapCaseFirstWords(str string) string {
 	}
 
 	return string(retval)
+}
+
+// Unit type control
+const (
+	_               = uint8(iota)
+	LowerCaseSingle // Single Unit character converted to Lower-case
+	LowerCaseDouble // Double Unit characters converted to Lower-case
+
+	UpperCaseSingle // Single Unit character converted to Uppper-case
+	UpperCaseDouble // Double Unit characters converted to Upper-case
+
+	CamelCaseDouble // Double Unit characters converted to Camel-case
+	CamelCaseLong   // Full Unit characters converted to Camel-case
+)
+
+var sizeStrLowerCaseSingle = []string{"b", "k", "m", "g", "t", "p", "e", "z", "y"}
+var sizeStrLowerCaseDouble = []string{"b", "kb", "mb", "gb", "tb", "pb", "eb", "zb", "yb"}
+var sizeStrUpperCaseSingle = []string{"B", "K", "M", "G", "T", "P", "E", "Z", "Y"}
+var sizeStrUpperCaseDouble = []string{"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"}
+var sizeStrCamelCaseDouble = []string{"B", "Kb", "Mb", "Gb", "Tb", "Eb", "Zb", "Yb"}
+var sizeStrCamelCaseLong = []string{"Byte", "KiloByte", "MegaByte", "GigaByte", "TeraByte", "ExaByte", "ZettaByte", "YottaByte"}
+
+//HumanByteSize is Byte Size convert to Easy Readable Size String
+func (s *StringProc) HumanByteSize(obj interface{}, decimals int, unit uint8) (string, error) {
+
+	if unit < UpperCaseSingle || unit > CamelCaseLong {
+		return "", fmt.Errorf("Not allow unit parameter : %v", unit)
+	}
+
+	strNum, err := numberToString(obj)
+	if err != nil {
+		return "", err
+	}
+
+	var bufStrFloat64 float64
+
+	switch obj.(type) {
+	case string:
+		bufStrFloat64, err = strconv.ParseFloat(strNum, 64)
+		if err != nil {
+			return "", fmt.Errorf("not support %v (obj.(%v))", obj, reflect.TypeOf(obj))
+		}
+
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32:
+
+		float64Type := reflect.TypeOf(float64(0))
+		tmpVal := reflect.Indirect(reflect.ValueOf(obj))
+
+		if tmpVal.Type().ConvertibleTo(float64Type) == false {
+			return "", fmt.Errorf("not support obj.(%v)", reflect.TypeOf(obj))
+		}
+
+		bufStrFloat64 = tmpVal.Convert(float64Type).Float()
+
+	case float64:
+		bufStrFloat64 = obj.(float64)
+
+	default:
+		return "", fmt.Errorf("not support obj.(%v)", reflect.TypeOf(obj))
+	}
+
+	var sizeStr []string
+
+	switch unit {
+	case LowerCaseSingle:
+		sizeStr = sizeStrLowerCaseSingle
+	case LowerCaseDouble:
+		sizeStr = sizeStrLowerCaseDouble
+	case UpperCaseSingle:
+		sizeStr = sizeStrUpperCaseSingle
+	case UpperCaseDouble:
+		sizeStr = sizeStrUpperCaseDouble
+	case CamelCaseDouble:
+		sizeStr = sizeStrCamelCaseDouble
+	case CamelCaseLong:
+		sizeStr = sizeStrCamelCaseLong
+	}
+
+	strNumLen := len(strNum)
+
+	factor := int(math.Floor(float64(strNumLen)-1) / 3)
+
+	decimalsFmt := `%.` + strconv.Itoa(decimals) + `f%s`
+	humanSize := bufStrFloat64 / math.Pow(1024, float64(factor))
+
+	return fmt.Sprintf(decimalsFmt, humanSize, sizeStr[factor]), nil
+}
+
+//HumanFileSize is File Size convert to Easy Readable Size String
+func (s *StringProc) HumanFileSize(filepath string, decimals int, unit uint8) (string, error) {
+
+	fd, err := os.Open(filepath)
+	if err != nil {
+		return "", fmt.Errorf("%v", err)
+	}
+
+	stat, err := fd.Stat()
+	if err != nil {
+		return "", fmt.Errorf("%v", err)
+	}
+
+	if stat.IsDir() == true {
+		return "", fmt.Errorf("%v isn't file", filepath)
+	}
+
+	return s.HumanByteSize(stat.Size(), decimals, unit)
+}
+
+// compare with map
+var recursiveDepth = 0
+var recursiveDepthKeypList []string
+
+func compareMap(compObj1 reflect.Value, compObj2 reflect.Value) (bool, error) {
+
+	recursiveDepth++
+	var valueCompareErr bool
+
+	for _, k := range compObj1.MapKeys() {
+
+		recursiveDepthKeypList = append(recursiveDepthKeypList, k.String())
+
+		//check : Type
+		if compObj1.MapIndex(k).Kind() != compObj2.MapIndex(k).Kind() {
+			return false, fmt.Errorf("different type : (obj1[%v] is  %v) != (obj2[%v] is  %v)", k, compObj1.MapIndex(k).Kind(), k, compObj1.MapIndex(k).Kind())
+		}
+
+		switch compObj1.MapIndex(k).Kind() {
+
+		//String
+		case reflect.String:
+			if compObj1.MapIndex(k).String() != compObj2.MapIndex(k).String() {
+				valueCompareErr = true
+			}
+
+		//Integer
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			if compObj1.MapIndex(k).Int() != compObj2.MapIndex(k).Int() {
+				valueCompareErr = true
+			}
+
+		//Un-signed Integer
+		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			if compObj1.MapIndex(k).Uint() != compObj2.MapIndex(k).Uint() {
+				valueCompareErr = true
+			}
+
+		//Float
+		case reflect.Float32, reflect.Float64:
+			if compObj1.MapIndex(k).Float() != compObj2.MapIndex(k).Float() {
+				valueCompareErr = true
+			}
+
+		//Boolean
+		case reflect.Bool:
+			if compObj1.MapIndex(k).Bool() != compObj2.MapIndex(k).Bool() {
+				valueCompareErr = true
+			}
+
+		//Complex
+		case reflect.Complex64, reflect.Complex128:
+			if compObj1.MapIndex(k).Complex() != compObj2.MapIndex(k).Complex() {
+				valueCompareErr = true
+			}
+
+		//Map : recursive loop
+		case reflect.Map:
+			retval, err := compareMap(compObj1.MapIndex(k), compObj2.MapIndex(k))
+			if retval == false {
+				return retval, err
+			}
+
+		default:
+			return false, fmt.Errorf("not support compare : (obj1[%v] := %v) != (obj2[%v] := %v)", k, compObj1.MapIndex(k), k, compObj2.MapIndex(k))
+		}
+
+		if valueCompareErr == true {
+			if recursiveDepth == 1 {
+				return false, fmt.Errorf("different value : (obj1[%v] := %v) != (obj2[%v] := %v)", recursiveDepth, k, compObj1.MapIndex(k), k, compObj2.MapIndex(k))
+			}
+
+			depthStr := strings.Join(recursiveDepthKeypList, "][")
+			return false, fmt.Errorf("different value : (obj1[%v] := %v) != (obj2[%v] := %v)", depthStr, compObj1.MapIndex(k).Interface(), depthStr, compObj2.MapIndex(k))
+
+		}
+	}
+
+	return true, nil
+}
+
+// AnyCompare is compares two same basic type (without prt) dataset (slice,map,single data).
+// TODO : support interface, struct ...
+// NOTE : Not safe , Not Test Complete. Require more test data based on the complex dataset.
+func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error) {
+
+	if reflect.TypeOf(obj1) != reflect.TypeOf(obj2) {
+		return false, fmt.Errorf("not compare type, obj1.(%v) != obj2.(%v)", obj1, obj2)
+	}
+
+	switch obj1.(type) {
+
+	case string, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64, complex64, complex128, bool:
+		if reflect.TypeOf(obj1).Comparable() == true && reflect.TypeOf(obj2).Comparable() == true {
+			return (obj1 == obj2), nil
+		}
+
+	default:
+
+		compObj1 := reflect.ValueOf(obj1)
+		compObj2 := reflect.ValueOf(obj2)
+
+		if compObj1.Len() != compObj2.Len() {
+			return false, fmt.Errorf("different size : obj1(%d) != obj2(%d)", compObj1.Len(), compObj2.Len())
+		}
+
+		switch {
+
+		case compObj1.Kind() == reflect.Slice:
+
+			for i := 0; i < compObj1.Len(); i++ {
+				if compObj1.Index(i).Interface() != compObj2.Index(i).Interface() {
+					return false, fmt.Errorf("different value : (obj1[%d] := %v) != (obj2[%d] := %v)", i, compObj1.Index(i).Interface(), i, compObj2.Index(i).Interface())
+				}
+			}
+
+		case compObj1.Kind() == reflect.Map:
+			recursiveDepth = 0
+			retval, err := compareMap(compObj1, compObj2)
+			if retval == false {
+				return retval, err
+			}
+
+		default:
+			return false, fmt.Errorf("not support compare : (obj1[%v]) , (obj2[%v])", compObj1.Kind(), compObj2.Kind())
+
+		}
+	}
+	return true, nil
 }
