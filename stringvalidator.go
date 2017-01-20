@@ -1,5 +1,3 @@
-// Package strutils made by torden <https://github.com/torden/go-strutil>
-// license that can be found in the LICENSE file.
 package strutils
 
 import (
@@ -75,7 +73,7 @@ func (s *StringValidator) IsValidIPAddr(str string, cktypes ...int) (bool, error
 	for _, cktype := range cktypes {
 
 		if cktype != IPAny && cktype != IPv4 && cktype != IPv6 && cktype != IPv4MappedIPv6 && cktype != IPv4CIDR && cktype != IPv6CIDR && cktype != IPv4MappedIPv6CIDR {
-			return false, errors.New("invalid options")
+			return false, errors.New("Invalid Options")
 		}
 	}
 
@@ -195,12 +193,12 @@ func (s *StringValidator) IsPureTextStrict(str string) (bool, error) {
 
 		// deny : control char (00-31 without 9(TAB) and Single 10(LF),13(CR)
 		if c >= 0 && c <= 31 && c != 9 && c != 10 && c != 13 {
-			return false, errors.New("detect control character")
+			return false, errors.New("Detect Control Character")
 		}
 
 		// deny : control char (DEL)
 		if c == 127 {
-			return false, errors.New("detect control character (DEL)")
+			return false, errors.New("Detect Control Character (DEL)")
 		}
 
 		//deny : html tag (< ~ >)
@@ -217,7 +215,7 @@ func (s *StringValidator) IsPureTextStrict(str string) (bool, error) {
 
 				// 62 (>)
 				if ds == 1 && str[n] == 62 {
-					return false, errors.New("detect tag (<[!|?]~>)")
+					return false, errors.New("Detect Tag (<[!|?]~>)")
 				}
 			}
 		}
@@ -231,7 +229,7 @@ func (s *StringValidator) IsPureTextStrict(str string) (bool, error) {
 			}
 			for n := i; n < max; n++ {
 				if str[n] == 59 {
-					return false, errors.New("detect html encoded ta (&XXX;)")
+					return false, errors.New("Detect HTML Encoded Tag (&XXX;)")
 				}
 			}
 		}
@@ -265,12 +263,12 @@ func (s *StringValidator) IsPureTextNormal(str string) (bool, error) {
 
 	matchedElement := elementPattern.MatchString(decodedStr)
 	if matchedElement == true {
-		return false, errors.New("detect html element")
+		return false, errors.New("Detect HTML Element")
 	}
 
 	matchedCc := controlcharPattern.MatchString(decodedStr)
 	if matchedCc == true {
-		return false, errors.New("detect control character")
+		return false, errors.New("Detect Control Character")
 	}
 
 	return true, nil
