@@ -1,15 +1,17 @@
-package strutils
+package strutils_test
 
 import (
 	"strings"
 	"testing"
 
 	"github.com/dustin/go-humanize"
+
+	"github.com/torden/go-strutil"
 )
 
 func TestAddSlashes(t *testing.T) {
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 	dataset := map[string]string{
 		`대한민국만세`:     `대한민국만세`,
 		`대한\민국만세`:    `대한\\민국만세`,
@@ -30,7 +32,7 @@ func TestAddSlashes(t *testing.T) {
 
 func TestStripSlashes(t *testing.T) {
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 	dataset := map[string]string{
 		`대한민국만세`:       `대한민국만세`,
 		`대한\\민국만세`:     `대한\민국만세`,
@@ -51,7 +53,7 @@ func TestStripSlashes(t *testing.T) {
 
 func TestNl2Br(t *testing.T) {
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 	dataset := map[string]string{
 		"대한\n민국만세":     "대한<br />민국만세",
 		"대한\r\n민국만세":   "대한<br />민국만세",
@@ -76,7 +78,7 @@ func TestNl2Br(t *testing.T) {
 
 func BenchmarkNl2Br(b *testing.B) {
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 	dataset := map[string]string{
 		"대한\n민국만세":     "대한<br />민국만세",
 		"대한\r\n민국만세":   "대한<br />민국만세",
@@ -137,7 +139,7 @@ type wordwrapTestVal struct {
 }
 
 func TestWordWrapSimple(t *testing.T) {
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 
 	dataset := make(map[int]wordwrapTestVal)
 
@@ -182,7 +184,7 @@ func TestWordWrapSimple(t *testing.T) {
 }
 
 func TestWordWrapAround(t *testing.T) {
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 
 	dataset := make(map[int]wordwrapTestVal)
 
@@ -228,7 +230,7 @@ func TestWordWrapAround(t *testing.T) {
 
 func TestNumbertFmt(t *testing.T) {
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 	dataset := map[interface{}]string{
 		123456789101112: "123,456,789,101,112",
 		123456.1234:     "123,456.1234",
@@ -258,7 +260,7 @@ func TestNumbertFmt(t *testing.T) {
 
 func BenchmarkTestNumbertFmt(b *testing.B) {
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 	dataset := map[interface{}]string{
 		123456789101112: "123,456,789,101,112",
 		123456.1234:     "123,456.1234",
@@ -293,7 +295,7 @@ func BenchmarkTestNumbertFmt(b *testing.B) {
 //BenchmarkTestNumbertFmtInt64UseHumanUnits-8   	 2000000	       761 ns/op
 func BenchmarkTestNumbertFmtInt64(b *testing.B) {
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 	dataset := map[interface{}]string{
 		123456789101112: "123,456,789,101,112",
 	}
@@ -338,26 +340,26 @@ type paddingTestVal struct {
 
 func TestPadding(t *testing.T) {
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 	dataset := make(map[int]paddingTestVal)
 
-	dataset[0] = paddingTestVal{"Life isn't always what one like.", "*", padBoth, 38, "***Life isn't always what one like.***"}
-	dataset[1] = paddingTestVal{"Life isn't always what one like.", "*", padLeft, 38, "******Life isn't always what one like."}
-	dataset[2] = paddingTestVal{"Life isn't always what one like.", "*", padRight, 38, "Life isn't always what one like.******"}
-	dataset[3] = paddingTestVal{"Life isn't always what one like.", "*-=", padBoth, 37, "*-Life isn't always what one like.*-="}
-	dataset[4] = paddingTestVal{"Life isn't always what one like.", "*-=", padLeft, 37, "*-=*-Life isn't always what one like."}
-	dataset[5] = paddingTestVal{"Life isn't always what one like.", "*-=", padRight, 37, "Life isn't always what one like.*-=*-"}
+	dataset[0] = paddingTestVal{"Life isn't always what one like.", "*", strutils.PadBoth, 38, "***Life isn't always what one like.***"}
+	dataset[1] = paddingTestVal{"Life isn't always what one like.", "*", strutils.PadLeft, 38, "******Life isn't always what one like."}
+	dataset[2] = paddingTestVal{"Life isn't always what one like.", "*", strutils.PadRight, 38, "Life isn't always what one like.******"}
+	dataset[3] = paddingTestVal{"Life isn't always what one like.", "*-=", strutils.PadBoth, 37, "*-Life isn't always what one like.*-="}
+	dataset[4] = paddingTestVal{"Life isn't always what one like.", "*-=", strutils.PadLeft, 37, "*-=*-Life isn't always what one like."}
+	dataset[5] = paddingTestVal{"Life isn't always what one like.", "*-=", strutils.PadRight, 37, "Life isn't always what one like.*-=*-"}
 
-	dataset[6] = paddingTestVal{"가나다라마바사아자차카타파하", "*", padBoth, 48, "***가나다라마바사아자차카타파하***"}
-	dataset[7] = paddingTestVal{"가나다라마바사아자차카타파하", "*", padLeft, 48, "******가나다라마바사아자차카타파하"}
-	dataset[8] = paddingTestVal{"가나다라마바사아자차카타파하", "*", padRight, 48, "가나다라마바사아자차카타파하******"}
-	dataset[9] = paddingTestVal{"가나다라마바사아자차카타파하", "*-=", padBoth, 47, "*-가나다라마바사아자차카타파하*-="}
-	dataset[10] = paddingTestVal{"가나다라마바사아자차카타파하", "*-=", padLeft, 47, "*-=*-가나다라마바사아자차카타파하"}
-	dataset[11] = paddingTestVal{"가나다라마바사아자차카타파하", "*-=", padRight, 47, "가나다라마바사아자차카타파하*-=*-"}
+	dataset[6] = paddingTestVal{"가나다라마바사아자차카타파하", "*", strutils.PadBoth, 48, "***가나다라마바사아자차카타파하***"}
+	dataset[7] = paddingTestVal{"가나다라마바사아자차카타파하", "*", strutils.PadLeft, 48, "******가나다라마바사아자차카타파하"}
+	dataset[8] = paddingTestVal{"가나다라마바사아자차카타파하", "*", strutils.PadRight, 48, "가나다라마바사아자차카타파하******"}
+	dataset[9] = paddingTestVal{"가나다라마바사아자차카타파하", "*-=", strutils.PadBoth, 47, "*-가나다라마바사아자차카타파하*-="}
+	dataset[10] = paddingTestVal{"가나다라마바사아자차카타파하", "*-=", strutils.PadLeft, 47, "*-=*-가나다라마바사아자차카타파하"}
+	dataset[11] = paddingTestVal{"가나다라마바사아자차카타파하", "*-=", strutils.PadRight, 47, "가나다라마바사아자차카타파하*-=*-"}
 
 	for _, v := range dataset {
 
-		retval := strproc.padding(v.str, v.fill, v.m, v.mx)
+		retval := strproc.Padding(v.str, v.fill, v.m, v.mx)
 		if v.okstr != retval {
 			t.Errorf("Original Value : %v\n", v.str)
 			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v.okstr)
@@ -367,7 +369,7 @@ func TestPadding(t *testing.T) {
 
 func TestUppercaseFirstWords(t *testing.T) {
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 	dataset := map[string]string{
 		"o say, can you see, by the dawn’s early light,":                    "O Say, Can You See, By The Dawn’s Early Light,",
 		"what so proudly we hailed at the twilight’s last gleaming,":        "What So Proudly We Hailed At The Twilight’s Last Gleaming,",
@@ -390,7 +392,7 @@ func TestUppercaseFirstWords(t *testing.T) {
 
 func TestLowercaseFirstWords(t *testing.T) {
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 	dataset := map[string]string{
 		"O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,":                    "o sAY, cAN yOU sEE, bY tHE dAWN’S eARLY lIGHT,",
 		"WHAT SO PROUDLY WE HAILED AT THE TWILIGHT’S LAST GLEAMING,":        "wHAT sO pROUDLY wE hAILED aT tHE tWILIGHT’S lAST gLEAMING,",
@@ -413,7 +415,7 @@ func TestLowercaseFirstWords(t *testing.T) {
 
 func TestSwapCaseFirstWords(t *testing.T) {
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 	dataset := map[string]string{
 		"O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,":                    "o sAY, cAN yOU sEE, bY tHE dAWN’S eARLY lIGHT,",
 		"WHAT SO PROUDLY WE HAILED AT THE TWILIGHT’S LAST GLEAMING,":        "wHAT sO pROUDLY wE hAILED aT tHE tWILIGHT’S lAST gLEAMING,",
@@ -453,7 +455,7 @@ func TestSwapCaseFirstWords(t *testing.T) {
 
 func TestHumanByteSize(t *testing.T) {
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 	dataset := map[interface{}]string{
 		1.7976931348623157e+308: "152270531428124968725096603469261934082567927321390584004196605238063615198482718997460353589210907119043200911085747810785909744915680620242659147418948017662928903247753430023357200398869394856103928002466673473125884404826265988290381563441726944871732658253337089007918982991007711232.00Yb",
 		1170:         "1.14Kb",
@@ -480,7 +482,7 @@ func TestHumanByteSize(t *testing.T) {
 	}
 
 	for k, v := range dataset {
-		retval, err := strproc.HumanByteSize(k, 2, CamelCaseDouble)
+		retval, err := strproc.HumanByteSize(k, 2, strutils.CamelCaseDouble)
 		if v != retval {
 			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 		}
@@ -495,7 +497,7 @@ func TestAnyCompare(t *testing.T) {
 	var retval bool
 	var err error
 
-	strproc := NewStringProc()
+	strproc := strutils.NewStringProc()
 
 	testInt1 := []int{1, 2, 3}
 	testInt2 := []int{1, 2, 3}

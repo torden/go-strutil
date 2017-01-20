@@ -1,12 +1,14 @@
-// Package strutils made by torden <https://github.com/torden/go-strutil>
-// license that can be found in the LICENSE file.
-package strutils
+package strutils_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/torden/go-strutil"
+)
 
 func ipaddrTest(t *testing.T, cktype int, dataset map[string]bool, errfmt string) {
 
-	strvalidator := NewStringValidator()
+	strvalidator := strutils.NewStringValidator()
 
 	for k, v := range dataset {
 		retval, _ := strvalidator.IsValidIPAddr(k, cktype)
@@ -89,12 +91,12 @@ func TestIPAddr(t *testing.T) {
 		"12.12/12":                                     false,
 	}
 
-	ipaddrTest(t, IPv4, testIpv4Ipaddrs, "invalid (%s) IPv4 address")
-	ipaddrTest(t, IPv4CIDR, testIpv4WithCidrIpaddrs, "invalid (%s) IPv4 with CIDR address")
+	ipaddrTest(t, strutils.IPv4, testIpv4Ipaddrs, "invalid (%s) IPv4 address")
+	ipaddrTest(t, strutils.IPv4CIDR, testIpv4WithCidrIpaddrs, "invalid (%s) IPv4 with CIDR address")
 
-	ipaddrTest(t, IPv6, testIpv6Ipaddrs, "invalid (%s) IPv6 address")
-	ipaddrTest(t, IPv6CIDR, testIpv6WithCidrIpaddrs, "invalid (%s) IPv6 with CIDR address")
-	ipaddrTest(t, IPv4MappedIPv6, testIpv4MappedIpv6Ipaddrs, "invalid (%s) IPv4-Mapped Embedded IPv6 address")
+	ipaddrTest(t, strutils.IPv6, testIpv6Ipaddrs, "invalid (%s) IPv6 address")
+	ipaddrTest(t, strutils.IPv6CIDR, testIpv6WithCidrIpaddrs, "invalid (%s) IPv6 with CIDR address")
+	ipaddrTest(t, strutils.IPv4MappedIPv6, testIpv4MappedIpv6Ipaddrs, "invalid (%s) IPv4-Mapped Embedded IPv6 address")
 
 }
 
@@ -115,7 +117,7 @@ func TestMacAddr(t *testing.T) {
 		"ebf8.2bd7.e962":    true,
 	}
 
-	strvalidator := NewStringValidator()
+	strvalidator := strutils.NewStringValidator()
 
 	for k, v := range macaddrList {
 		retval := strvalidator.IsValidMACAddr(k)
@@ -181,7 +183,7 @@ func TestDomain(t *testing.T) {
 		"www.google.idf.il":        true,
 	}
 
-	strvalidator := NewStringValidator()
+	strvalidator := strutils.NewStringValidator()
 
 	for k, v := range testDomains {
 		retval := strvalidator.IsValidDomain(k)
@@ -208,7 +210,7 @@ func TestURL(t *testing.T) {
 		"http://ftp.yz.yamagata-u.ac.jp/pub/linux/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1611.iso":                           true,
 	}
 
-	strvalidator := NewStringValidator()
+	strvalidator := strutils.NewStringValidator()
 
 	for k, v := range testUrls {
 		retval := strvalidator.IsValidURL(k)
@@ -245,7 +247,7 @@ func TestPureTextNormal(t *testing.T) {
 		`abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</a>qwdoijqwdoiqjd`:                                                                                                     false,
 	}
 
-	strvalidator := NewStringValidator()
+	strvalidator := strutils.NewStringValidator()
 
 	for k, v := range testTxts {
 		retval, _ := strvalidator.IsPureTextNormal(k)
@@ -282,7 +284,7 @@ func TestPureTextStrict(t *testing.T) {
 		`abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</a>qwdoijqwdoiqjd`:                                                                                                     false,
 	}
 
-	strvalidator := NewStringValidator()
+	strvalidator := strutils.NewStringValidator()
 
 	for k, v := range testTxts {
 		retval, _ := strvalidator.IsPureTextStrict(k)
@@ -311,7 +313,7 @@ func TestFilePathOnlyFilePath(t *testing.T) {
 		"a-1-e-r-t-_1_21234_d_1234_qwed_1423_.txt": true,
 	}
 
-	strvalidator := NewStringValidator()
+	strvalidator := strutils.NewStringValidator()
 
 	for k, v := range testFilepaths {
 		retval := strvalidator.IsValidFilePath(k)
@@ -340,7 +342,7 @@ func TestFilePathAllowRelativePath(t *testing.T) {
 		"/asdasd/asdasdasd/qwdqwd_qwdqwd/12-12/a-1-e-r-t-_1_21234_d_1234_qwed_1423_.txt": true,
 	}
 
-	strvalidator := NewStringValidator()
+	strvalidator := strutils.NewStringValidator()
 
 	for k, v := range testFilepaths {
 		retval := strvalidator.IsValidFilePathWithRelativePath(k)
