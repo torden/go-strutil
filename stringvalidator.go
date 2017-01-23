@@ -101,7 +101,7 @@ func (s *StringValidator) IsValidIPAddr(str string, cktypes ...int) (bool, error
 		}
 	}
 
-	return false, nil
+	return false, errors.New("Invalid IPAddr")
 }
 
 // isCIDR is Validates whether the value IP Address with CIRD
