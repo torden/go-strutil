@@ -271,6 +271,9 @@ func TestNumbertFmt(t *testing.T) {
 		1.212e+24:       "1.212e+24",
 		123456789:       "123,456,789",
 
+		int(math.MaxInt8):  "127",
+		uint(math.MaxInt8): "127",
+
 		int8(math.MaxInt8):       "127",
 		int16(math.MaxInt16):     "32,767",
 		int16(math.MinInt16):     "-32,768",
@@ -302,6 +305,12 @@ func TestNumbertFmt(t *testing.T) {
 	}
 
 	var err error
+
+	//check : ParseFloat
+	_, err = strproc.NumberFmt("12.11111111111111111111111111111111111111111111111111111111111e12e12e1p029ekj12e")
+	if err == nil {
+		t.Errorf("Failure : Couldn't check the `Not Support strconv.ParseFloat`")
+	}
 
 	//check : not support obj
 	_, err = strproc.NumberFmt(complex128(123))
@@ -610,7 +619,7 @@ func TestHumanFileSize(t *testing.T) {
 		t.Errorf("Failuew : Couldn't Mkdir %q: %s", tmpPath, err)
 	}
 
-	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseDouble)
+	_, err = strproc.HumanFileSize(tmpPath, 2, strutils.CamelCaseDouble)
 	if err == nil {
 		os.Remove(tmpPath)
 		t.Errorf("Failure : Couldn't check the `stat.IsDir()`")
