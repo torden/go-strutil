@@ -1,6 +1,7 @@
 package strutils
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"os"
@@ -99,10 +100,11 @@ func (s *StringProc) Nl2Br(str string) string {
 }
 
 // WordWrapSimple is Wraps a string to a given number of characters using break characters (TAB, SPACE)
-func (s *StringProc) WordWrapSimple(str string, wd int, breakstr string) string {
+func (s *StringProc) WordWrapSimple(str string, wd int, breakstr string) (string, error) {
 
 	if wd < 1 {
-		return str
+		err := errors.New("wd At least 1 or More")
+		return str, err
 	}
 
 	strl := len(str)
@@ -126,14 +128,14 @@ func (s *StringProc) WordWrapSimple(str string, wd int, breakstr string) string 
 		brpos++
 	}
 
-	return string(buf)
+	return string(buf), nil
 }
 
 // WordWrapAround is Wraps a string to a given number of characters using break characters (TAB, SPACE)
-func (s *StringProc) WordWrapAround(str string, wd int, breakstr string) string {
+func (s *StringProc) WordWrapAround(str string, wd int, breakstr string) (string, error) {
 
 	if wd < 1 {
-		return str
+		return "", errors.New("wd At least 1 or More")
 	}
 
 	strl := len(str)
@@ -170,7 +172,6 @@ func (s *StringProc) WordWrapAround(str string, wd int, breakstr string) string 
 		if (width <= beforeBp || width <= beforeBp+1 || width <= beforeBp-1) && width <= v {
 			inject = append(inject, beforeBp)
 			width += wd
-			//fmt.Print("OK")
 		} else if width < v && len(lastspc) == 1 {
 			inject = append(inject, v)
 		}
@@ -199,19 +200,21 @@ func (s *StringProc) WordWrapAround(str string, wd int, breakstr string) string 
 		loopcnt++
 	}
 
-	return string(buf)
+	return string(buf), nil
 }
 
 func numberToString(obj interface{}) (string, error) {
 
 	var strNum string
+	var err error
 
 	switch obj.(type) {
 
 	case string:
 		strNum = obj.(string)
 		if numericPattern.MatchString(strNum) == false {
-			return "", fmt.Errorf("Not Support obj.(%v) := %v ", reflect.TypeOf(obj), strNum)
+			err = fmt.Errorf("Not Support obj.(%v) := %v ", reflect.TypeOf(obj), strNum)
+			return strNum, err
 		}
 	case int:
 		strNum = strconv.FormatInt(int64(obj.(int)), 10)
@@ -238,7 +241,8 @@ func numberToString(obj interface{}) (string, error) {
 	case float64:
 		strNum = fmt.Sprintf("%g", obj.(float64))
 	default:
-		return "", fmt.Errorf("Not Support obj.(%v)", reflect.TypeOf(obj))
+		err = fmt.Errorf("Not Support obj.(%v)", reflect.TypeOf(obj))
+		return strNum, err
 	}
 
 	return strNum, nil
