@@ -2,6 +2,7 @@
 package strutils_test
 
 import (
+	"math"
 	"strings"
 	"testing"
 
@@ -182,6 +183,12 @@ func TestWordWrapSimple(t *testing.T) {
 			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v.okstr)
 		}
 	}
+
+	//check : wd = 0
+	_, err := strproc.WordWrapSimple("test", 0, "1234")
+	if err == nil {
+		t.Errorf("Failure : Can't check the `wd at least 1`")
+	}
 }
 
 func TestWordWrapAround(t *testing.T) {
@@ -227,6 +234,21 @@ func TestWordWrapAround(t *testing.T) {
 			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v.okstr)
 		}
 	}
+
+	var err error
+
+	//check : wd = 0
+	_, err = strproc.WordWrapAround("test", 0, "1234")
+	if err == nil {
+		t.Errorf("Failure : Can't check the `wd at least 1`")
+	}
+
+	//check : lastspc = 1
+	_, err = strproc.WordWrapAround("ttttttt tttttttttt", 2, "1111")
+	if err != nil {
+		t.Errorf("Failure : Can't check the `lastspc = 1`")
+	}
+
 }
 
 func TestNumbertFmt(t *testing.T) {
@@ -246,6 +268,25 @@ func TestNumbertFmt(t *testing.T) {
 		12.12123098123:  "12.12123098123",
 		1.212e+24:       "1.212e+24",
 		123456789:       "123,456,789",
+
+		int8(math.MaxInt8):       "127",
+		int16(math.MaxInt16):     "32,767",
+		int16(math.MinInt16):     "-32,768",
+		int32(math.MaxInt32):     "2,147,483,647",
+		int32(math.MinInt32):     "-2,147,483,648",
+		int64(math.MaxInt64):     "9,223,372,036,854,775,807",
+		int64(math.MinInt64):     "-9,223,372,036,854,775,808",
+		uint8(math.MaxUint8):     "255",
+		uint16(math.MaxUint16):   "65,535",
+		uint32(math.MaxUint32):   "4,294,967,295",
+		uint64(math.MaxUint64):   "18,446,744,073,709,551,615",
+		float32(math.MaxFloat32): "3.4028235e+38",
+		float64(math.MaxFloat64): "1.7976931348623157e+308",
+		//BUG(r) :
+		//int8(math.MinInt8):       "-128",
+		//float32(math.SmallestNonzeroFloat32): "1e-45",
+		//float64(math.SmallestNonzeroFloat64): "5e-324",
+
 	}
 
 	for k, v := range dataset {
@@ -257,6 +298,21 @@ func TestNumbertFmt(t *testing.T) {
 			t.Errorf("Return Error : %v", err)
 		}
 	}
+
+	var err error
+
+	//check : not support obj
+	_, err = strproc.NumberFmt(complex128(123))
+	if err == nil {
+		t.Errorf("Failure : Can't check the `not support obj`")
+	}
+
+	//check : not support numric string
+	_, err = strproc.NumberFmt("1234===121212")
+	if err == nil {
+		t.Errorf("Failure : Can't check the `not support obj`")
+	}
+
 }
 
 func BenchmarkTestNumbertFmt(b *testing.B) {
@@ -289,7 +345,6 @@ func BenchmarkTestNumbertFmt(b *testing.B) {
 			}
 		}
 	}
-
 }
 
 //BenchmarkTestNumbertFmtInt64-8                	 2000000	       712 ns/op
@@ -365,6 +420,15 @@ func TestPadding(t *testing.T) {
 			t.Errorf("Original Value : %v\n", v.str)
 			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v.okstr)
 		}
+	}
+
+	//check : mx >= byteStrLen
+	testStr := "test"
+	retval := strproc.Padding(testStr, "*", strutils.PadBoth, 1)
+	if retval != testStr {
+
+		t.Errorf("Failure : Can't check the `mx >= byteStrLen`")
+
 	}
 }
 
@@ -490,6 +554,20 @@ func TestHumanByteSize(t *testing.T) {
 		if err != nil {
 			t.Errorf("Error : %v", err)
 		}
+	}
+
+	var err error
+
+	//check : unit < UpperCaseSingle || unit > CamelCaseLong
+	_, err = strproc.HumanByteSize(`1234`, 2, 123)
+	if err == nil {
+		t.Errorf("Failure : Can't check the `retval, err := strproc.HumanByteSize(k, 2, strutils.CamelCaseDouble)`")
+	}
+
+	//check : ParseFloat
+	_, err = strproc.HumanByteSize(`abc`, 2, 123)
+	if err == nil {
+		t.Errorf("Failure : Can't check the `strconv.ParseFloat(strNum, 64)`")
 	}
 }
 
