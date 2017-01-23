@@ -8,7 +8,8 @@ import (
 	"github.com/torden/go-strutil"
 )
 
-func ExampleAddSlashes() {
+// stringproc.go
+func Example_strutils_AddSlashes() {
 
 	strproc := strutils.NewStringProc()
 	example_str := `a\bcdefgz`
@@ -16,6 +17,7 @@ func ExampleAddSlashes() {
 	// Output: a\\bcdefgz
 }
 
+// stringproc.go
 func ExmapleStripSlashes() {
 
 	strproc := strutils.NewStringProc()
@@ -24,7 +26,8 @@ func ExmapleStripSlashes() {
 	// Output: abcdefgz
 }
 
-func ExampleNl2Br() {
+// stringproc.go
+func Example_strutils_Nl2Br() {
 
 	strproc := strutils.NewStringProc()
 	example_str := "abc\ndefgh"
@@ -32,7 +35,7 @@ func ExampleNl2Br() {
 	// Output: abc<br />defgh
 }
 
-func ExampleWordWrapSimple() {
+func Example_strutils_WordWrapSimple() {
 
 	strproc := strutils.NewStringProc()
 	example_str := "The quick brown fox jumped over the lazy dog."
@@ -42,7 +45,7 @@ func ExampleWordWrapSimple() {
 	// The quick*brown fox*jumped over*the lazy*dog.
 }
 
-func ExampleWordWrapAround() {
+func Example_strutils_WordWrapAround() {
 
 	strproc := strutils.NewStringProc()
 	example_str := "The quick brown fox jumped over the lazy dog."
@@ -52,7 +55,7 @@ func ExampleWordWrapAround() {
 	// The quick*brown fox*jumped*over the*lazy*dog.
 }
 
-func ExampleNumberFmt() {
+func Example_strutils_NumberFmt() {
 
 	strproc := strutils.NewStringProc()
 
@@ -164,7 +167,7 @@ func ExampleNumberFmt() {
 
 }
 
-func ExamplePaddingBoth() {
+func Example_strutils_PaddingBoth() {
 
 	strproc := strutils.NewStringProc()
 	example_str := "Life isn't always what one like."
@@ -176,7 +179,7 @@ func ExamplePaddingBoth() {
 	// *-Life isn't always what one like.*-=
 }
 
-func ExamplePaddingLeft() {
+func Example_strutils_PaddingLeft() {
 
 	strproc := strutils.NewStringProc()
 	example_str := "Life isn't always what one like."
@@ -188,7 +191,7 @@ func ExamplePaddingLeft() {
 	// *-=*-Life isn't always what one like.
 }
 
-func ExamplePaddingRight() {
+func Example_strutils_PaddingRight() {
 
 	strproc := strutils.NewStringProc()
 	example_str := "Life isn't always what one like."
@@ -200,7 +203,7 @@ func ExamplePaddingRight() {
 	// Life isn't always what one like.*-=*-
 }
 
-func ExampleLowerCaseFirstWords() {
+func Example_strutils_LowerCaseFirstWords() {
 
 	strproc := strutils.NewStringProc()
 	example_str := "LIFE ISN'T ALWAYS WHAT ONE LIKE."
@@ -208,7 +211,7 @@ func ExampleLowerCaseFirstWords() {
 	// Output: lIFE iSN'T aLWAYS wHAT oNE lIKE.
 }
 
-func ExampleUpperCaseFirstWords() {
+func Example_strutils_UpperCaseFirstWords() {
 
 	strproc := strutils.NewStringProc()
 	example_str := "life isn't always what one like."
@@ -216,7 +219,7 @@ func ExampleUpperCaseFirstWords() {
 	// Output: Life Isn't Always What One Like.
 }
 
-func ExampleSwapCaseFirstWords() {
+func Example_strutils_SwapCaseFirstWords() {
 
 	strproc := strutils.NewStringProc()
 	example_str := "O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,"
@@ -224,7 +227,7 @@ func ExampleSwapCaseFirstWords() {
 	// Output: O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,
 }
 
-func ExampleHumanByteSize() {
+func Example_strutils_HumanByteSize() {
 
 	strproc := strutils.NewStringProc()
 	example_str := 3276537856
@@ -237,7 +240,7 @@ func ExampleHumanByteSize() {
 	// Output: 3.05GigaByte
 }
 
-func ExampleHumanFileSize() {
+func Example_strutils_HumanFileSize() {
 
 	const tmpFilePath = "./filesizecheck.touch"
 	var retval string
@@ -270,7 +273,7 @@ func ExampleHumanFileSize() {
 
 }
 
-func ExampleAnyCompare() {
+func Example_strutils_AnyCompare() {
 
 	strproc := strutils.NewStringProc()
 
@@ -334,7 +337,7 @@ func ExampleAnyCompare() {
 	// Error :  Not Compare type, obj1.([a b c]) != obj2.([1 2 3 4 5 6 7 8 8])
 }
 
-func ExampleIsValidEmail() {
+func Example_strutils_IsValidEmail() {
 
 	strvalidator := strutils.NewStringValidator()
 	example_str := "a@golang.org"
@@ -342,7 +345,7 @@ func ExampleIsValidEmail() {
 	// Output: true
 }
 
-func ExampleIsValidDomain() {
+func Example_strutils_IsValidDomain() {
 
 	strvalidator := strutils.NewStringValidator()
 	example_str := "golang.org"
@@ -351,7 +354,7 @@ func ExampleIsValidDomain() {
 
 }
 
-func ExampleIsValidURL() {
+func Example_strutils_IsValidURL() {
 
 	strvalidator := strutils.NewStringValidator()
 	example_str := "https://www.google.co.kr/url?sa=t&rct=j&q=&esrc=s&source=web"
@@ -360,7 +363,7 @@ func ExampleIsValidURL() {
 
 }
 
-func ExampleIsValidMACAddr() {
+func Example_strutils_IsValidMACAddr() {
 
 	strvalidator := strutils.NewStringValidator()
 	example_str := "02-f3-71-eb-9e-4b"
@@ -369,7 +372,7 @@ func ExampleIsValidMACAddr() {
 
 }
 
-func ExampleIsValidIPAddr() {
+func Example_strutils_IsValidIPAddr() {
 
 	strvalidator := strutils.NewStringValidator()
 	example_str := "2001:470:1f09:495::3:217.126.185.21"
@@ -382,7 +385,7 @@ func ExampleIsValidIPAddr() {
 	// Output: true
 }
 
-func ExampleIsValidFilePath() {
+func Example_strutils_IsValidFilePath() {
 
 	strvalidator := strutils.NewStringValidator()
 	example_str := "a-1-s-d-v-we-wd_+qwd-qwd-qwd.txt"
@@ -390,7 +393,7 @@ func ExampleIsValidFilePath() {
 	// Output: false
 }
 
-func ExampleIsValidFilePathWithRelativePath() {
+func Example_strutils_IsValidFilePathWithRelativePath() {
 
 	strvalidator := strutils.NewStringValidator()
 	example_str := "/asdasd/asdasdasd/qwdqwd_qwdqwd/12-12/a-1-e-r-t-_1_21234_d_1234_qwed_1423_.txt"
@@ -398,7 +401,7 @@ func ExampleIsValidFilePathWithRelativePath() {
 	// Output: true
 }
 
-func ExampleIsPureTextStrict() {
+func Example_strutils_IsPureTextStrict() {
 
 	strvalidator := strutils.NewStringValidator()
 	example_str := `abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</a>qwdoijqwdoiqjd`
@@ -411,7 +414,7 @@ func ExampleIsPureTextStrict() {
 	// Output: Error :  Detect Tag (<[!|?]~>)
 }
 
-func ExampleIsPureTextNormal() {
+func Example_strutils_IsPureTextNormal() {
 
 	strvalidator := strutils.NewStringValidator()
 	example_str := `Foo<script type="text/javascript">alert(1337)</script>Bar`
