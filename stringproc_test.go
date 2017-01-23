@@ -638,6 +638,13 @@ func TestHumanFileSize(t *testing.T) {
 	}
 
 	os.Remove(tmpPath)
+
+	//check : os.Open
+	_, err = strproc.HumanFileSize("/hello_word_txt", 2, strutils.CamelCaseDouble)
+	if err == nil {
+		os.Remove(tmpPath)
+		t.Errorf("Failure : Couldn't check the `os.Open()`")
+	}
 }
 
 func TestAnyCompare(t *testing.T) {
@@ -922,6 +929,114 @@ func TestAnyCompare(t *testing.T) {
 	if err == nil {
 		t.Errorf("Failure : Couldn't check the `Not Support Compre`")
 		t.Errorf("Error : %v", err)
+	}
+
+	//check : sting != string
+	testDiffrentStringMap1 := map[string]map[string]map[string]string{
+		"F": map[string]map[string]string{
+			"name": map[string]string{
+				"first": "1",
+				"last":  "2",
+			},
+		},
+	}
+
+	testDiffrentStringMap2 := map[string]map[string]map[string]int{
+		"A": map[string]map[string]int{
+			"name": map[string]int{
+				"first": 11,
+				"last":  21,
+			},
+		},
+	}
+
+	retval, _ = strproc.AnyCompare(testDiffrentStringMap1, testDiffrentStringMap2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison.")
+	}
+
+	//check : uint != uint
+	testDiffrentUintMap1 := map[string]map[string]map[string]uint{
+		"F": map[string]map[string]uint{
+			"name": map[string]uint{
+				"first": 1,
+				"last":  2,
+			},
+		},
+	}
+
+	testDiffrentUintMap2 := map[string]map[string]map[string]int{
+		"A": map[string]map[string]int{
+			"name": map[string]int{
+				"first": 11,
+				"last":  21,
+			},
+		},
+	}
+
+	retval, _ = strproc.AnyCompare(testDiffrentUintMap1, testDiffrentUintMap2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison.")
+	}
+
+	//check : float64 != float64
+	testDiffrentFloatMap1 := map[string]map[string]map[string]float64{
+		"F": map[string]map[string]float64{
+			"name": map[string]float64{
+				"first": 1,
+				"last":  2,
+			},
+		},
+	}
+
+	testDiffrentFloatMap2 := map[string]map[string]map[string]int{
+		"A": map[string]map[string]int{
+			"name": map[string]int{
+				"first": 11,
+				"last":  21,
+			},
+		},
+	}
+
+	retval, _ = strproc.AnyCompare(testDiffrentFloatMap1, testDiffrentFloatMap2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison.")
+	}
+
+	//check : complex64 != complex64
+	testDiffrentComplexMap1 := map[string]map[string]map[string]complex64{
+		"F": map[string]map[string]complex64{
+			"name": map[string]complex64{
+				"first": 1,
+				"last":  2,
+			},
+		},
+	}
+
+	testDiffrentComplexMap2 := map[string]map[string]map[string]int{
+		"A": map[string]map[string]int{
+			"name": map[string]int{
+				"first": 11,
+				"last":  21,
+			},
+		},
+	}
+
+	retval, _ = strproc.AnyCompare(testDiffrentComplexMap1, testDiffrentComplexMap2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison.")
+	}
+
+	type testStruct1 struct {
+		a int
+		b int
+	}
+
+	testMapStruct1 := map[string]testStruct1{"a": testStruct1{1, 2}}
+	testMapStruct2 := map[string]testStruct1{"a": testStruct1{1, 2}}
+	retval, err = strproc.AnyCompare(testMapStruct1, testMapStruct2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison : %v", err)
 	}
 
 }
