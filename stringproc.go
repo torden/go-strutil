@@ -522,7 +522,7 @@ var sizeStrCamelCaseLong = []string{"Byte", "KiloByte", "MegaByte", "GigaByte", 
 //HumanByteSize is Byte Size convert to Easy Readable Size String
 func (s *StringProc) HumanByteSize(obj interface{}, decimals int, unit uint8) (string, error) {
 
-	if unit < UpperCaseSingle || unit > CamelCaseLong {
+	if unit < LowerCaseSingle || unit > CamelCaseLong {
 		return "", fmt.Errorf("Not allow unit parameter : %v", unit)
 	}
 

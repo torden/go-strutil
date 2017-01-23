@@ -582,7 +582,7 @@ func TestHumanByteSize(t *testing.T) {
 	}
 
 	//check : ParseFloat
-	_, err = strproc.HumanByteSize(`1234.1234+38`, 2, strutils.UpperCaseDouble)
+	_, err = strproc.HumanByteSize("1212098123091823234987425908273409834098134019238123102938123098123098123834.1234+38", 2, strutils.UpperCaseDouble)
 	if err == nil {
 		t.Errorf("Failure : Couldn't check the `strconv.ParseFloat(strNum, 64)`")
 	}
@@ -593,21 +593,33 @@ func TestHumanFileSize(t *testing.T) {
 
 	const tmpFilePath = "./filesizecheck.touch"
 	const tmpPath = "./testdir"
+
+	var retval string
 	var err error
 
 	//generating a touch file
-	tmpdata := []byte("123456789")
+	tmpdata := []byte(strings.Repeat("*", 1024*1024*13))
 	ioutil.WriteFile(tmpFilePath, tmpdata, 0750)
 
 	strproc := strutils.NewStringProc()
-	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseLong)
-	if err != nil {
-		t.Errorf("Error : %v", err)
+
+	dataset := map[uint8]string{
+		strutils.LowerCaseSingle: "13.00m",
+		strutils.LowerCaseDouble: "13.00mb",
+		strutils.UpperCaseSingle: "13.00M",
+		strutils.UpperCaseDouble: "13.00MB",
+		strutils.CamelCaseLong:   "13.00MegaByte",
+		strutils.CamelCaseDouble: "13.00Mb",
 	}
 
-	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseDouble)
-	if err != nil {
-		t.Errorf("Error : %v", err)
+	for k, v := range dataset {
+		retval, err = strproc.HumanFileSize(tmpFilePath, 2, k)
+		if v != retval {
+			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
+		}
+		if err != nil {
+			t.Errorf("Error : %v", err)
+		}
 	}
 
 	os.Remove(tmpFilePath)
@@ -616,7 +628,7 @@ func TestHumanFileSize(t *testing.T) {
 	err = os.MkdirAll(tmpPath, 0777)
 	if err != nil {
 		os.Remove(tmpPath)
-		t.Errorf("Failuew : Couldn't Mkdir %q: %s", tmpPath, err)
+		t.Errorf("Failure : Couldn't Mkdir %q: %s", tmpPath, err)
 	}
 
 	_, err = strproc.HumanFileSize(tmpPath, 2, strutils.CamelCaseDouble)
