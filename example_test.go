@@ -235,6 +235,7 @@ func ExampleHumanByteSize() {
 	// Output: 3.05GigaByte
 }
 
+/*
 func ExampleHumanFileSize() {
 
 	strproc := strutils.NewStringProc()
@@ -246,6 +247,7 @@ func ExampleHumanFileSize() {
 	}
 	// Output: 2.44KiloByte
 }
+*/
 
 func ExampleAnyCompare() {
 
