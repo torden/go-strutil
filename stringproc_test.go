@@ -645,7 +645,6 @@ func TestHumanFileSize(t *testing.T) {
 		os.Remove(tmpPath)
 		t.Errorf("Failure : Couldn't check the `os.Open()`")
 	}
-
 }
 
 func TestAnyCompare(t *testing.T) {
