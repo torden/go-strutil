@@ -8,7 +8,6 @@ import (
 	"github.com/torden/go-strutil"
 )
 
-// stringproc.go
 func Example_strutils_AddSlashes() {
 
 	strproc := strutils.NewStringProc()
@@ -17,7 +16,6 @@ func Example_strutils_AddSlashes() {
 	// Output: a\\bcdefgz
 }
 
-// stringproc.go
 func ExmapleStripSlashes() {
 
 	strproc := strutils.NewStringProc()
@@ -26,7 +24,6 @@ func ExmapleStripSlashes() {
 	// Output: abcdefgz
 }
 
-// stringproc.go
 func Example_strutils_Nl2Br() {
 
 	strproc := strutils.NewStringProc()

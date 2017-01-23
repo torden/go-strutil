@@ -1,3 +1,4 @@
+// testing : string validator
 package strutils_test
 
 import "testing"
