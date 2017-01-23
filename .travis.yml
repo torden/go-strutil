@@ -7,6 +7,13 @@ go:
   - 1.5.x
   - 1.4.x
   - tip
+before_install:
+  - go get github.com/mattn/goveralls
+before_script:
+  - go fmt ./...
+  - go vet ./...
+script:
+  - $HOME/gopath/bin/goveralls -service=travis-ci
 matrix:
   allow_failures:
     - go: tip
