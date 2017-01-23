@@ -2,6 +2,8 @@ package strutils_test
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
 
 	"github.com/torden/go-strutil"
 )
@@ -235,19 +237,38 @@ func ExampleHumanByteSize() {
 	// Output: 3.05GigaByte
 }
 
-/*
 func ExampleHumanFileSize() {
 
+	const tmpFilePath = "./filesizecheck.touch"
+	var retval string
+	var err error
+
+	//generating a touch file
+	tmpdata := []byte("123456789")
+
+	ioutil.WriteFile(tmpFilePath, tmpdata, 0750)
+
 	strproc := strutils.NewStringProc()
-	retval, err := strproc.HumanFileSize("/etc/ssh/sshd_config", 2, strutils.CamelCaseLong)
+	retval, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseLong)
 	if err != nil {
 		fmt.Println("Error : ", err)
 	} else {
 		fmt.Println(retval)
 	}
-	// Output: 2.44KiloByte
+
+	retval, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseDouble)
+	if err != nil {
+		fmt.Println("Error : ", err)
+	} else {
+		fmt.Println(retval)
+	}
+
+	os.Remove(tmpFilePath)
+
+	// Output: 9.00Byte
+	// 9.00B
+
 }
-*/
 
 func ExampleAnyCompare() {
 
