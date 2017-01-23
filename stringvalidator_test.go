@@ -17,6 +17,37 @@ func ipaddrTest(t *testing.T, cktype int, dataset map[string]bool, errfmt string
 	}
 }
 
+func TestIPAddrFalse(t *testing.T) {
+
+	strvalidator := strutils.NewStringValidator()
+	var err error
+
+	//check : wrong IP Addr
+	_, err = strvalidator.IsValidIPAddr("A.B.C.D", strutils.IPv4)
+	if err == nil {
+		t.Errorf("Failured : Couldn't check the `wrong IP Addr`")
+	}
+
+	//check : wrong options
+	_, err = strvalidator.IsValidIPAddr("127.0.0.1", 7)
+	if err == nil {
+		t.Errorf("Failured : Couldn't check the `wrong option`")
+	}
+
+	//check : getIPType
+	_, err = strvalidator.IsValidIPAddr(":F", strutils.IPv6CIDR, strutils.IPv6)
+	if err == nil {
+		t.Errorf("Failured : Couldn't check the `wrong IP Addr`")
+	}
+
+	//check : getIPType
+	_, err = strvalidator.IsValidIPAddr("127127127127", strutils.IPv6CIDR, strutils.IPv6)
+	if err == nil {
+		t.Errorf("Failured : Couldn't check the `wrong IP Addr`")
+	}
+
+}
+
 func TestIPAddr(t *testing.T) {
 
 	//IPv4
@@ -124,6 +155,11 @@ func TestMacAddr(t *testing.T) {
 		}
 	}
 
+	//check : return FALSE
+	retval := strvalidator.IsValidMACAddr("127.0.0.1")
+	if retval != false {
+		t.Errorf("Failured : Couldn't check the `return false`")
+	}
 }
 
 func TestDomain(t *testing.T) {
@@ -243,6 +279,8 @@ func TestPureTextNormal(t *testing.T) {
 		`%E6%8A%8A%E7%99%BE%E5%BA%A6%E8%AE%BE%E4%B8%BA%E4%B8%BB%E9%A1%B5%E5%85%B3%E4%BA%8E%E7%99%BE%E5%BA%A6About%20%20Baidu%E7%99%BE%E5%BA%A6%E6%8E%A8%E5%B9%BF`: true,
 		`abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</>qwdoijqwdoiqjd`:                                                                                                      true,
 		`abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</a>qwdoijqwdoiqjd`:                                                                                                     false,
+		"\tq\tq\t\nq": false,
+		"": false,
 	}
 
 	strvalidator := strutils.NewStringValidator()
@@ -280,6 +318,8 @@ func TestPureTextStrict(t *testing.T) {
 		`%E6%8A%8A%E7%99%BE%E5%BA%A6%E8%AE%BE%E4%B8%BA%E4%B8%BB%E9%A1%B5%E5%85%B3%E4%BA%8E%E7%99%BE%E5%BA%A6About%20%20Baidu%E7%99%BE%E5%BA%A6%E6%8E%A8%E5%B9%BF`: true,
 		`abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</>qwdoijqwdoiqjd`:                                                                                                      true,
 		`abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</a>qwdoijqwdoiqjd`:                                                                                                     false,
+		"\tq\tq\t\nq": false,
+		"": false,
 	}
 
 	strvalidator := strutils.NewStringValidator()
