@@ -1,20 +1,29 @@
 sudo: false
 language: go
 go:
-  - 1.x
-  - 1.7.x
-  - 1.6.x
-  - 1.5.x
-  - 1.4.x
-  - tip
+    - 1.x
+    - 1.7.x
+    - 1.6.x
+    - 1.5.x
+    - 1.4.x
+    - tip
 before_install:
-  - go get github.com/mattn/goveralls
+    - go get github.com/mattn/goveralls
+    - go get golang.org/x/tools/cmd/cover
+    - go get github.com/Masterminds/glide
+    - go get github.com/mattn/goveralls
+    - go get github.com/modocache/gover
+    - glide install
+
 before_script:
-  - go fmt ./...
-  - go vet ./...
+    - go fmt ./...
+    - go vet ./...
 script:
-  - $HOME/gopath/bin/goveralls -service=travis-ci
+    - go test -coverprofile=echo.coverprofile
+    - go test -coverprofile=middleware.coverprofile ./middleware
+    - gover
+    - goveralls -coverprofile=gover.coverprofile -service=travis-ci
 matrix:
-  allow_failures:
-    - go: tip
-  fast_finish: true
+    allow_failures:
+        - go: tip
+          fast_finish: true
