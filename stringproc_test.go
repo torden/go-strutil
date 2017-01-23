@@ -2,7 +2,9 @@
 package strutils_test
 
 import (
+	"io/ioutil"
 	"math"
+	"os"
 	"strings"
 	"testing"
 
@@ -187,7 +189,7 @@ func TestWordWrapSimple(t *testing.T) {
 	//check : wd = 0
 	_, err := strproc.WordWrapSimple("test", 0, "1234")
 	if err == nil {
-		t.Errorf("Failure : Can't check the `wd at least 1`")
+		t.Errorf("Failure : Couldn't check the `wd at least 1`")
 	}
 }
 
@@ -240,13 +242,13 @@ func TestWordWrapAround(t *testing.T) {
 	//check : wd = 0
 	_, err = strproc.WordWrapAround("test", 0, "1234")
 	if err == nil {
-		t.Errorf("Failure : Can't check the `wd at least 1`")
+		t.Errorf("Failure : Couldn't check the `wd at least 1`")
 	}
 
 	//check : lastspc = 1
 	_, err = strproc.WordWrapAround("ttttttt tttttttttt", 2, "1111")
 	if err != nil {
-		t.Errorf("Failure : Can't check the `lastspc = 1`")
+		t.Errorf("Failure : Couldn't check the `lastspc = 1`")
 	}
 
 }
@@ -304,13 +306,13 @@ func TestNumbertFmt(t *testing.T) {
 	//check : not support obj
 	_, err = strproc.NumberFmt(complex128(123))
 	if err == nil {
-		t.Errorf("Failure : Can't check the `not support obj`")
+		t.Errorf("Failure : Couldn't check the `not support obj`")
 	}
 
 	//check : not support numric string
 	_, err = strproc.NumberFmt("1234===121212")
 	if err == nil {
-		t.Errorf("Failure : Can't check the `not support obj`")
+		t.Errorf("Failure : Couldn't check the `not support obj`")
 	}
 
 }
@@ -427,7 +429,7 @@ func TestPadding(t *testing.T) {
 	retval := strproc.Padding(testStr, "*", strutils.PadBoth, 1)
 	if retval != testStr {
 
-		t.Errorf("Failure : Can't check the `mx >= byteStrLen`")
+		t.Errorf("Failure : Couldn't check the `mx >= byteStrLen`")
 
 	}
 }
@@ -561,14 +563,60 @@ func TestHumanByteSize(t *testing.T) {
 	//check : unit < UpperCaseSingle || unit > CamelCaseLong
 	_, err = strproc.HumanByteSize(`1234`, 2, 123)
 	if err == nil {
-		t.Errorf("Failure : Can't check the `retval, err := strproc.HumanByteSize(k, 2, strutils.CamelCaseDouble)`")
+		t.Errorf("Failure : Couldn't check the `retval, err := strproc.HumanByteSize(k, 2, strutils.CamelCaseDouble)`")
+	}
+
+	//check : numberToString
+	_, err = strproc.HumanByteSize(`abc`, 2, strutils.UpperCaseDouble)
+	if err == nil {
+		t.Errorf("Failure : Couldn't check the `can't convert number to string`")
 	}
 
 	//check : ParseFloat
-	_, err = strproc.HumanByteSize(`abc`, 2, 123)
+	_, err = strproc.HumanByteSize(`1234.1234+38`, 2, strutils.UpperCaseDouble)
 	if err == nil {
-		t.Errorf("Failure : Can't check the `strconv.ParseFloat(strNum, 64)`")
+		t.Errorf("Failure : Couldn't check the `strconv.ParseFloat(strNum, 64)`")
 	}
+
+}
+
+func TestHumanFileSize(t *testing.T) {
+
+	const tmpFilePath = "./filesizecheck.touch"
+	const tmpPath = "./testdir"
+	var err error
+
+	//generating a touch file
+	tmpdata := []byte("123456789")
+	ioutil.WriteFile(tmpFilePath, tmpdata, 0750)
+
+	strproc := strutils.NewStringProc()
+	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseLong)
+	if err != nil {
+		t.Errorf("Error : ", err)
+	}
+
+	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseDouble)
+	if err != nil {
+		t.Errorf("Error : ", err)
+	}
+
+	os.Remove(tmpFilePath)
+
+	//check : isDir
+	err = os.MkdirAll(tmpPath, 0777)
+	if err != nil {
+		os.Remove(tmpPath)
+		t.Errorf("Failuew : Couldn't Mkdir %q: %s", tmpPath, err)
+	}
+
+	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseDouble)
+	if err == nil {
+		os.Remove(tmpPath)
+		t.Errorf("Failure : Couldn't check the `stat.IsDir()`")
+	}
+
+	os.Remove(tmpPath)
 }
 
 func TestAnyCompare(t *testing.T) {
@@ -828,6 +876,31 @@ func TestAnyCompare(t *testing.T) {
 	retval, _ = strproc.AnyCompare(testComplexMap1, testComplexMap2)
 	if retval == true {
 		t.Errorf("Could not make an accurate comparison.")
+	}
+
+	//check : different type
+	testDiffType1 := int(32)
+	testDiffType2 := int64(32)
+	_, err = strproc.AnyCompare(testDiffType1, testDiffType2)
+	if err == nil {
+		t.Errorf("Failure : Couldn't check the `Different Type`")
+	}
+
+	//check : different len
+	testDiffLen1 := []int{1, 2, 3, 4, 5, 6, 7}
+	testDiffLen2 := []int{1, 2, 3}
+	_, err = strproc.AnyCompare(testDiffLen1, testDiffLen2)
+	if err == nil {
+		t.Errorf("Failure : Couldn't check the `Different Len`")
+	}
+
+	//check : not support compre
+	testDiffNotSupport1 := paddingTestVal{}
+	testDiffNotSupport2 := paddingTestVal{}
+	_, err = strproc.AnyCompare(testDiffNotSupport1, testDiffNotSupport2)
+	if err == nil {
+		t.Errorf("Failure : Couldn't check the `Not Support Compre`")
+		t.Errorf("Error : %v", err)
 	}
 
 }
