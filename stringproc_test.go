@@ -1,3 +1,4 @@
+// testing : string processing
 package strutils_test
 
 import (
