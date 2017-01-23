@@ -709,13 +709,13 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 		compObj1 := reflect.ValueOf(obj1)
 		compObj2 := reflect.ValueOf(obj2)
 
-		if compObj1.Len() != compObj2.Len() {
-			return false, fmt.Errorf("Different Size : obj1(%d) != obj2(%d)", compObj1.Len(), compObj2.Len())
-		}
-
 		switch {
 
 		case compObj1.Kind() == reflect.Slice:
+
+			if compObj1.Len() != compObj2.Len() {
+				return false, fmt.Errorf("Different Size : obj1(%d) != obj2(%d)", compObj1.Len(), compObj2.Len())
+			}
 
 			for i := 0; i < compObj1.Len(); i++ {
 				if compObj1.Index(i).Interface() != compObj2.Index(i).Interface() {
@@ -724,6 +724,10 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 			}
 
 		case compObj1.Kind() == reflect.Map:
+			if compObj1.Len() != compObj2.Len() {
+				return false, fmt.Errorf("Different Size : obj1(%d) != obj2(%d)", compObj1.Len(), compObj2.Len())
+			}
+
 			recursiveDepth = 0
 			retval, err := compareMap(compObj1, compObj2)
 			if retval == false {
