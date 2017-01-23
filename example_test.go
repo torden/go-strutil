@@ -36,8 +36,14 @@ func Example_strutils_WordWrapSimple() {
 
 	strproc := strutils.NewStringProc()
 	example_str := "The quick brown fox jumped over the lazy dog."
-	fmt.Printf("%v\n", strproc.WordWrapSimple(example_str, 3, "*"))
-	fmt.Printf("%v\n", strproc.WordWrapSimple(example_str, 8, "*"))
+
+	var retval string
+	retval, _ = strproc.WordWrapSimple(example_str, 3, "*")
+	fmt.Printf("%v\n", retval)
+
+	retval, _ = strproc.WordWrapSimple(example_str, 8, "*")
+	fmt.Printf("%v\n", retval)
+
 	// Output: The*quick*brown*fox*jumped*over*the*lazy*dog.
 	// The quick*brown fox*jumped over*the lazy*dog.
 }
@@ -46,8 +52,23 @@ func Example_strutils_WordWrapAround() {
 
 	strproc := strutils.NewStringProc()
 	example_str := "The quick brown fox jumped over the lazy dog."
-	fmt.Printf("%v\n", strproc.WordWrapAround(example_str, 3, "*"))
-	fmt.Printf("%v\n", strproc.WordWrapAround(example_str, 8, "*"))
+
+	var retval string
+	var err error
+	retval, err = strproc.WordWrapAround(example_str, 3, "*")
+	if err != nil {
+		fmt.Println("Error : ", err)
+	} else {
+		fmt.Printf("%v\n", retval)
+	}
+
+	retval, _ = strproc.WordWrapAround(example_str, 8, "*")
+	if err != nil {
+		fmt.Println("Error : ", err)
+	} else {
+		fmt.Printf("%v\n", retval)
+	}
+
 	// Output: The*quick*brown*fox*jumped*over*the*lazy*dog.
 	// The quick*brown fox*jumped*over the*lazy*dog.
 }
