@@ -16,7 +16,7 @@ func Example_strutils_AddSlashes() {
 	// Output: a\\bcdefgz
 }
 
-func Exmaple_strutils_StripSlashes() {
+func Example_strutils_StripSlashes() {
 
 	strproc := strutils.NewStringProc()
 	example_str := "a\\bcdefgz"
