@@ -176,7 +176,7 @@ func TestWordWrapSimple(t *testing.T) {
 
 	for _, v := range dataset {
 
-		retval := strproc.WordWrapSimple(v.str, v.wd, v.breakstr)
+		retval, _ := strproc.WordWrapSimple(v.str, v.wd, v.breakstr)
 		if v.okstr != retval {
 			t.Errorf("Original Value : %v\n", v.str)
 			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v.okstr)
@@ -221,7 +221,7 @@ func TestWordWrapAround(t *testing.T) {
 
 	for _, v := range dataset {
 
-		retval := strproc.WordWrapAround(v.str, v.wd, v.breakstr)
+		retval, _ := strproc.WordWrapAround(v.str, v.wd, v.breakstr)
 		if v.okstr != retval {
 			t.Errorf("Original Value : %v\n", v.str)
 			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v.okstr)
