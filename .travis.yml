@@ -15,7 +15,6 @@ before_install:
 
 before_script:
     - go fmt ./...
-    - if [[ `go version` =~ go1.5 ]] ; then go vet ./... ; fi
 script:
     - go test -coverprofile=strutils.coverprofile
     - gover
