@@ -120,6 +120,13 @@ func TestIPAddr(t *testing.T) {
 		"12.12/12":                                     false,
 	}
 
+	//IPv4-Mapped Embedded IPv6 Address with CIDR
+	testIpv4MappedIpv6IpaddrsCIDR := map[string]bool{
+		"2600:9000:5301:b600::1:205.251.193.182/32": true,
+		"2600:9000:5303:900::1:205.251.195.9/32":    true,
+		"0:0:0:0:0:FFFF:222.1.41.90/32":             true,
+	}
+
 	ipaddrTest(t, strutils.IPv4, testIpv4Ipaddrs, "invalid (%s) IPv4 address")
 	ipaddrTest(t, strutils.IPv4CIDR, testIpv4WithCidrIpaddrs, "invalid (%s) IPv4 with CIDR address")
 
@@ -127,6 +134,7 @@ func TestIPAddr(t *testing.T) {
 	ipaddrTest(t, strutils.IPv6CIDR, testIpv6WithCidrIpaddrs, "invalid (%s) IPv6 with CIDR address")
 	ipaddrTest(t, strutils.IPv4MappedIPv6, testIpv4MappedIpv6Ipaddrs, "invalid (%s) IPv4-Mapped Embedded IPv6 address")
 
+	ipaddrTest(t, strutils.IPv4MappedIPv6CIDR, testIpv4MappedIpv6IpaddrsCIDR, "invalid (%s) IPv4-Mapped Embedded IPv6 address With CIDR")
 }
 
 func TestMacAddr(t *testing.T) {
@@ -281,6 +289,7 @@ func TestPureTextNormal(t *testing.T) {
 		`abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</a>qwdoijqwdoiqjd`:                                                                                                     false,
 		"\tq\tq\t\nq": false,
 		"": false,
+		"aaaaaaqwdqwdqwwdqwdqw	qwdqwdqwqdw": false,
 	}
 
 	strvalidator := strutils.NewStringValidator()
@@ -320,6 +329,7 @@ func TestPureTextStrict(t *testing.T) {
 		`abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</a>qwdoijqwdoiqjd`:                                                                                                     false,
 		"\tq\tq\t\nq": false,
 		"": false,
+		"aaaaaaqwdqwdqwwdqwdqw	qwdqwdqwqdw": false,
 	}
 
 	strvalidator := strutils.NewStringValidator()
