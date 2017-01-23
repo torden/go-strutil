@@ -602,12 +602,12 @@ func TestHumanFileSize(t *testing.T) {
 	strproc := strutils.NewStringProc()
 	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseLong)
 	if err != nil {
-		t.Errorf("Error : ", err)
+		t.Errorf("Error : %v", err)
 	}
 
 	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseDouble)
 	if err != nil {
-		t.Errorf("Error : ", err)
+		t.Errorf("Error : %v", err)
 	}
 
 	os.Remove(tmpFilePath)
