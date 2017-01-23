@@ -638,6 +638,14 @@ func TestHumanFileSize(t *testing.T) {
 	}
 
 	os.Remove(tmpPath)
+
+	//check : os.Open
+	_, err = strproc.HumanFileSize("/etc/passwd", 2, strutils.CamelCaseDouble)
+	if err == nil {
+		os.Remove(tmpPath)
+		t.Errorf("Failure : Couldn't check the `os.Open()`")
+	}
+
 }
 
 func TestAnyCompare(t *testing.T) {
