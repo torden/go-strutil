@@ -135,8 +135,7 @@ func (s *StringProc) WordWrapSimple(str string, wd int, breakstr string) (string
 func (s *StringProc) WordWrapAround(str string, wd int, breakstr string) (string, error) {
 
 	if wd < 1 {
-		err := errors.New("wd At least 1 or More")
-		return str, err
+		return "", errors.New("wd At least 1 or More")
 	}
 
 	strl := len(str)
@@ -173,7 +172,6 @@ func (s *StringProc) WordWrapAround(str string, wd int, breakstr string) (string
 		if (width <= beforeBp || width <= beforeBp+1 || width <= beforeBp-1) && width <= v {
 			inject = append(inject, beforeBp)
 			width += wd
-			//fmt.Print("OK")
 		} else if width < v && len(lastspc) == 1 {
 			inject = append(inject, v)
 		}
