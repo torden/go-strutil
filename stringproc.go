@@ -670,7 +670,7 @@ func compareMap(compObj1 reflect.Value, compObj2 reflect.Value) (bool, error) {
 
 		if valueCompareErr == true {
 			if recursiveDepth == 1 {
-				return false, fmt.Errorf("Different Value : (obj1[%v] := %v) != (obj2[%v] := %v)", recursiveDepth, k, compObj1.MapIndex(k), k, compObj2.MapIndex(k))
+				return false, fmt.Errorf("Different Value : (obj1[%v] := %v) != (obj2[%v] := %v)", k, compObj1.MapIndex(k), k, compObj2.MapIndex(k))
 			}
 
 			depthStr := strings.Join(recursiveDepthKeypList, "][")
