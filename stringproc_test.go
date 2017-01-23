@@ -711,7 +711,7 @@ func TestAnyCompare(t *testing.T) {
 		},
 	}
 
-	retval, err = strproc.AnyCompare(testMultipleDepthMapFalse1, testMultipleDepthMapFalse2)
+	retval, _ = strproc.AnyCompare(testMultipleDepthMapFalse1, testMultipleDepthMapFalse2)
 	if retval == true {
 		t.Errorf("Could not make an accurate comparison.")
 	}
@@ -746,7 +746,7 @@ func TestAnyCompare(t *testing.T) {
 		},
 	}
 
-	retval, err = strproc.AnyCompare(testComplexMap1, testComplexMap2)
+	retval, _ = strproc.AnyCompare(testComplexMap1, testComplexMap2)
 	if retval == true {
 		t.Errorf("Could not make an accurate comparison.")
 	}
