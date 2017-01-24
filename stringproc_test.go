@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/dustin/go-humanize"
 
@@ -258,6 +259,11 @@ func TestWordWrapAround(t *testing.T) {
 		t.Errorf("Failure : Couldn't check the `lastspc = 1`")
 	}
 
+	//check : except
+	_, err = strproc.WordWrapAround("t t", 1, "*")
+	if err != nil {
+		t.Errorf("Failure : Couldn't check the `specific except`")
+	}
 }
 
 func TestNumbertFmt(t *testing.T) {
@@ -322,6 +328,18 @@ func TestNumbertFmt(t *testing.T) {
 
 	//check : not support obj
 	_, err = strproc.NumberFmt(complex128(123))
+	if err == nil {
+		t.Errorf("Failure : Couldn't check the `not support obj`")
+	}
+
+	//check : not support obj
+	_, err = strproc.NumberFmt(complex64(123))
+	if err == nil {
+		t.Errorf("Failure : Couldn't check the `not support obj`")
+	}
+
+	//check : not support obj
+	_, err = strproc.NumberFmt(true)
 	if err == nil {
 		t.Errorf("Failure : Couldn't check the `not support obj`")
 	}
@@ -604,6 +622,12 @@ func TestHumanByteSize(t *testing.T) {
 		t.Errorf("Failure : Couldn't check the `strconv.ParseFloat(strNum, 64)`")
 	}
 
+	//check : Complex64
+	_, err = strproc.HumanByteSize(complex64(13), 2, strutils.UpperCaseDouble)
+	if err == nil {
+		t.Errorf("Failure : Couldn't check the `not support obj.(complex128)`")
+	}
+
 	//check : Complex128
 	_, err = strproc.HumanByteSize(complex128(2+3i), 2, strutils.UpperCaseDouble)
 	if err == nil {
@@ -643,6 +667,16 @@ func TestHumanFileSize(t *testing.T) {
 		if err != nil {
 			t.Errorf("Error : %v", err)
 		}
+	}
+
+	//check : lost file description
+	go func() {
+		time.Sleep(time.Nanosecond * 10)
+		os.Remove(tmpFilePath)
+	}()
+	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseDouble)
+	if err == nil {
+		//Sometime, get a error
 	}
 
 	os.Remove(tmpFilePath)
@@ -819,6 +853,13 @@ func TestAnyCompare(t *testing.T) {
 	testMapStr2 := map[string]string{"a": "va", "vb": "vb"}
 	retval, err = strproc.AnyCompare(testMapStr1, testMapStr2)
 	if retval == false {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
+	testMapStrDiff1 := map[string]string{"a": "va", "vb": "v"}
+	testMapStrDiff2 := map[string]string{"a": "va", "vb": "vb"}
+	retval, err = strproc.AnyCompare(testMapStrDiff1, testMapStrDiff2)
+	if retval == true {
 		t.Errorf("Could not make an accurate comparison : %v", err)
 	}
 
