@@ -546,7 +546,7 @@ func (s *StringProc) HumanByteSize(obj interface{}, decimals int, unit uint8) (s
 		tmpVal := reflect.Indirect(reflect.ValueOf(obj))
 
 		if tmpVal.Type().ConvertibleTo(float64Type) == false {
-			return "", fmt.Errorf("Not Support obj.(%v)", reflect.TypeOf(obj))
+			return "", fmt.Errorf("Not Convert obj.(%v) to float64", reflect.TypeOf(obj))
 		}
 
 		bufStrFloat64 = tmpVal.Convert(float64Type).Float()
@@ -627,7 +627,7 @@ func compareMap(compObj1 reflect.Value, compObj2 reflect.Value) (bool, error) {
 
 		//check : Type
 		if compObj1.MapIndex(k).Kind() != compObj2.MapIndex(k).Kind() {
-			return false, fmt.Errorf("Different Type : (obj1[%v] is  %v) != (obj2[%v] is  %v)", k, compObj1.MapIndex(k).Kind(), k, compObj1.MapIndex(k).Kind())
+			return false, fmt.Errorf("Different Type : (obj1[%v] type is `%v`) != (obj2[%v] type is `%v`)", k, compObj1.MapIndex(k).Kind(), k, compObj2.MapIndex(k).Kind())
 		}
 
 		switch compObj1.MapIndex(k).Kind() {
@@ -698,8 +698,8 @@ func compareMap(compObj1 reflect.Value, compObj2 reflect.Value) (bool, error) {
 // NOTE : Not safe , Not Test Complete. Require more test data based on the complex dataset.
 func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error) {
 
-	if reflect.TypeOf(obj1) != reflect.TypeOf(obj2) {
-		return false, fmt.Errorf("Not Compare type, obj1.(%v) != obj2.(%v)", obj1, obj2)
+	if reflect.TypeOf(obj1).Kind() != reflect.TypeOf(obj2).Kind() {
+		return false, fmt.Errorf("Not Compare type, obj1.(%v) != obj2.(%v)", reflect.TypeOf(obj1).Kind(), reflect.TypeOf(obj2).Kind())
 	}
 
 	recursiveDepthKeypList = make([]string, 0)
