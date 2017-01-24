@@ -680,6 +680,34 @@ func TestAnyCompare(t *testing.T) {
 
 	strproc := strutils.NewStringProc()
 
+	testStr1 := "ABCD"
+	testStr2 := "ABCD"
+	retval, err = strproc.AnyCompare(testStr1, testStr2)
+	if retval == false {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
+	testUint1 := uint64(1234567)
+	testUint2 := uint64(1234567)
+	retval, err = strproc.AnyCompare(testUint1, testUint2)
+	if retval == false {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
+	testFloat1 := float64(123.123)
+	testFloat2 := float64(123.123)
+	retval, err = strproc.AnyCompare(testFloat1, testFloat2)
+	if retval == false {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
+	testComplex1 := complex64(123.123)
+	testComplex2 := complex64(123.123)
+	retval, err = strproc.AnyCompare(testComplex1, testComplex2)
+	if retval == false {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
 	testInt1 := []int{1, 2, 3}
 	testInt2 := []int{1, 2, 3}
 	retval, err = strproc.AnyCompare(testInt1, testInt2)
@@ -944,6 +972,14 @@ func TestAnyCompare(t *testing.T) {
 	testDiffLen1 := []int{1, 2, 3, 4, 5, 6, 7}
 	testDiffLen2 := []int{1, 2, 3}
 	_, err = strproc.AnyCompare(testDiffLen1, testDiffLen2)
+	if err == nil {
+		t.Errorf("Failure : Couldn't check the `Different Len`")
+	}
+
+	//check : different len
+	testDiffMapLen1 := map[int]string{0: "A", 1: "B", 2: "C"}
+	testDiffMapLen2 := map[int]string{0: "A", 1: "B"}
+	_, err = strproc.AnyCompare(testDiffMapLen1, testDiffMapLen2)
 	if err == nil {
 		t.Errorf("Failure : Couldn't check the `Different Len`")
 	}
