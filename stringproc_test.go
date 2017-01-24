@@ -2,6 +2,7 @@
 package strutils_test
 
 import (
+	"fmt"
 	"io/ioutil"
 	"math"
 	"os"
@@ -599,18 +600,18 @@ func TestHumanByteSize(t *testing.T) {
 	}
 
 	//check : ParseFloat
-	/*
-		_, err = strproc.HumanByteSize("12121212121212121212121212121212121212121211212121212211212121212121.1234e+3", 2, strutils.UpperCaseDouble)
-		if err == nil {
-			t.Errorf("Failure : Couldn't check the `strconv.ParseFloat(strNum, 64)`")
-		}
-	*/
+	_, err = strproc.HumanByteSize("100.7976931348623157e+308", 2, strutils.UpperCaseDouble)
+	if err == nil {
+		t.Errorf("Failure : Couldn't check the `strconv.ParseFloat(strNum, 64)`")
+	}
 
 	//check : Complex128
-	_, err = strproc.HumanByteSize(complex128(123), 2, strutils.UpperCaseDouble)
+	_, err = strproc.HumanByteSize(complex128(2+3i), 2, strutils.UpperCaseDouble)
 	if err == nil {
 		t.Errorf("Failure : Couldn't check the `not support obj.(complex128)`")
 	}
+
+	fmt.Println(math.MaxFloat64)
 
 }
 
@@ -720,6 +721,96 @@ func TestAnyCompare(t *testing.T) {
 	retval, err = strproc.AnyCompare(testIntFalse1, testIntFalse2)
 	if retval == true {
 		t.Errorf("Could not make an accurate comparison.")
+	}
+
+	testMultipleDepthMapDiffType1 := map[string]map[string]string{
+		"H": map[string]string{
+			"name":  "Hydrogen",
+			"state": "gas",
+		},
+	}
+
+	testMultipleDepthMapDiffType2 := map[string]map[string]int{
+		"H": map[string]int{
+			"name":  1,
+			"state": 2,
+		},
+	}
+	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType1, testMultipleDepthMapDiffType2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
+	testMultipleDepthMapDiffType3 := map[string]map[string]int{
+		"H": map[string]int{
+			"name":  1,
+			"state": 2,
+		},
+	}
+
+	testMultipleDepthMapDiffType4 := map[string]map[string]uint{
+		"H": map[string]uint{
+			"name":  1,
+			"state": 2,
+		},
+	}
+	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType3, testMultipleDepthMapDiffType4)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
+	testMultipleDepthMapDiffType5 := map[string]map[string]uint{
+		"H": map[string]uint{
+			"name":  1,
+			"state": 2,
+		},
+	}
+
+	testMultipleDepthMapDiffType6 := map[string]map[string]int{
+		"H": map[string]int{
+			"name":  1,
+			"state": 2,
+		},
+	}
+	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType5, testMultipleDepthMapDiffType6)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
+	testMultipleDepthMapDiffType7 := map[string]map[string]float64{
+		"H": map[string]float64{
+			"name":  1,
+			"state": 2,
+		},
+	}
+
+	testMultipleDepthMapDiffType8 := map[string]map[string]int{
+		"H": map[string]int{
+			"name":  1,
+			"state": 2,
+		},
+	}
+	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType7, testMultipleDepthMapDiffType8)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison : %v", err)
+	}
+
+	testMultipleDepthMapDiffType9 := map[string]map[string]complex64{
+		"H": map[string]complex64{
+			"name":  1,
+			"state": 2,
+		},
+	}
+
+	testMultipleDepthMapDiffType10 := map[string]map[string]int{
+		"H": map[string]int{
+			"name":  1,
+			"state": 2,
+		},
+	}
+	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType9, testMultipleDepthMapDiffType10)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison : %v", err)
 	}
 
 	testMapStr1 := map[string]string{"a": "va", "vb": "vb"}
