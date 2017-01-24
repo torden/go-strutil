@@ -8,6 +8,7 @@ func ipaddrTest(t *testing.T, cktype int, dataset map[string]bool, errfmt string
 
 	strvalidator := strutils.NewStringValidator()
 
+	//check : common
 	for k, v := range dataset {
 		retval, _ := strvalidator.IsValidIPAddr(k, cktype)
 		if v != retval {
@@ -127,6 +128,7 @@ func TestIPAddr(t *testing.T) {
 		"0:0:0:0:0:FFFF:222.1.41.90/32":             true,
 	}
 
+	//check : common
 	ipaddrTest(t, strutils.IPv4, testIpv4Ipaddrs, "invalid (%s) IPv4 address")
 	ipaddrTest(t, strutils.IPv4CIDR, testIpv4WithCidrIpaddrs, "invalid (%s) IPv4 with CIDR address")
 
@@ -156,6 +158,7 @@ func TestMacAddr(t *testing.T) {
 
 	strvalidator := strutils.NewStringValidator()
 
+	//check : common
 	for k, v := range macaddrList {
 		retval := strvalidator.IsValidMACAddr(k)
 		if v != retval {
@@ -227,6 +230,7 @@ func TestDomain(t *testing.T) {
 
 	strvalidator := strutils.NewStringValidator()
 
+	//check : common
 	for k, v := range testDomains {
 		retval := strvalidator.IsValidDomain(k)
 		if v != retval {
@@ -254,6 +258,7 @@ func TestURL(t *testing.T) {
 
 	strvalidator := strutils.NewStringValidator()
 
+	//check : common
 	for k, v := range testUrls {
 		retval := strvalidator.IsValidURL(k)
 		if v != retval {
@@ -290,10 +295,12 @@ func TestPureTextNormal(t *testing.T) {
 		"\tq\tq\t\nq": false,
 		"": false,
 		"aaaaaaqwdqwdqwwdqwdqw	qwdqwdqwqdw": false,
+		"AbcEd-=qwdoijqdwoijaaaaaaqwdqwdqwwdqwdqw	qwdqwdqwqdw": false,
 	}
 
 	strvalidator := strutils.NewStringValidator()
 
+	//check : common
 	for k, v := range testTxts {
 		retval, _ := strvalidator.IsPureTextNormal(k)
 		if v != retval {
@@ -330,10 +337,12 @@ func TestPureTextStrict(t *testing.T) {
 		"\tq\tq\t\nq": false,
 		"": false,
 		"aaaaaaqwdqwdqwwdqwdqw	qwdqwdqwqdw": false,
+		"AbcEd-=qwdoijqdwoijaaaaaaqwdqwdqwwdqwdqw	qwdqwdqwqdw": false,
 	}
 
 	strvalidator := strutils.NewStringValidator()
 
+	//check : common
 	for k, v := range testTxts {
 		retval, _ := strvalidator.IsPureTextStrict(k)
 		if v != retval {
@@ -363,6 +372,7 @@ func TestFilePathOnlyFilePath(t *testing.T) {
 
 	strvalidator := strutils.NewStringValidator()
 
+	//check : common
 	for k, v := range testFilepaths {
 		retval := strvalidator.IsValidFilePath(k)
 		if v != retval {
@@ -392,6 +402,7 @@ func TestFilePathAllowRelativePath(t *testing.T) {
 
 	strvalidator := strutils.NewStringValidator()
 
+	//check : common
 	for k, v := range testFilepaths {
 		retval := strvalidator.IsValidFilePathWithRelativePath(k)
 		if v != retval {
