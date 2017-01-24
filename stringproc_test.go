@@ -2,7 +2,6 @@
 package strutils_test
 
 import (
-	"fmt"
 	"io/ioutil"
 	"math"
 	"os"
@@ -610,9 +609,6 @@ func TestHumanByteSize(t *testing.T) {
 	if err == nil {
 		t.Errorf("Failure : Couldn't check the `not support obj.(complex128)`")
 	}
-
-	fmt.Println(math.MaxFloat64)
-
 }
 
 func TestHumanFileSize(t *testing.T) {
@@ -671,6 +667,12 @@ func TestHumanFileSize(t *testing.T) {
 	if err == nil {
 		os.Remove(tmpPath)
 		t.Errorf("Failure : Couldn't check the `os.Open()`")
+	}
+
+	//check : not support obj.(complex128)
+	_, err = strproc.HumanByteSize(complex128(1+3i), 2, strutils.CamelCaseLong)
+	if err == nil {
+		t.Errorf("Failure : Couldn't check the `Not Support obj.(complex129)`")
 	}
 }
 
@@ -1047,6 +1049,30 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	retval, _ = strproc.AnyCompare(testComplexMap1, testComplexMap2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison.")
+	}
+
+	//check : uint in map
+	testMDepthUint1 := map[string]map[string]uint{"H": map[string]uint{"name": 1, "state": 2}}
+	testMDepthUint2 := map[string]map[string]uint{"H": map[string]uint{"name": 1, "state": 3}}
+	retval, _ = strproc.AnyCompare(testMDepthUint1, testMDepthUint2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison.")
+	}
+
+	//check : float in map
+	testMDepthFloat1 := map[string]map[string]float64{"H": map[string]float64{"name": 1, "state": 2}}
+	testMDepthFloat2 := map[string]map[string]float64{"H": map[string]float64{"name": 1, "state": 3}}
+	retval, _ = strproc.AnyCompare(testMDepthFloat1, testMDepthFloat2)
+	if retval == true {
+		t.Errorf("Could not make an accurate comparison.")
+	}
+
+	//check : complex in map
+	testMDepthComplex1 := map[string]map[string]complex64{"H": map[string]complex64{"name": 1, "state": 2}}
+	testMDepthComplex2 := map[string]map[string]complex64{"H": map[string]complex64{"name": 1, "state": 3}}
+	retval, _ = strproc.AnyCompare(testMDepthComplex1, testMDepthComplex2)
 	if retval == true {
 		t.Errorf("Could not make an accurate comparison.")
 	}
