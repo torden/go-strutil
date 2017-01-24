@@ -12,6 +12,7 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
 [![Go Walker](http://gowalker.org/api/v1/badge)](https://gowalker.org/github.com/torden/go-strutil)
 
 ## Installation
+
 `go get github.com/torden/go-strutils`, import it as `"github.com/torden/go-strutils"`, use it as `StringProc or StringValidator`
 
 ## Processing Methods
