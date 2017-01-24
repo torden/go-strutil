@@ -5,7 +5,6 @@ Just a few methods for helping processing the string
 README.md haven't contain all the examples. Please refer to the the XXXtest.go files.
 [[Referrer to Example Code](https://github.com/torden/go-strutil/blob/master/example_test.go)]
 
-
 [![Build Status](https://travis-ci.org/torden/go-strutil.svg?branch=master)](https://travis-ci.org/torden/go-strutil)
 [![Go Report Card](https://goreportcard.com/badge/github.com/torden/go-strutil)](https://goreportcard.com/report/github.com/torden/go-strutil)
 [![GoDoc](https://godoc.org/github.com/torden/go-strutil?status.svg)](https://godoc.org/github.com/torden/go-strutil)
@@ -17,11 +16,11 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
 
 ## Processing Methods
 
-#### AddSlashes
+### AddSlashes
 quote string with slashes.
 ```go
 func (s *StringProc) AddSlashes(str string) string
-````
+```
 
 Example:
 ```go
@@ -94,11 +93,11 @@ The*quick*brown*fox*jumped*over*the*lazy*dog.
 The quick*brown fox*jumped*over the*lazy*dog.
 ```
 
-##NumberFmt
+## NumberFmt
 format a number with english notation grouped thousands
 ```go
 func (s *StringProc) NumberFmt(obj interface{}) (string, error)
-````
+```
 
 Example:
 ```go
@@ -147,7 +146,7 @@ The above example will output:
 123,456,789
 ```
 
-##PaddingBoth , PaddingLeft, PaddingRight
+## PaddingBoth , PaddingLeft, PaddingRight
 pad a string to a certain length with another string
 ```go
 func (s *StringProc) PaddingBoth(str string, fill string, mx int) string
@@ -233,7 +232,6 @@ The above example will output:
 ```bash
 o sAY, cAN yOU sEE, bY tHE dAWN’S eARLY lIGHT,
 ```
-
 
 ### HumanByteSize
 Byte Size convert to Easy Readable Size String
@@ -326,10 +324,7 @@ Return :  false
 Error :  different value : (obj1[A][name][first][last][F][name][first] := 1) != (obj2[A][name][first][last][F][name][first] := 11)
 ```
 
-
-
 ----
-
 
 ## Validation Methods
 ### IsValidEmail
@@ -488,4 +483,3 @@ false
 
 ----
 Please feel free
-
