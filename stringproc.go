@@ -206,15 +206,13 @@ func (s *StringProc) WordWrapAround(str string, wd int, breakstr string) (string
 func numberToString(obj interface{}) (string, error) {
 
 	var strNum string
-	var err error
 
 	switch obj.(type) {
 
 	case string:
 		strNum = obj.(string)
 		if numericPattern.MatchString(strNum) == false {
-			err = fmt.Errorf("Not Support obj.(%v) := %v ", reflect.TypeOf(obj), strNum)
-			return strNum, err
+			return strNum, fmt.Errorf("Not Support obj.(%v) := %v ", reflect.TypeOf(obj), strNum)
 		}
 	case int:
 		strNum = strconv.FormatInt(int64(obj.(int)), 10)
@@ -240,9 +238,13 @@ func numberToString(obj interface{}) (string, error) {
 		strNum = fmt.Sprintf("%g", obj.(float32))
 	case float64:
 		strNum = fmt.Sprintf("%g", obj.(float64))
+	case complex64:
+		strNum = fmt.Sprintf("%g", obj.(complex64))
+	case complex128:
+		strNum = fmt.Sprintf("%g", obj.(complex128))
+
 	default:
-		err = fmt.Errorf("Not Support obj.(%v)", reflect.TypeOf(obj))
-		return strNum, err
+		return strNum, fmt.Errorf("Not Support obj.(%v)", reflect.TypeOf(obj))
 	}
 
 	return strNum, nil
@@ -251,6 +253,12 @@ func numberToString(obj interface{}) (string, error) {
 // NumberFmt is format a number with english notation grouped thousands
 // TODO : support other country notation
 func (s *StringProc) NumberFmt(obj interface{}) (string, error) {
+
+	//check : complex
+	switch obj.(type) {
+	case complex64, complex128:
+		return "", fmt.Errorf("Not Support obj.(%v)", reflect.TypeOf(obj))
+	}
 
 	strNum, err := numberToString(obj)
 	if err != nil {
@@ -545,9 +553,18 @@ func (s *StringProc) HumanByteSize(obj interface{}, decimals int, unit uint8) (s
 		float64Type := reflect.TypeOf(float64(0))
 		tmpVal := reflect.Indirect(reflect.ValueOf(obj))
 
-		if tmpVal.Type().ConvertibleTo(float64Type) == false {
-			return "", fmt.Errorf("Not Convert obj.(%v) to float64", reflect.TypeOf(obj))
-		}
+		/*
+			//impossible?
+			if tmpVal.Type().ConvertibleTo(float64Type) == false {
+				bufStrFloat64, err = strconv.ParseFloat(reflect.ValueOf(obj).String(), 64)
+				if err != nil {
+					return "", fmt.Errorf("Not Support %v (obj.(%v))", obj, reflect.TypeOf(obj))
+				}
+
+			} else {
+				bufStrFloat64 = tmpVal.Convert(float64Type).Float()
+			}
+		*/
 
 		bufStrFloat64 = tmpVal.Convert(float64Type).Float()
 
@@ -600,7 +617,7 @@ func (s *StringProc) HumanFileSize(filepath string, decimals int, unit uint8) (s
 		return "", fmt.Errorf("%v", err)
 	}
 
-	stat, err := fd.Stat()
+	stat, err := fd.Stat() // impossible?. maybe it can be broken fd after file open. anyway can't make a test case..
 	if err != nil {
 		return "", fmt.Errorf("%v", err)
 	}
