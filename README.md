@@ -3,6 +3,7 @@
 Just a few methods for helping processing the string
 
 README.md haven't contain all the examples. Please refer to the the XXXtest.go files.
+
 [[Referrer to Example Code](https://github.com/torden/go-strutil/blob/master/example_test.go)]
 
 [![Build Status](https://travis-ci.org/torden/go-strutil.svg?branch=master)](https://travis-ci.org/torden/go-strutil)
