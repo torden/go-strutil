@@ -569,7 +569,8 @@ func TestHumanByteSize(t *testing.T) {
 		"2856906752": "2.66Gb",
 		"7040152":    "6.71Mb",
 		"22016":      "21.50Kb",
-		3.40282346638528859811704183484516925440e+38: "288230358971842560.00Yb",
+		3.40282346638528859811704183484516925440e+38:                                   "288230358971842560.00Yb",
+		"12121212121212121212121212121212121212121211212121212211212121212121.1234e+3": "0.00NaN",
 	}
 
 	//check : common
@@ -598,9 +599,17 @@ func TestHumanByteSize(t *testing.T) {
 	}
 
 	//check : ParseFloat
-	_, err = strproc.HumanByteSize("1212098123091823234987425908273409834098134019238123102938123098123098123834.1234+38", 2, strutils.UpperCaseDouble)
+	/*
+		_, err = strproc.HumanByteSize("12121212121212121212121212121212121212121211212121212211212121212121.1234e+3", 2, strutils.UpperCaseDouble)
+		if err == nil {
+			t.Errorf("Failure : Couldn't check the `strconv.ParseFloat(strNum, 64)`")
+		}
+	*/
+
+	//check : Complex128
+	_, err = strproc.HumanByteSize(complex128(123), 2, strutils.UpperCaseDouble)
 	if err == nil {
-		t.Errorf("Failure : Couldn't check the `strconv.ParseFloat(strNum, 64)`")
+		t.Errorf("Failure : Couldn't check the `not support obj.(complex128)`")
 	}
 
 }
