@@ -582,7 +582,14 @@ func (s *StringProc) HumanByteSize(obj interface{}, decimals int, unit uint8) (s
 	decimalsFmt := `%.` + strconv.Itoa(decimals) + `f%s`
 	humanSize := bufStrFloat64 / math.Pow(1024, float64(factor))
 
-	return fmt.Sprintf(decimalsFmt, humanSize, sizeStr[factor]), nil
+	var unitStr string
+	if len(sizeStr) > factor {
+		unitStr = sizeStr[factor]
+	} else {
+		unitStr = "NaN"
+	}
+
+	return fmt.Sprintf(decimalsFmt, humanSize, unitStr), nil
 }
 
 //HumanFileSize is File Size convert to Easy Readable Size String
