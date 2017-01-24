@@ -25,6 +25,7 @@ func TestAddSlashes(t *testing.T) {
 		`a\\bcdefgz`: `a\\bcdefgz`,
 	}
 
+	//check : common
 	var retval string
 	for k, v := range dataset {
 		retval = strproc.AddSlashes(k)
@@ -46,6 +47,7 @@ func TestStripSlashes(t *testing.T) {
 		`a\\\\bcdefgz`: `a\\bcdefgz`,
 	}
 
+	//check : common
 	var retval string
 	for k, v := range dataset {
 		retval = strproc.StripSlashes(k)
@@ -71,6 +73,7 @@ func TestNl2Br(t *testing.T) {
 		"abcdefgh\n\r": "abcdefgh<br />",
 	}
 
+	//check : common
 	var retval string
 	for k, v := range dataset {
 		retval = strproc.Nl2Br(k)
@@ -96,6 +99,7 @@ func BenchmarkNl2Br(b *testing.B) {
 		"abcdefgh\n\r": "abcdefgh<br />",
 	}
 
+	//check : common
 	for i := 0; i < b.N; i++ {
 		var retval string
 		for k, v := range dataset {
@@ -122,6 +126,7 @@ func BenchmarkNl2BrUseStringReplace(b *testing.B) {
 		"abcdefgh\n\r": "abcdefgh<br />",
 	}
 
+	//check : common
 	for i := 0; i < b.N; i++ {
 		var retval string
 		for k, v := range dataset {
@@ -177,6 +182,7 @@ func TestWordWrapSimple(t *testing.T) {
 	dataset[23] = wordwrapTestVal{`A very long woooooooooooooooooord. and something`, 8, `_+_+_+_+_+_+_+_+_+_+_+_+`, `A very long_+_+_+_+_+_+_+_+_+_+_+_+woooooooooooooooooord._+_+_+_+_+_+_+_+_+_+_+_+and something`}
 	dataset[24] = wordwrapTestVal{`가 나 다 라 마 바 사 아 자 차 카 타 파 하`, 8, `_+_+_+_+_+_+_+_+_+_+_+_+`, `가 나 다_+_+_+_+_+_+_+_+_+_+_+_+라 마 바_+_+_+_+_+_+_+_+_+_+_+_+사 아 자_+_+_+_+_+_+_+_+_+_+_+_+차 카 타_+_+_+_+_+_+_+_+_+_+_+_+파 하`}
 
+	//check : common
 	for _, v := range dataset {
 
 		retval, _ := strproc.WordWrapSimple(v.str, v.wd, v.breakstr)
@@ -228,6 +234,7 @@ func TestWordWrapAround(t *testing.T) {
 	dataset[23] = wordwrapTestVal{`A very long woooooooooooooooooord. and something`, 8, `_+_+_+_+_+_+_+_+_+_+_+_+`, `A very long_+_+_+_+_+_+_+_+_+_+_+_+woooooooooooooooooord._+_+_+_+_+_+_+_+_+_+_+_+and_+_+_+_+_+_+_+_+_+_+_+_+something`}
 	dataset[24] = wordwrapTestVal{`가 나 다 라 마 바 사 아 자 차 카 타 파 하`, 8, `_+_+_+_+_+_+_+_+_+_+_+_+`, `가 나 다_+_+_+_+_+_+_+_+_+_+_+_+라 마_+_+_+_+_+_+_+_+_+_+_+_+바 사_+_+_+_+_+_+_+_+_+_+_+_+아 자_+_+_+_+_+_+_+_+_+_+_+_+차 카_+_+_+_+_+_+_+_+_+_+_+_+타 파_+_+_+_+_+_+_+_+_+_+_+_+하`}
 
+	//check : common
 	for _, v := range dataset {
 
 		retval, _ := strproc.WordWrapAround(v.str, v.wd, v.breakstr)
@@ -294,6 +301,7 @@ func TestNumbertFmt(t *testing.T) {
 
 	}
 
+	//check : common
 	for k, v := range dataset {
 		retval, err := strproc.NumberFmt(k)
 		if v != retval {
@@ -345,6 +353,7 @@ func BenchmarkTestNumbertFmt(b *testing.B) {
 		123456789:       "123,456,789",
 	}
 
+	//benchmark : common
 	for i := 0; i < b.N; i++ {
 		for k, v := range dataset {
 			retval, err := strproc.NumberFmt(k)
@@ -358,15 +367,16 @@ func BenchmarkTestNumbertFmt(b *testing.B) {
 	}
 }
 
-//BenchmarkTestNumbertFmtInt64-8                	 2000000	       712 ns/op
-//BenchmarkTestNumbertFmtInt64UseHumanUnits-8   	 2000000	       761 ns/op
 func BenchmarkTestNumbertFmtInt64(b *testing.B) {
+	//BenchmarkTestNumbertFmtInt64-8                	 2000000	       712 ns/op
+	//BenchmarkTestNumbertFmtInt64UseHumanUnits-8   	 2000000	       761 ns/op
 
 	strproc := strutils.NewStringProc()
 	dataset := map[interface{}]string{
 		123456789101112: "123,456,789,101,112",
 	}
 
+	//benchmark : common
 	for i := 0; i < b.N; i++ {
 		for k, v := range dataset {
 			retval, err := strproc.NumberFmt(k)
@@ -387,6 +397,7 @@ func BenchmarkTestNumbertFmtInt64UseHumanUnits(b *testing.B) {
 		123456789101112: "123,456,789,101,112",
 	}
 
+	//benchmark : common
 	for i := 0; i < b.N; i++ {
 		for k, v := range dataset {
 			retval := humanize.Comma(k)
@@ -424,6 +435,7 @@ func TestPadding(t *testing.T) {
 	dataset[10] = paddingTestVal{"가나다라마바사아자차카타파하", "*-=", strutils.PadLeft, 47, "*-=*-가나다라마바사아자차카타파하"}
 	dataset[11] = paddingTestVal{"가나다라마바사아자차카타파하", "*-=", strutils.PadRight, 47, "가나다라마바사아자차카타파하*-=*-"}
 
+	//check : common
 	for _, v := range dataset {
 
 		retval := strproc.Padding(v.str, v.fill, v.m, v.mx)
@@ -458,6 +470,7 @@ func TestUppercaseFirstWords(t *testing.T) {
 		"가나다 라 마 바사아brownd 가나":                                              "가나다 라 마 바사아brownd 가나",
 	}
 
+	//check : common
 	for k, v := range dataset {
 		retval := strproc.UpperCaseFirstWords(k)
 		if v != retval {
@@ -481,6 +494,7 @@ func TestLowercaseFirstWords(t *testing.T) {
 		"가나다 라 마 바사아BROWND 가나":                                              "가나다 라 마 바사아BROWND 가나",
 	}
 
+	//check : common
 	for k, v := range dataset {
 		retval := strproc.LowerCaseFirstWords(k)
 		if v != retval {
@@ -521,6 +535,7 @@ func TestSwapCaseFirstWords(t *testing.T) {
 		"가나다 라 마 바사아BROWND 가나":                                              "가나다 라 마 바사아BROWND 가나",
 	}
 
+	//check : common
 	for k, v := range dataset {
 		retval := strproc.SwapCaseFirstWords(k)
 		if v != retval {
@@ -557,6 +572,7 @@ func TestHumanByteSize(t *testing.T) {
 		3.40282346638528859811704183484516925440e+38: "288230358971842560.00Yb",
 	}
 
+	//check : common
 	for k, v := range dataset {
 		retval, err := strproc.HumanByteSize(k, 2, strutils.CamelCaseDouble)
 		if v != retval {
@@ -612,6 +628,7 @@ func TestHumanFileSize(t *testing.T) {
 		strutils.CamelCaseDouble: "13.00Mb",
 	}
 
+	//check : common
 	for k, v := range dataset {
 		retval, err = strproc.HumanFileSize(tmpFilePath, 2, k)
 		if v != retval {
