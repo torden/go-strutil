@@ -18,18 +18,23 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
 ## Processing Methods
 
 ### AddSlashes
+
 quote string with slashes.
+
 ```go
 func (s *StringProc) AddSlashes(str string) string
 ```
 
 Example:
+
 ```go
 strutil := strutils.NewStringProc()
 example_str := "a\bcdefgz"
 fmt.Println("%v", strutil.AddSlashes(example_str))
 ```
+
 The above example will output:
+
 ```bash
 a\\bcdefgz
 ```
