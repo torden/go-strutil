@@ -556,3 +556,42 @@ func Example_strutils_ReverseReverseUnicode() {
 	//おえういあ
 	//荒洪宙宇黃玄地天
 }
+
+func Example_strutils_FileMD5Hash() {
+	strproc := strutils.NewStringProc()
+
+	retval, err := strproc.FileMD5Hash("./LICENSE")
+	if err != nil {
+		fmt.Println("Error : %v", err)
+	}
+
+	fmt.Println(retval)
+
+	// Output: f3f8954bac465686f0bfc2a757c5200b
+}
+
+func Example_strutils_MD5Hash() {
+
+	dataset := []string{
+		"0123456789",
+		"abcdefg",
+		"abcdefgqwdoisef;oijawe;fijq2039jdfs.dnc;oa283hr08uj3o;ijwaef;owhjefo;uhwefwef",
+	}
+
+	strproc := strutils.NewStringProc()
+
+	//check : common
+	for _, v := range dataset {
+		retval, err := strproc.MD5Hash(v)
+		if err != nil {
+			fmt.Println("Error : %v", err)
+		} else {
+			fmt.Println(retval)
+		}
+	}
+
+	// Output : 781e5e245d69b566979b86e28d23f2c7
+	// 7ac66c0f148de9519b8bd264312c4d64
+	// 15f764f21d09b11102eb015fc8824d00
+
+}
