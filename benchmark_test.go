@@ -33,13 +33,13 @@ func BenchmarkReverseNormalStr(b *testing.B) {
 	}
 }
 
-func BenchmarkReverseReverseUniCode(b *testing.B) {
+func BenchmarkReverseReverseUnicode(b *testing.B) {
 
 	benchMarkStr1 := strings.Repeat("0123456789", 100)
 
 	strproc := strutils.NewStringProc()
 	for i := 0; i < b.N; i++ {
-		strproc.ReverseUniCode(benchMarkStr1)
+		strproc.ReverseUnicode(benchMarkStr1)
 	}
 }
 
