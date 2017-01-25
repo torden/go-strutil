@@ -1,9 +1,12 @@
 package strutils
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"html"
+	"io"
 	"math"
 	"net/url"
 	"os"
@@ -625,6 +628,8 @@ func (s *StringProc) HumanFileSize(filepath string, decimals int, unit uint8) (s
 		return "", fmt.Errorf("%v", err)
 	}
 
+	defer fd.Close()
+
 	stat, err := fd.Stat() // impossible?. maybe it can be broken fd after file open. anyway can't make a test case..
 	if err != nil {
 		return "", fmt.Errorf("%v", err)
@@ -875,4 +880,33 @@ func (s *StringProc) ReverseUnicode(str string) string {
 	}
 
 	return string(bufRuneStr[:])
+}
+
+// FileMD5Hash is MD5 checksum of the file
+func (s *StringProc) FileMD5Hash(filepath string) (string, error) {
+
+	fd, err := os.Open(filepath)
+	if err != nil {
+		return "", err
+	}
+
+	defer fd.Close()
+
+	md5Hash := md5.New()
+	if _, err := io.Copy(md5Hash, fd); err != nil {
+		return "", err
+	}
+
+	return hex.EncodeToString(md5Hash.Sum(nil)), nil
+}
+
+// MD5Hash is MD5 checksum of the string
+func (s *StringProc) MD5Hash(str string) (string, error) {
+
+	md5Hash := md5.New()
+	if _, err := io.WriteString(md5Hash, str); err != nil {
+		return "", err
+	}
+
+	return hex.EncodeToString(md5Hash.Sum(nil)), nil
 }

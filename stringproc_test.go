@@ -588,42 +588,42 @@ func TestAnyCompare(t *testing.T) {
 	testStr2 := "ABCD"
 	retval, err = strproc.AnyCompare(testStr1, testStr2)
 	if retval == false {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testUint1 := uint64(1234567)
 	testUint2 := uint64(1234567)
 	retval, err = strproc.AnyCompare(testUint1, testUint2)
 	if retval == false {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testFloat1 := float64(123.123)
 	testFloat2 := float64(123.123)
 	retval, err = strproc.AnyCompare(testFloat1, testFloat2)
 	if retval == false {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testComplex1 := complex64(123.123)
 	testComplex2 := complex64(123.123)
 	retval, err = strproc.AnyCompare(testComplex1, testComplex2)
 	if retval == false {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testInt1 := []int{1, 2, 3}
 	testInt2 := []int{1, 2, 3}
 	retval, err = strproc.AnyCompare(testInt1, testInt2)
 	if retval == false {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testIntFalse1 := []int{1, 2, 3}
 	testIntFalse2 := []int{1, 2, 1}
 	retval, err = strproc.AnyCompare(testIntFalse1, testIntFalse2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison.")
+		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	testMultipleDepthMapDiffType1 := map[string]map[string]string{
@@ -641,7 +641,7 @@ func TestAnyCompare(t *testing.T) {
 	}
 	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType1, testMultipleDepthMapDiffType2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testMultipleDepthMapDiffType3 := map[string]map[string]int{
@@ -659,7 +659,7 @@ func TestAnyCompare(t *testing.T) {
 	}
 	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType3, testMultipleDepthMapDiffType4)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testMultipleDepthMapDiffType5 := map[string]map[string]uint{
@@ -677,7 +677,7 @@ func TestAnyCompare(t *testing.T) {
 	}
 	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType5, testMultipleDepthMapDiffType6)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testMultipleDepthMapDiffType7 := map[string]map[string]float64{
@@ -695,7 +695,7 @@ func TestAnyCompare(t *testing.T) {
 	}
 	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType7, testMultipleDepthMapDiffType8)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testMultipleDepthMapDiffType9 := map[string]map[string]complex64{
@@ -713,35 +713,35 @@ func TestAnyCompare(t *testing.T) {
 	}
 	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType9, testMultipleDepthMapDiffType10)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testMapStr1 := map[string]string{"a": "va", "vb": "vb"}
 	testMapStr2 := map[string]string{"a": "va", "vb": "vb"}
 	retval, err = strproc.AnyCompare(testMapStr1, testMapStr2)
 	if retval == false {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testMapStrDiff1 := map[string]string{"a": "va", "vb": "v"}
 	testMapStrDiff2 := map[string]string{"a": "va", "vb": "vb"}
 	retval, err = strproc.AnyCompare(testMapStrDiff1, testMapStrDiff2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testMapStrFalse1 := map[string]string{"a": "va", "vb": "vb"}
 	testMapStrFalse2 := map[string]string{"a": "va", "v": "vb"}
 	retval, err = strproc.AnyCompare(testMapStrFalse1, testMapStrFalse2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison.")
+		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	testMapBool1 := map[string]bool{"a": false, "vb": false}
 	testMapBool2 := map[string]bool{"a": false, "vb": true}
 	retval, err = strproc.AnyCompare(testMapBool1, testMapBool2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testMultipleDepthMap1 := map[string]map[string]string{
@@ -832,7 +832,7 @@ func TestAnyCompare(t *testing.T) {
 
 	retval, err = strproc.AnyCompare(testMultipleDepthMap1, testMultipleDepthMap2)
 	if retval == false {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 
 	testMultipleDepthMapFalse1 := map[string]map[string]string{
@@ -923,7 +923,7 @@ func TestAnyCompare(t *testing.T) {
 
 	retval, _ = strproc.AnyCompare(testMultipleDepthMapFalse1, testMultipleDepthMapFalse2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison.")
+		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	testComplexMap1 := map[string]map[string]map[string]int{
@@ -958,7 +958,7 @@ func TestAnyCompare(t *testing.T) {
 
 	retval, _ = strproc.AnyCompare(testComplexMap1, testComplexMap2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison.")
+		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	//check : uint in map
@@ -966,7 +966,7 @@ func TestAnyCompare(t *testing.T) {
 	testMDepthUint2 := map[string]map[string]uint{"H": map[string]uint{"name": 1, "state": 3}}
 	retval, _ = strproc.AnyCompare(testMDepthUint1, testMDepthUint2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison.")
+		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	//check : float in map
@@ -974,7 +974,7 @@ func TestAnyCompare(t *testing.T) {
 	testMDepthFloat2 := map[string]map[string]float64{"H": map[string]float64{"name": 1, "state": 3}}
 	retval, _ = strproc.AnyCompare(testMDepthFloat1, testMDepthFloat2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison.")
+		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	//check : complex in map
@@ -982,7 +982,7 @@ func TestAnyCompare(t *testing.T) {
 	testMDepthComplex2 := map[string]map[string]complex64{"H": map[string]complex64{"name": 1, "state": 3}}
 	retval, _ = strproc.AnyCompare(testMDepthComplex1, testMDepthComplex2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison.")
+		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	//check : different type
@@ -1039,7 +1039,7 @@ func TestAnyCompare(t *testing.T) {
 
 	retval, _ = strproc.AnyCompare(testDiffrentStringMap1, testDiffrentStringMap2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison.")
+		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	//check : uint != uint
@@ -1063,7 +1063,7 @@ func TestAnyCompare(t *testing.T) {
 
 	retval, _ = strproc.AnyCompare(testDiffrentUintMap1, testDiffrentUintMap2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison.")
+		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	//check : float64 != float64
@@ -1087,7 +1087,7 @@ func TestAnyCompare(t *testing.T) {
 
 	retval, _ = strproc.AnyCompare(testDiffrentFloatMap1, testDiffrentFloatMap2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison.")
+		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	//check : complex64 != complex64
@@ -1111,7 +1111,7 @@ func TestAnyCompare(t *testing.T) {
 
 	retval, _ = strproc.AnyCompare(testDiffrentComplexMap1, testDiffrentComplexMap2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison.")
+		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	type testStruct1 struct {
@@ -1123,7 +1123,7 @@ func TestAnyCompare(t *testing.T) {
 	testMapStruct2 := map[string]testStruct1{"a": testStruct1{1, 2}}
 	retval, err = strproc.AnyCompare(testMapStruct1, testMapStruct2)
 	if retval == true {
-		t.Errorf("Could not make an accurate comparison : %v", err)
+		t.Errorf("Couldn't make an accurate comparison : %v", err)
 	}
 }
 
@@ -1375,6 +1375,53 @@ func TestReverseReverseUnicode(t *testing.T) {
 		retval := strproc.ReverseUnicode(k)
 		if v != retval {
 			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
+		}
+	}
+}
+
+func TestFileMD5Hash(t *testing.T) {
+
+	strproc := strutils.NewStringProc()
+
+	var retval string
+	var err error
+
+	//check : common
+	retval, err = strproc.FileMD5Hash("./LICENSE")
+	if err != nil {
+		t.Errorf("Error : %v", err)
+	}
+
+	str_ok := "f3f8954bac465686f0bfc2a757c5200b"
+	if retval != str_ok { //make use md5sum command
+		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
+	}
+
+	//check : os.Open
+	_, err = strproc.FileMD5Hash("./HELLO_GOLANG")
+	if err == nil {
+		t.Errorf("Couldn't check the `os.Open`")
+	}
+}
+
+func TestMD5Hash(t *testing.T) {
+
+	dataset := map[string]string{
+		"0123456789": "781e5e245d69b566979b86e28d23f2c7",
+		"abcdefg":    "7ac66c0f148de9519b8bd264312c4d64",
+		"abcdefgqwdoisef;oijawe;fijq2039jdfs.dnc;oa283hr08uj3o;ijwaef;owhjefo;uhwefwef": "15f764f21d09b11102eb015fc8824d00",
+	}
+
+	strproc := strutils.NewStringProc()
+
+	//check : common
+	for k, v := range dataset {
+		retval, err := strproc.MD5Hash(k)
+		if v != retval {
+			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
+		}
+		if err != nil {
+			t.Errorf("Error : %v", err)
 		}
 	}
 }
