@@ -774,7 +774,7 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 	return true, nil
 }
 
-// StipTags is remove all tag in string
+// StripTags is remove all tag in string
 func (s *StringProc) StripTags(str string) (string, error) {
 
 	var retval bool
@@ -814,62 +814,64 @@ func (s *StringProc) ConvertToStr(obj interface{}) (string, error) {
 	case bool:
 		if obj.(bool) == true {
 			return "true", nil
-		} else {
-			return "false", nil
 		}
+
 	default:
 		return numberToString(obj)
 	}
+
+	//according to golint guide-line...
+	return "false", nil
 }
 
-/*
 // ReverseStr is Reverse a String , According to value type between ascii or rune
 // TODO : improve performance (use goroutin)
-data : "0123456789" * 100
-BenchmarkReverseStr-8              	   50000	     34127 ns/op	    5120 B/op	       2 allocs/op
-BenchmarkReverseNormalStr-8        	 1000000	      1187 ns/op	    2048 B/op	       2 allocs/op
-BenchmarkReverseReverseUniCode-8   	  100000	     29343 ns/op	    5120 B/op	       2 allocs/op
-*/
 func (s *StringProc) ReverseStr(str string) string {
+	/*
+	   data : "0123456789" * 100
+	   BenchmarkReverseStr-8              	   50000	     34127 ns/op	    5120 B/op	       2 allocs/op
+	   BenchmarkReverseNormalStr-8        	 1000000	      1187 ns/op	    2048 B/op	       2 allocs/op
+	   BenchmarkReverseReverseUnicode-8   	  100000	     29343 ns/op	    5120 B/op	       2 allocs/op
+	*/
 
 	if len(str) != utf8.RuneCountInString(str) {
-		return s.ReverseUniCode(str)
-	} else {
-		return s.ReverseNormalStr(str)
+		return s.ReverseUnicode(str)
 	}
+
+	return s.ReverseNormalStr(str)
 }
 
 // ReverseNormalStr is Reverse a None-unicode String
 func (s *StringProc) ReverseNormalStr(str string) string {
 
-	bufbyte_str := []byte(str)
-	bufbyte_str_l := len(bufbyte_str)
-	swap_size := int(math.Ceil(float64(bufbyte_str_l) / 2))
+	bufbyteStr := []byte(str)
+	bufbyteStrLen := len(bufbyteStr)
+	swapSize := int(math.Ceil(float64(bufbyteStrLen) / 2))
 
-	head_no := 0
-	tail_no := bufbyte_str_l - 1
-	for i := 0; i < swap_size; i++ {
-		bufbyte_str[tail_no], bufbyte_str[head_no] = bufbyte_str[head_no], bufbyte_str[tail_no]
-		head_no++
-		tail_no--
+	headNo := 0
+	tailNo := bufbyteStrLen - 1
+	for i := 0; i < swapSize; i++ {
+		bufbyteStr[tailNo], bufbyteStr[headNo] = bufbyteStr[headNo], bufbyteStr[tailNo]
+		headNo++
+		tailNo--
 	}
 
-	return string(bufbyte_str[:])
+	return string(bufbyteStr[:])
 }
 
-// ReverseNormalStr is Reverse a unicode String
-func (s *StringProc) ReverseUniCode(str string) string {
+// ReverseUnicode is Reverse a unicode String
+func (s *StringProc) ReverseUnicode(str string) string {
 
 	bufRuneStr := []rune(str)
 	bufRuneStrl := len(bufRuneStr)
-	swap_size := int(math.Ceil(float64(bufRuneStrl) / 2))
+	swapSize := int(math.Ceil(float64(bufRuneStrl) / 2))
 
-	head_no := 0
-	tail_no := bufRuneStrl - 1
-	for i := 0; i < swap_size; i++ {
-		bufRuneStr[tail_no], bufRuneStr[head_no] = bufRuneStr[head_no], bufRuneStr[tail_no]
-		head_no++
-		tail_no--
+	headNo := 0
+	tailNo := bufRuneStrl - 1
+	for i := 0; i < swapSize; i++ {
+		bufRuneStr[tailNo], bufRuneStr[headNo] = bufRuneStr[headNo], bufRuneStr[tailNo]
+		headNo++
+		tailNo--
 	}
 
 	return string(bufRuneStr[:])
