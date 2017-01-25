@@ -297,7 +297,7 @@ func (s *StringProc) NumberFmt(obj interface{}) (string, error) {
 
 	//make bufbyte size
 	if foundDot == 0 { //numeric without dot
-		bufbyteSize = int(math.Ceil(float64(bufbyteStrLen) + (float64(bufbyteStrLen) / 3)))
+		bufbyteSize = int(math.Ceil(float64(bufbyteStrLen) + float64(bufbyteStrLen)/3))
 		foundDot = bufbyteStrLen
 		foundPos = bufbyteSize - 2
 
@@ -313,7 +313,7 @@ func (s *StringProc) NumberFmt(obj interface{}) (string, error) {
 			calFoundDot = foundDot
 		}
 
-		bufbyteSize = int(math.Ceil(float64(calFoundDot) + (float64(calFoundDot) / 3) + float64(bufbyteStrLen-calFoundDot) - 1))
+		bufbyteSize = int(math.Ceil(float64(calFoundDot) + float64(calFoundDot)/3 + float64(bufbyteStrLen-calFoundDot) - 1))
 	}
 
 	//make a buffer byte
@@ -327,7 +327,7 @@ func (s *StringProc) NumberFmt(obj interface{}) (string, error) {
 	//injection
 	intoPos := foundPos
 	for i := foundDot - 1; i >= 0; i-- {
-		if dotcnt >= 3 && ((bufbyteStr[i] >= 48 && bufbyteStr[i] <= 57) || bufbyteStr[i] == 69 || bufbyteStr[i] == 101 || bufbyteStr[i] == 43) {
+		if dotcnt >= 3 && (bufbyteStr[i] >= 48 && bufbyteStr[i] <= 57 || bufbyteStr[i] == 69 || bufbyteStr[i] == 101 || bufbyteStr[i] == 43) {
 			bufbyte[intoPos] = 44
 			intoPos--
 			dotcnt = 0
@@ -455,7 +455,7 @@ func (s *StringProc) LowerCaseFirstWords(str string) string {
 
 		upper = 0
 
-		if (v >= 9 && v <= 13) || v == 32 {
+		if v >= 9 && v <= 13 || v == 32 {
 			upper = 1
 		}
 		retval[k] = v
@@ -479,7 +479,7 @@ func (s *StringProc) UpperCaseFirstWords(str string) string {
 
 		upper = 0
 
-		if (v >= 9 && v <= 13) || v == 32 {
+		if v >= 9 && v <= 13 || v == 32 {
 			upper = 1
 		}
 		retval[k] = v
@@ -506,7 +506,7 @@ func (s *StringProc) SwapCaseFirstWords(str string) string {
 
 		upper = 0
 
-		if (v >= 9 && v <= 13) || v == 32 {
+		if v >= 9 && v <= 13 || v == 32 {
 			upper = 1
 		}
 		retval[k] = v
@@ -733,7 +733,7 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 
 	case string, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64, complex64, complex128, bool:
 		if reflect.TypeOf(obj1).Comparable() == true && reflect.TypeOf(obj2).Comparable() == true {
-			return (obj1 == obj2), nil
+			return obj1 == obj2, nil
 		}
 
 	default:
