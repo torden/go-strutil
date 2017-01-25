@@ -13,9 +13,9 @@ BenchmarkReverseStrSwap-8                     	 1000000	      1137 ns/op
 BenchmarkReverseStrUseReverseLoop-8           	 1000000	      1608 ns/op
 */
 
-var benchMarkStr1 = strings.Repeat("0123456789", 100)
-
 func BenchmarkReverseStr(b *testing.B) {
+
+	benchMarkStr1 := strings.Repeat("0123456789", 100)
 
 	strproc := strutils.NewStringProc()
 	for i := 0; i < b.N; i++ {
@@ -25,6 +25,8 @@ func BenchmarkReverseStr(b *testing.B) {
 
 func BenchmarkReverseNormalStr(b *testing.B) {
 
+	benchMarkStr1 := strings.Repeat("0123456789", 100)
+
 	strproc := strutils.NewStringProc()
 	for i := 0; i < b.N; i++ {
 		strproc.ReverseNormalStr(benchMarkStr1)
@@ -33,6 +35,8 @@ func BenchmarkReverseNormalStr(b *testing.B) {
 
 func BenchmarkReverseReverseUniCode(b *testing.B) {
 
+	benchMarkStr1 := strings.Repeat("0123456789", 100)
+
 	strproc := strutils.NewStringProc()
 	for i := 0; i < b.N; i++ {
 		strproc.ReverseUniCode(benchMarkStr1)
@@ -40,6 +44,8 @@ func BenchmarkReverseReverseUniCode(b *testing.B) {
 }
 
 func BenchmarkReverseStrSwap(b *testing.B) {
+
+	benchMarkStr1 := strings.Repeat("0123456789", 100)
 
 	strproc := strutils.NewStringProc()
 	for i := 0; i < b.N; i++ {
