@@ -462,7 +462,7 @@ The above example will output:
 
 ### ReverseStr
 
-ReverseStr is Reverse a String , According to value type between ascii (ReverseNormalStr) or rune (ReverseUniCode)
+ReverseStr is Reverse a String , According to value type between ascii (ReverseNormalStr) or rune (ReverseUnicode)
 
 ```go
 func (s *StringProc) ReverseStr(str string) string
@@ -499,7 +499,7 @@ The above example will output:
 ### ReverseNormalStr
 
 ReverseNormalStr is Reverse a None-unicode String.
-Fast then ReverseUniCode or ReverseStr
+Fast then ReverseUnicode or ReverseStr
 
 ```go
 func (s *StringProc) ReverseNormalStr(str string) string
@@ -529,12 +529,12 @@ gfedcba
 ```
 
 
-### ReverseUniCode
+### ReverseUnicode
 
 ReverseNormalStr is Reverse a None-unicode String
 
 ```go
-func (s *StringProc) ReverseUniCode(str string) string
+func (s *StringProc) ReverseUnicode(str string) string
 ```
 
 Example:
@@ -551,7 +551,7 @@ dataset := []string{
 
 strproc := strproc.NewStringProc()
 for k, v := range dataset {
-  fmt.Println(strproc.ReverseUniCode(k))
+  fmt.Println(strproc.ReverseUnicode(k))
 }
 ```
 

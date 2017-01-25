@@ -537,7 +537,7 @@ func Example_strutils_ReverseNormalStr() {
 	//gfedcba
 }
 
-func Example_strutils_ReverseReverseUniCode() {
+func Example_strutils_ReverseReverseUnicode() {
 
 	dataset := []string{
 		"0123456789",
@@ -548,7 +548,7 @@ func Example_strutils_ReverseReverseUniCode() {
 
 	strproc := strutils.NewStringProc()
 	for _, v := range dataset {
-		fmt.Println(strproc.ReverseUniCode(v))
+		fmt.Println(strproc.ReverseUnicode(v))
 	}
 
 	// Output : 9876543210
