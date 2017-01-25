@@ -378,6 +378,192 @@ Return :  false
 Error :  different value : (obj1[A][name][first][last][F][name][first] := 1) != (obj2[A][name][first][last][F][name][first] := 11)
 ```
 
+### StripTags
+
+StipTags is remove all tag in string (Pure String or URL Encoded or Html Entity Encoded or Mixed String)
+
+```go
+func (s *StringProc) StripTags(str string) (string, error)
+```
+
+Example:
+
+```go
+strproc := strproc.NewStringProc()
+example_str := `
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="UTF-8">
+<title>                            Just! a String Processing Library for Go-lang</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#157878">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/go-strutil/assets/css/style.css?v=dae229423409070462d2ce364eba3b5721930df0">
+</head>
+<body>
+<section class="page-header">
+<h1 class="project-name">Just! a String Processing Library for Go-lang</h1>
+<h2 class="project-tagline">Just a few methods for helping processing and validation the string</h2>
+<a href="https://github.com/torden/go-strutil" class="btn">View on GitHub</a>
+</section>
+<section class="main-content">
+<h1 id="just-a-string-processing-library-for-go-lang">Just! a String Processing Library for Go-lang</h1>
+<p>Just a few methods for helping processing the string</p>
+<p>README.md haven’t contain all the examples. Please refer to the the XXXtest.go files.</p>
+</body>
+</html>
+`
+retval, err := strutil.StripTags(example_str)
+if err != nil {
+    fmt.Println("Error : ", err)
+}
+fmt.Println(retval)
+```
+
+The above example will output:
+
+```bash
+Just! a String Processing Library for Go-lang
+Just! a String Processing Library for Go-lang
+Just a few methods for helping processing and validation the string
+View on GitHub
+Just! a String Processing Library for Go-lang
+Just a few methods for helping processing the string
+README.md haven’t contain all the examples. Please refer to the the XXXtest.go files.
+```
+
+### ConvertToStr
+
+ConvertToStr is Convert basic data type to string
+
+```go
+func (s *StringProc) ConvertToStr(obj interface{}) (string, error)
+```
+
+Example:
+
+```go
+strproc := strproc.NewStringProc()
+example_val := uint64(1234567)
+retval, err := strutil.ConvertToStr(example_val)
+if err != nil {
+    fmt.Println("Error : ", err)
+}
+fmt.Println(retval)
+```
+
+The above example will output:
+
+```bash
+"1234567"
+```
+
+
+### ReverseStr
+
+ReverseStr is Reverse a String , According to value type between ascii (ReverseNormalStr) or rune (ReverseUniCode)
+
+```go
+func (s *StringProc) ReverseStr(str string) string
+```
+
+Example:
+
+```go
+strproc := strproc.NewStringProc()
+
+dataset := []string{
+  "0123456789",
+  "가나다라마바사",
+  "あいうえお",
+  "天地玄黃宇宙洪荒",
+}
+
+strproc := strproc.NewStringProc()
+for k, v := range dataset {
+  fmt.Println(strproc.ReverseStr(k))
+}
+```
+
+The above example will output:
+
+```bash
+9876543210
+사바마라다나가
+おえういあ
+荒洪宙宇黃玄地天
+```
+
+
+### ReverseNormalStr
+
+ReverseNormalStr is Reverse a None-unicode String.
+Fast then ReverseUniCode or ReverseStr
+
+```go
+func (s *StringProc) ReverseNormalStr(str string) string
+```
+
+Example:
+
+```go
+strproc := strproc.NewStringProc()
+
+dataset := []string{
+  "0123456789",
+  "abcdefg",
+}
+
+strproc := strproc.NewStringProc()
+for k, v := range dataset {
+  fmt.Println(strproc.ReverseNormalStr(k))
+}
+```
+
+The above example will output:
+
+```bash
+9876543210
+gfedcba
+```
+
+
+### ReverseUniCode
+
+ReverseNormalStr is Reverse a None-unicode String
+
+```go
+func (s *StringProc) ReverseUniCode(str string) string
+```
+
+Example:
+
+```go
+strproc := strproc.NewStringProc()
+
+dataset := []string{
+  "0123456789",
+  "가나다라마바사",
+  "あいうえお",
+  "天地玄黃宇宙洪荒",
+}
+
+strproc := strproc.NewStringProc()
+for k, v := range dataset {
+  fmt.Println(strproc.ReverseUniCode(k))
+}
+```
+
+The above example will output:
+
+```bash
+9876543210
+사바마라다나가
+おえういあ
+荒洪宙宇黃玄地天
+```
+
 ----
 
 ## Validation Methods

@@ -9,8 +9,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dustin/go-humanize"
-
 	"github.com/torden/go-strutil"
 )
 
@@ -80,63 +78,6 @@ func TestNl2Br(t *testing.T) {
 		retval = strproc.Nl2Br(k)
 		if v != retval {
 			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
-	}
-}
-
-func BenchmarkNl2Br(b *testing.B) {
-
-	strproc := strutils.NewStringProc()
-	dataset := map[string]string{
-		"대한\n민국만세":     "대한<br />민국만세",
-		"대한\r\n민국만세":   "대한<br />민국만세",
-		"대한민국만세\r\n":   "대한민국만세<br />",
-		"대한민국만세\n\r":   "대한민국만세<br />",
-		"대한민국만세\n":     "대한민국만세<br />",
-		"abcdefgh":     "abcdefgh",
-		"abc\ndefgh":   "abc<br />defgh",
-		"abcde\r\nfgh": "abcde<br />fgh",
-		"abcdefgh\r\n": "abcdefgh<br />",
-		"abcdefgh\n\r": "abcdefgh<br />",
-	}
-
-	//check : common
-	for i := 0; i < b.N; i++ {
-		var retval string
-		for k, v := range dataset {
-			retval = strproc.Nl2Br(k)
-			if v != retval {
-				b.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-			}
-		}
-	}
-}
-
-func BenchmarkNl2BrUseStringReplace(b *testing.B) {
-
-	dataset := map[string]string{
-		"대한\n민국만세":     "대한<br />민국만세",
-		"대한\r\n민국만세":   "대한<br />민국만세",
-		"대한민국만세\r\n":   "대한민국만세<br />",
-		"대한민국만세\n\r":   "대한민국만세<br />",
-		"대한민국만세\n":     "대한민국만세<br />",
-		"abcdefgh":     "abcdefgh",
-		"abc\ndefgh":   "abc<br />defgh",
-		"abcde\r\nfgh": "abcde<br />fgh",
-		"abcdefgh\r\n": "abcdefgh<br />",
-		"abcdefgh\n\r": "abcdefgh<br />",
-	}
-
-	//check : common
-	for i := 0; i < b.N; i++ {
-		var retval string
-		for k, v := range dataset {
-			retval = strings.Replace(k, "\r\n", "<br />", -1)
-			retval = strings.Replace(retval, "\n\r", "<br />", -1)
-			retval = strings.Replace(retval, "\n", "<br />", -1)
-			if v != retval {
-				b.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-			}
 		}
 	}
 }
@@ -350,80 +291,6 @@ func TestNumbertFmt(t *testing.T) {
 		t.Errorf("Failure : Couldn't check the `not support obj`")
 	}
 
-}
-
-func BenchmarkTestNumbertFmt(b *testing.B) {
-
-	strproc := strutils.NewStringProc()
-	dataset := map[interface{}]string{
-		123456789101112: "123,456,789,101,112",
-		123456.1234:     "123,456.1234",
-		-123456.1234:    "-123,456.1234",
-		1.1234561e+06:   "1.1234561e+06",
-		1234.1234:       "1,234.1234",
-		12345.1234:      "12,345.1234",
-		-1.1234561e+06:  "-1.1234561e+06",
-		-12345.16:       "-12,345.16",
-		12345.16:        "12,345.16",
-		1234:            "1,234",
-		12.12123098123:  "12.12123098123",
-		1.212e+24:       "1.212e+24",
-		123456789:       "123,456,789",
-	}
-
-	//benchmark : common
-	for i := 0; i < b.N; i++ {
-		for k, v := range dataset {
-			retval, err := strproc.NumberFmt(k)
-			if v != retval {
-				b.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-			}
-			if err != nil {
-				b.Errorf("Return Error : %v", err)
-			}
-		}
-	}
-}
-
-func BenchmarkTestNumbertFmtInt64(b *testing.B) {
-	//BenchmarkTestNumbertFmtInt64-8                	 2000000	       712 ns/op
-	//BenchmarkTestNumbertFmtInt64UseHumanUnits-8   	 2000000	       761 ns/op
-
-	strproc := strutils.NewStringProc()
-	dataset := map[interface{}]string{
-		123456789101112: "123,456,789,101,112",
-	}
-
-	//benchmark : common
-	for i := 0; i < b.N; i++ {
-		for k, v := range dataset {
-			retval, err := strproc.NumberFmt(k)
-			if v != retval {
-				b.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-			}
-			if err != nil {
-				b.Errorf("Return Error : %v", err)
-			}
-		}
-	}
-
-}
-
-func BenchmarkTestNumbertFmtInt64UseHumanUnits(b *testing.B) {
-
-	dataset := map[int64]string{
-		123456789101112: "123,456,789,101,112",
-	}
-
-	//benchmark : common
-	for i := 0; i < b.N; i++ {
-		for k, v := range dataset {
-			retval := humanize.Comma(k)
-			if v != retval {
-				b.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-			}
-		}
-	}
 }
 
 type paddingTestVal struct {
@@ -1258,5 +1125,249 @@ func TestAnyCompare(t *testing.T) {
 	if retval == true {
 		t.Errorf("Could not make an accurate comparison : %v", err)
 	}
+}
 
+func TestStripTags(t *testing.T) {
+
+	str_ok := `
+Just! a String Processing Library for Go-lang
+Just! a String Processing Library for Go-lang
+Just a few methods for helping processing and validation the string
+View on GitHub
+Just! a String Processing Library for Go-lang
+Just a few methods for helping processing the string
+README.md haven’t contain all the examples. Please refer to the the XXXtest.go files.
+`
+
+	str_original_html := `
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="UTF-8">
+<title>                            Just! a String Processing Library for Go-lang</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#157878">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/go-strutil/assets/css/style.css?v=dae229423409070462d2ce364eba3b5721930df0">
+</head>
+<body>
+<section class="page-header">
+<h1 class="project-name">Just! a String Processing Library for Go-lang</h1>
+<h2 class="project-tagline">Just a few methods for helping processing and validation the string</h2>
+<a href="https://github.com/torden/go-strutil" class="btn">View on GitHub</a>
+</section>
+<section class="main-content">
+<h1 id="just-a-string-processing-library-for-go-lang">Just! a String Processing Library for Go-lang</h1>
+<p>Just a few methods for helping processing the string</p>
+<p>README.md haven’t contain all the examples. Please refer to the the XXXtest.go files.</p>
+</body>
+</html>
+`
+
+	str_html_entity_encoded := `
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en-us&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;                            Just! a String Processing Library for Go-lang&lt;/title&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;theme-color&quot; content=&quot;#157878&quot;&gt;
+&lt;link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/go-strutil/assets/css/style.css?v=dae229423409070462d2ce364eba3b5721930df0&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;section class=&quot;page-header&quot;&gt;
+&lt;h1 class=&quot;project-name&quot;&gt;Just! a String Processing Library for Go-lang&lt;/h1&gt;
+&lt;h2 class=&quot;project-tagline&quot;&gt;Just a few methods for helping processing and validation the string&lt;/h2&gt;
+&lt;a href=&quot;https://github.com/torden/go-strutil&quot; class=&quot;btn&quot;&gt;View on GitHub&lt;/a&gt;
+&lt;/section&gt;
+&lt;section class=&quot;main-content&quot;&gt;
+&lt;h1 id=&quot;just-a-string-processing-library-for-go-lang&quot;&gt;Just! a String Processing Library for Go-lang&lt;/h1&gt;
+&lt;p&gt;Just a few methods for helping processing the string&lt;/p&gt;
+&lt;p&gt;README.md haven&rsquo;t contain all the examples. Please refer to the the XXXtest.go files.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt
+`
+	str_html_urlencoded := `
+%3C%21DOCTYPE+html%3E%0A%3Chtml+lang%3D%22en-us%22%3E%0A%3Chead%3E%0A%3Cmeta+charset%3D%22UTF-8%22%3E%0A%3Ctitle%3E++++++++++++++++++++++++++++Just%21+a+String+Processing+Library+for+Go-lang%3C%2Ftitle%3E%0A%3Cmeta+name%3D%22viewport%22+content%3D%22width%3Ddevice-width%2C+initial-scale%3D1%22%3E%0A%3Cmeta+name%3D%22theme-color%22+content%3D%22%23157878%22%3E%0A%3Clink+href%3D%27https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DOpen%2BSans%3A400%2C700%27+rel%3D%27stylesheet%27+type%3D%27text%2Fcss%27%3E%0A%3Clink+rel%3D%22stylesheet%22+href%3D%22%2Fgo-strutil%2Fassets%2Fcss%2Fstyle.css%3Fv%3Ddae229423409070462d2ce364eba3b5721930df0%22%3E%0A%3C%2Fhead%3E%0A%3Cbody%3E%0A%3Csection+class%3D%22page-header%22%3E%0A%3Ch1+class%3D%22project-name%22%3EJust%21+a+String+Processing+Library+for+Go-lang%3C%2Fh1%3E%0A%3Ch2+class%3D%22project-tagline%22%3EJust+a+few+methods+for+helping+processing+and+validation+the+string%3C%2Fh2%3E%0A%3Ca+href%3D%22https%3A%2F%2Fgithub.com%2Ftorden%2Fgo-strutil%22+class%3D%22btn%22%3EView+on+GitHub%3C%2Fa%3E%0A%3C%2Fsection%3E%0A%3Csection+class%3D%22main-content%22%3E%0A%3Ch1+id%3D%22just-a-string-processing-library-for-go-lang%22%3EJust%21+a+String+Processing+Library+for+Go-lang%3C%2Fh1%3E%0A%3Cp%3EJust+a+few+methods+for+helping+processing+the+string%3C%2Fp%3E%0A%3Cp%3EREADME.md+haven%E2%80%99t+contain+all+the+examples.+Please+refer+to+the+the+XXXtest.go+files.%3C%2Fp%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E
+`
+
+	// html entity encoded after url encoded
+	str_htmentity_urlencoded := `
+%3C%21DOCTYPE+html%3E%0A%3Chtml+lang%3D%22en-us%22%3E%0A%3Chead%3E%0A%3Cmeta+charset%3D%22UTF-8%22%3E%0A%3Ctitle%3E++++++++++++++++++++++++++++Just%21+a+String+Processing+Library+for+Go-lang%3C%2Ftitle%3E%0A%3Cmeta+name%3D%22viewport%22+content%3D%22width%3Ddevice-width%2C+initial-scale%3D1%22%3E%0A%3Cmeta+name%3D%22theme-color%22+content%3D%22%23157878%22%3E%0A%3Clink+href%3D%27https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DOpen%2BSans%3A400%2C700%27+rel%3D%27stylesheet%27+type%3D%27text%2Fcss%27%3E%0A%3Clink+rel%3D%22stylesheet%22+href%3D%22%2Fgo-strutil%2Fassets%2Fcss%2Fstyle.css%3Fv%3Ddae229423409070462d2ce364eba3b5721930df0%22%3E%0A%3C%2Fhead%3E%0A%3Cbody%3E%0A%3Csection+class%3D%22page-header%22%3E%0A%3Ch1+class%3D%22project-name%22%3EJust%21+a+String+Processing+Library+for+Go-lang%3C%2Fh1%3E%0A%3Ch2+class%3D%22project-tagline%22%3EJust+a+few+methods+for+helping+processing+and+validation+the+string%3C%2Fh2%3E%0A%3Ca+href%3D%22https%3A%2F%2Fgithub.com%2Ftorden%2Fgo-strutil%22+class%3D%22btn%22%3EView+on+GitHub%3C%2Fa%3E%0A%3C%2Fsection%3E%0A%3Csection+class%3D%22main-content%22%3E%0A%3Ch1+id%3D%22just-a-string-processing-library-for-go-lang%22%3EJust%21+a+String+Processing+Library+for+Go-lang%3C%2Fh1%3E%0A%3Cp%3EJust+a+few+methods+for+helping+processing+the+string%3C%2Fp%3E%0A%3Cp%3EREADME.md+haven%E2%80%99t+contain+all+the+examples.+Please+refer+to+the+the+XXXtest.go+files.%3C%2Fp%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E
+`
+
+	// url encoded adter html entity encoded
+	str_urlencoded_htmlentity := `
+%26lt%3B%21DOCTYPE+html%26gt%3B%0A%26lt%3Bhtml+lang%3D%26quot%3Ben-us%26quot%3B%26gt%3B%0A%26lt%3Bhead%26gt%3B%0A%26lt%3Bmeta+charset%3D%26quot%3BUTF-8%26quot%3B%26gt%3B%0A%26lt%3Btitle%26gt%3B++++++++++++++++++++++++++++Just%21+a+String+Processing+Library+for+Go-lang%26lt%3B%2Ftitle%26gt%3B%0A%26lt%3Bmeta+name%3D%26quot%3Bviewport%26quot%3B+content%3D%26quot%3Bwidth%3Ddevice-width%2C+initial-scale%3D1%26quot%3B%26gt%3B%0A%26lt%3Bmeta+name%3D%26quot%3Btheme-color%26quot%3B+content%3D%26quot%3B%23157878%26quot%3B%26gt%3B%0A%26lt%3Blink+href%3D%27https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DOpen%2BSans%3A400%2C700%27+rel%3D%27stylesheet%27+type%3D%27text%2Fcss%27%26gt%3B%0A%26lt%3Blink+rel%3D%26quot%3Bstylesheet%26quot%3B+href%3D%26quot%3B%2Fgo-strutil%2Fassets%2Fcss%2Fstyle.css%3Fv%3Ddae229423409070462d2ce364eba3b5721930df0%26quot%3B%26gt%3B%0A%26lt%3B%2Fhead%26gt%3B%0A%26lt%3Bbody%26gt%3B%0A%26lt%3Bsection+class%3D%26quot%3Bpage-header%26quot%3B%26gt%3B%0A%26lt%3Bh1+class%3D%26quot%3Bproject-name%26quot%3B%26gt%3BJust%21+a+String+Processing+Library+for+Go-lang%26lt%3B%2Fh1%26gt%3B%0A%26lt%3Bh2+class%3D%26quot%3Bproject-tagline%26quot%3B%26gt%3BJust+a+few+methods+for+helping+processing+and+validation+the+string%26lt%3B%2Fh2%26gt%3B%0A%26lt%3Ba+href%3D%26quot%3Bhttps%3A%2F%2Fgithub.com%2Ftorden%2Fgo-strutil%26quot%3B+class%3D%26quot%3Bbtn%26quot%3B%26gt%3BView+on+GitHub%26lt%3B%2Fa%26gt%3B%0A%26lt%3B%2Fsection%26gt%3B%0A%26lt%3Bsection+class%3D%26quot%3Bmain-content%26quot%3B%26gt%3B%0A%26lt%3Bh1+id%3D%26quot%3Bjust-a-string-processing-library-for-go-lang%26quot%3B%26gt%3BJust%21+a+String+Processing+Library+for+Go-lang%26lt%3B%2Fh1%26gt%3B%0A%26lt%3Bp%26gt%3BJust+a+few+methods+for+helping+processing+the+string%26lt%3B%2Fp%26gt%3B%0A%26lt%3Bp%26gt%3BREADME.md+haven%26rsquo%3Bt+contain+all+the+examples.+Please+refer+to+the+the+XXXtest.go+files.%26lt%3B%2Fp%26gt%3B%0A%26lt%3B%2Fbody%26gt%3B%0A%26lt%3B%2Fhtml%26gt%3B
+`
+
+	var retval string
+	var err error
+
+	strproc := strutils.NewStringProc()
+
+	// check : original html
+	retval, err = strproc.StripTags(str_original_html)
+	if err != nil {
+		t.Errorf("Error : %v", err)
+	}
+
+	if retval != str_ok {
+		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
+	}
+
+	// check : html entity encoded html
+	retval, err = strproc.StripTags(str_html_entity_encoded)
+	if err != nil {
+		t.Errorf("Error : %v", err)
+	}
+
+	if retval != str_ok {
+		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
+	}
+
+	// check : url encoded html
+	retval, err = strproc.StripTags(str_html_urlencoded)
+	if err != nil {
+		t.Errorf("Error : %v", err)
+	}
+
+	if retval != str_ok {
+		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
+	}
+
+	// check : html entity encoded after url encoded
+	retval, err = strproc.StripTags(str_htmentity_urlencoded)
+	if err != nil {
+		t.Errorf("Error : %v", err)
+	}
+
+	if retval != str_ok {
+		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
+	}
+
+	// check : url encoded after html entity encoded
+	retval, err = strproc.StripTags(str_urlencoded_htmlentity)
+	if err != nil {
+		t.Errorf("Error : %v", err)
+	}
+
+	if retval != str_ok {
+		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
+	}
+}
+
+func TestConvertToStr(t *testing.T) {
+
+	dataset := map[interface{}]string{
+		string("1234567"): "1234567",
+		int(1):            "1",
+		int8(1):           "1",
+		int16(256):        "256",
+		int32(256):        "256",
+		int64(1234567):    "1234567",
+		uint(1):           "1",
+		uint8(1):          "1",
+		uint16(256):       "256",
+		uint32(256):       "256",
+		uint64(1234567):   "1234567",
+		float32(12):       "12",
+		float64(12):       "12",
+		complex64(12):     "(12+0i)",
+		complex128(12):    "(12+0i)",
+
+		int(-1):         "-1",
+		int8(-1):        "-1",
+		int16(-256):     "-256",
+		int32(-256):     "-256",
+		int64(-1234567): "-1234567",
+		float32(-12):    "-12",
+		float64(-12):    "-12",
+		complex64(-12):  "(-12+0i)",
+		complex128(-12): "(-12+0i)",
+
+		float32(12.1):    "12.1",
+		float64(12.1):    "12.1",
+		complex64(12.1):  "(12.1+0i)",
+		complex128(12.1): "(12.1+0i)",
+
+		float32(-12.1):    "-12.1",
+		float64(-12.1):    "-12.1",
+		complex64(-12.1):  "(-12.1+0i)",
+		complex128(-12.1): "(-12.1+0i)",
+
+		true:  "true",
+		false: "false",
+	}
+
+	strproc := strutils.NewStringProc()
+
+	//check : common
+	for k, v := range dataset {
+		retval, err := strproc.ConvertToStr(k)
+		if v != retval {
+			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
+			t.Errorf("Error : %v\n", err)
+		}
+	}
+}
+
+func TestReverseStr(t *testing.T) {
+
+	dataset := map[string]string{
+		"0123456789": "9876543210",
+		"가나다라마바사":    "사바마라다나가",
+		"あいうえお":      "おえういあ",
+		"天地玄黃宇宙洪荒":   "荒洪宙宇黃玄地天",
+	}
+
+	strproc := strutils.NewStringProc()
+
+	//check : common
+	for k, v := range dataset {
+		retval := strproc.ReverseStr(k)
+		if v != retval {
+			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
+		}
+	}
+}
+
+func TestReverseNormalStr(t *testing.T) {
+
+	dataset := map[string]string{
+		"0123456789": "9876543210",
+		"abcdefg":    "gfedcba",
+	}
+
+	strproc := strutils.NewStringProc()
+
+	//check : common
+	for k, v := range dataset {
+		retval := strproc.ReverseNormalStr(k)
+		if v != retval {
+			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
+		}
+	}
+}
+
+func TestReverseReverseUniCode(t *testing.T) {
+
+	dataset := map[string]string{
+		"0123456789": "9876543210",
+		"abcdefg":    "gfedcba",
+		"가나다라마바사":    "사바마라다나가",
+		"あいうえお":      "おえういあ",
+		"天地玄黃宇宙洪荒":   "荒洪宙宇黃玄地天",
+	}
+
+	strproc := strutils.NewStringProc()
+
+	//check : common
+	for k, v := range dataset {
+		retval := strproc.ReverseUniCode(k)
+		if v != retval {
+			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
+		}
+	}
 }
