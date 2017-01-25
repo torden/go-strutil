@@ -1256,6 +1256,13 @@ README.md haven’t contain all the examples. Please refer to the the XXXtest.go
 	if retval != str_ok {
 		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
 	}
+
+	// check : failure at urldecode
+	failTestStr := `html%26gt%3` // clear str is `html%26gt%3B`
+	_, err = strproc.StripTags(failTestStr)
+	if err == nil {
+		t.Errorf("Failure : Couldn't check the `failure at url decoding`")
+	}
 }
 
 func TestConvertToStr(t *testing.T) {
