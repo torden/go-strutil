@@ -1351,7 +1351,7 @@ func TestReverseNormalStr(t *testing.T) {
 	}
 }
 
-func TestReverseReverseUniCode(t *testing.T) {
+func TestReverseReverseUnicode(t *testing.T) {
 
 	dataset := map[string]string{
 		"0123456789": "9876543210",
@@ -1365,7 +1365,7 @@ func TestReverseReverseUniCode(t *testing.T) {
 
 	//check : common
 	for k, v := range dataset {
-		retval := strproc.ReverseUniCode(k)
+		retval := strproc.ReverseUnicode(k)
 		if v != retval {
 			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 		}
