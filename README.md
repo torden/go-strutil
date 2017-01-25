@@ -564,6 +564,71 @@ The above example will output:
 荒洪宙宇黃玄地天
 ```
 
+### FileMD5Hash
+
+FileMD5Hash is MD5 checksum of the file
+
+```go
+func (s *StringProc) FileMD5Hash(filepath string) (string, error)
+```
+
+Example:
+
+```go
+strproc := strutils.NewStringProc()
+
+retval, err := strproc.FileMD5Hash("./LICENSE")
+if err != nil {
+    fmt.Println("Error : %v", err)
+}
+
+fmt.Println(retval)
+```
+
+The above example will output:
+
+```bash
+f3f8954bac465686f0bfc2a757c5200b
+```
+
+### MD5Hash
+
+MD5Hash is MD5 checksum of the string
+
+```go
+func (s *StringProc) MD5Hash(str string) (string, error)
+```
+
+Example:
+
+```go
+dataset := []string{
+    "0123456789",
+    "abcdefg",
+    "abcdefgqwdoisef;oijawe;fijq2039jdfs.dnc;oa283hr08uj3o;ijwaef;owhjefo;uhwefwef",
+}
+
+strproc := strutils.NewStringProc()
+
+//check : common
+for _, v := range dataset {
+    retval, err := strproc.MD5Hash(v)
+    if err != nil {
+        fmt.Println("Error : %v", err)
+    } else {
+      fmt.Println(retval)
+    }
+}
+```
+
+The above example will output:
+
+```bash
+781e5e245d69b566979b86e28d23f2c7
+7ac66c0f148de9519b8bd264312c4d64
+15f764f21d09b11102eb015fc8824d00
+```
+
 ----
 
 ## Validation Methods
