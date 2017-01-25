@@ -445,3 +445,114 @@ func Example_strutils_IsPureTextNormal() {
 	}
 	// Output: Error :  Detect HTML Element
 }
+
+func Example_strutils_StripTags() {
+
+	strproc := strutils.NewStringProc()
+	example_str := `
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="UTF-8">
+<title>                            Just! a String Processing Library for Go-lang</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#157878">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/go-strutil/assets/css/style.css?v=dae229423409070462d2ce364eba3b5721930df0">
+</head>
+<body>
+<section class="page-header">
+<h1 class="project-name">Just! a String Processing Library for Go-lang</h1>
+<h2 class="project-tagline">Just a few methods for helping processing and validation the string</h2>
+<a href="https://github.com/torden/go-strutil" class="btn">View on GitHub</a>
+</section>
+<section class="main-content">
+<h1 id="just-a-string-processing-library-for-go-lang">Just! a String Processing Library for Go-lang</h1>
+<p>Just a few methods for helping processing the string</p>
+<p>README.md haven’t contain all the examples. Please refer to the the XXXtest.go files.</p>
+</body>
+</html>
+`
+	retval, err := strproc.StripTags(example_str)
+	if err != nil {
+		fmt.Println("Error : ", err)
+	}
+	fmt.Println(retval)
+
+	// 	Output :Just! a String Processing Library for Go-lang
+	//Just! a String Processing Library for Go-lang
+	//Just a few methods for helping processing and validation the string
+	//View on GitHub
+	//Just! a String Processing Library for Go-lang
+	//Just a few methods for helping processing the string
+	//README.md haven’t contain all the examples. Please refer to the the XXXtest.go files.
+}
+
+func Example_strutils_ConvertToStr() {
+
+	strproc := strutils.NewStringProc()
+	example_val := uint64(1234567)
+	retval, err := strproc.ConvertToStr(example_val)
+	if err != nil {
+		fmt.Println("Error : ", err)
+	}
+	fmt.Println(retval)
+
+	// Output : "1234567"
+}
+
+func Example_strutils_ReverseStr() {
+
+	dataset := []string{
+		"0123456789",
+		"가나다라마바사",
+		"あいうえお",
+		"天地玄黃宇宙洪荒",
+	}
+
+	strproc := strutils.NewStringProc()
+	for _, v := range dataset {
+		fmt.Println(strproc.ReverseStr(v))
+	}
+
+	// Output : 9876543210
+	//사바마라다나가
+	//おえういあ
+	//荒洪宙宇黃玄地天
+}
+
+func Example_strutils_ReverseNormalStr() {
+
+	dataset := []string{
+		"0123456789",
+		"abcdefg",
+	}
+
+	strproc := strutils.NewStringProc()
+	for _, v := range dataset {
+		fmt.Println(strproc.ReverseNormalStr(v))
+	}
+
+	// Output : 9876543210
+	//gfedcba
+}
+
+func Example_strutils_ReverseReverseUniCode() {
+
+	dataset := []string{
+		"0123456789",
+		"가나다라마바사",
+		"あいうえお",
+		"天地玄黃宇宙洪荒",
+	}
+
+	strproc := strutils.NewStringProc()
+	for _, v := range dataset {
+		fmt.Println(strproc.ReverseUniCode(v))
+	}
+
+	// Output : 9876543210
+	//사바마라다나가
+	//おえういあ
+	//荒洪宙宇黃玄地天
+}
