@@ -3,15 +3,23 @@ package strutils
 import (
 	"errors"
 	"fmt"
+	"html"
 	"math"
+	"net/url"
 	"os"
 	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 )
 
+// referrer to https://golang.org/pkg/regexp/syntax/
 var numericPattern = regexp.MustCompile(`^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$`)
+var tagElementsPattern = regexp.MustCompile(`(?ims)(?P<tag><(/*\s*|\?*|\!*)(figcaption|expression|blockquote|plaintext|textarea|progress|optgroup|noscript|noframes|menuitem|frameset|fieldset|!DOCTYPE|datalist|colgroup|behavior|basefont|summary|section|isindex|details|caption|bgsound|article|address|acronym|strong|strike|source|select|script|output|option|object|legend|keygen|ilayer|iframe|header|footer|figure|dialog|center|canvas|button|applet|video|track|title|thead|tfoot|tbody|table|style|small|param|meter|layer|label|input|frame|embed|blink|audio|aside|alert|time|span|samp|ruby|meta|menu|mark|main|link|html|head|form|font|code|cite|body|base|area|abbr|xss|xml|wbr|var|svg|sup|sub|pre|nav|map|kbd|ins|img|div|dir|dfn|del|col|big|bdo|bdi|!--|ul|tt|tr|th|td|rt|rp|ol|li|hr|em|dt|dl|dd|br|u|s|q|p|i|b|a|(h[0-9]+))([^><]*)([><]*))`)
+var whiteSpacePattern = regexp.MustCompile(`(?im)\s{2,}`)
+var entityEncodedPattern = regexp.MustCompile(`(?ims)(&(?:[a-z0-9]{2,8}|#[0-9]{2,3});)`)
+var urlEncodedPattern = regexp.MustCompile(`(?ims)(%[A-Z0-9]{2})`)
 
 // StringProc is String processing methods, All operations on this object
 type StringProc struct{}
@@ -764,4 +772,105 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 		}
 	}
 	return true, nil
+}
+
+// StipTags is remove all tag in string
+func (s *StringProc) StripTags(str string) (string, error) {
+
+	var retval bool
+
+	//looking for html entities code in str
+ENTITY_DECODE:
+	retval = entityEncodedPattern.MatchString(str)
+	if retval == true {
+		str = html.UnescapeString(str)
+	}
+
+	//looking for html entities code in str
+	retval = urlEncodedPattern.MatchString(str)
+	if retval == true {
+		tmpstr, err := url.QueryUnescape(str)
+		if err == nil {
+			str = tmpstr
+			goto ENTITY_DECODE
+		} else {
+			return str, err
+		}
+	}
+
+	//remove tag elements
+	cleanedStr := tagElementsPattern.ReplaceAllString(str, "")
+
+	//remove multiple whitespace
+	cleanedStr = whiteSpacePattern.ReplaceAllString(cleanedStr, "\n")
+
+	return cleanedStr, nil
+}
+
+// ConvertToStr is Convert basic data type to string
+func (s *StringProc) ConvertToStr(obj interface{}) (string, error) {
+
+	switch obj.(type) {
+	case bool:
+		if obj.(bool) == true {
+			return "true", nil
+		} else {
+			return "false", nil
+		}
+	default:
+		return numberToString(obj)
+	}
+}
+
+/*
+// ReverseStr is Reverse a String , According to value type between ascii or rune
+// TODO : improve performance (use goroutin)
+data : "0123456789" * 100
+BenchmarkReverseStr-8              	   50000	     34127 ns/op	    5120 B/op	       2 allocs/op
+BenchmarkReverseNormalStr-8        	 1000000	      1187 ns/op	    2048 B/op	       2 allocs/op
+BenchmarkReverseReverseUniCode-8   	  100000	     29343 ns/op	    5120 B/op	       2 allocs/op
+*/
+func (s *StringProc) ReverseStr(str string) string {
+
+	if len(str) != utf8.RuneCountInString(str) {
+		return s.ReverseUniCode(str)
+	} else {
+		return s.ReverseNormalStr(str)
+	}
+}
+
+// ReverseNormalStr is Reverse a None-unicode String
+func (s *StringProc) ReverseNormalStr(str string) string {
+
+	bufbyte_str := []byte(str)
+	bufbyte_str_l := len(bufbyte_str)
+	swap_size := int(math.Ceil(float64(bufbyte_str_l) / 2))
+
+	head_no := 0
+	tail_no := bufbyte_str_l - 1
+	for i := 0; i < swap_size; i++ {
+		bufbyte_str[tail_no], bufbyte_str[head_no] = bufbyte_str[head_no], bufbyte_str[tail_no]
+		head_no++
+		tail_no--
+	}
+
+	return string(bufbyte_str[:])
+}
+
+// ReverseNormalStr is Reverse a unicode String
+func (s *StringProc) ReverseUniCode(str string) string {
+
+	bufRuneStr := []rune(str)
+	bufRuneStrl := len(bufRuneStr)
+	swap_size := int(math.Ceil(float64(bufRuneStrl) / 2))
+
+	head_no := 0
+	tail_no := bufRuneStrl - 1
+	for i := 0; i < swap_size; i++ {
+		bufRuneStr[tail_no], bufRuneStr[head_no] = bufRuneStr[head_no], bufRuneStr[tail_no]
+		head_no++
+		tail_no--
+	}
+
+	return string(bufRuneStr[:])
 }
