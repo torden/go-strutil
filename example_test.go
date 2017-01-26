@@ -578,7 +578,7 @@ func Example_strutils_FileMD5Hash() {
 
 	fmt.Println(retval)
 
-	// Output: f3f8954bac465686f0bfc2a757c5200b
+	// Output: 64e17a4e1c96bbfce57ab19cd0153e6a
 }
 
 func Example_strutils_MD5Hash() {
