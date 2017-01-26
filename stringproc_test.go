@@ -1,17 +1,7 @@
-/*
-The MIT License (MIT)
-
-Copyright (C) 2016-2017 Torden Cho <https://github.com/torden>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 package strutils_test
 
 import (
+	"fmt"
 	"io/ioutil"
 	"math"
 	"os"
@@ -522,7 +512,10 @@ func TestHumanFileSize(t *testing.T) {
 
 	//generating a touch file
 	tmpdata := []byte(strings.Repeat("*", 1024*1024*13))
-	ioutil.WriteFile(tmpFilePath, tmpdata, 0750)
+	err = ioutil.WriteFile(tmpFilePath, tmpdata, 0750)
+	if err != nil {
+		fmt.Println("Error : ", err)
+	}
 
 	strproc := strutils.NewStringProc()
 
@@ -556,27 +549,22 @@ func TestHumanFileSize(t *testing.T) {
 		//Sometime, get a error
 	}
 
-	os.Remove(tmpFilePath)
+	defer os.Remove(tmpFilePath)
 
 	//check : isDir
 	err = os.MkdirAll(tmpPath, 0777)
 	if err != nil {
-		os.Remove(tmpPath)
 		t.Errorf("Failure : Couldn't Mkdir %q: %s", tmpPath, err)
 	}
 
 	_, err = strproc.HumanFileSize(tmpPath, 2, strutils.CamelCaseDouble)
 	if err == nil {
-		os.Remove(tmpPath)
 		t.Errorf("Failure : Couldn't check the `stat.IsDir()`")
 	}
-
-	os.Remove(tmpPath)
 
 	//check : os.Open
 	_, err = strproc.HumanFileSize("/hello_word_txt", 2, strutils.CamelCaseDouble)
 	if err == nil {
-		os.Remove(tmpPath)
 		t.Errorf("Failure : Couldn't check the `os.Open()`")
 	}
 
@@ -637,14 +625,14 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testMultipleDepthMapDiffType1 := map[string]map[string]string{
-		"H": map[string]string{
+		"H": {
 			"name":  "Hydrogen",
 			"state": "gas",
 		},
 	}
 
 	testMultipleDepthMapDiffType2 := map[string]map[string]int{
-		"H": map[string]int{
+		"H": {
 			"name":  1,
 			"state": 2,
 		},
@@ -655,14 +643,14 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testMultipleDepthMapDiffType3 := map[string]map[string]int{
-		"H": map[string]int{
+		"H": {
 			"name":  1,
 			"state": 2,
 		},
 	}
 
 	testMultipleDepthMapDiffType4 := map[string]map[string]uint{
-		"H": map[string]uint{
+		"H": {
 			"name":  1,
 			"state": 2,
 		},
@@ -673,14 +661,14 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testMultipleDepthMapDiffType5 := map[string]map[string]uint{
-		"H": map[string]uint{
+		"H": {
 			"name":  1,
 			"state": 2,
 		},
 	}
 
 	testMultipleDepthMapDiffType6 := map[string]map[string]int{
-		"H": map[string]int{
+		"H": {
 			"name":  1,
 			"state": 2,
 		},
@@ -691,14 +679,14 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testMultipleDepthMapDiffType7 := map[string]map[string]float64{
-		"H": map[string]float64{
+		"H": {
 			"name":  1,
 			"state": 2,
 		},
 	}
 
 	testMultipleDepthMapDiffType8 := map[string]map[string]int{
-		"H": map[string]int{
+		"H": {
 			"name":  1,
 			"state": 2,
 		},
@@ -709,14 +697,14 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testMultipleDepthMapDiffType9 := map[string]map[string]complex64{
-		"H": map[string]complex64{
+		"H": {
 			"name":  1,
 			"state": 2,
 		},
 	}
 
 	testMultipleDepthMapDiffType10 := map[string]map[string]int{
-		"H": map[string]int{
+		"H": {
 			"name":  1,
 			"state": 2,
 		},
@@ -755,86 +743,86 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testMultipleDepthMap1 := map[string]map[string]string{
-		"H": map[string]string{
+		"H": {
 			"name":  "Hydrogen",
 			"state": "gas",
 		},
-		"He": map[string]string{
+		"He": {
 			"name":  "Helium",
 			"state": "gas",
 		},
-		"Li": map[string]string{
+		"Li": {
 			"name":  "Lithium",
 			"state": "solid",
 		},
-		"Be": map[string]string{
+		"Be": {
 			"name":  "Beryllium",
 			"state": "solid",
 		},
-		"B": map[string]string{
+		"B": {
 			"name":  "Boron",
 			"state": "solid",
 		},
-		"C": map[string]string{
+		"C": {
 			"name":  "Carbon",
 			"state": "solid",
 		},
-		"N": map[string]string{
+		"N": {
 			"name":  "Nitrogen",
 			"state": "gas",
 		},
-		"O": map[string]string{
+		"O": {
 			"name":  "Oxygen",
 			"state": "gas",
 		},
-		"F": map[string]string{
+		"F": {
 			"name":  "Fluorine",
 			"state": "gas",
 		},
-		"Ne": map[string]string{
+		"Ne": {
 			"name":  "Neon",
 			"state": "gas",
 		},
 	}
 
 	testMultipleDepthMap2 := map[string]map[string]string{
-		"H": map[string]string{
+		"H": {
 			"name":  "Hydrogen",
 			"state": "gas",
 		},
-		"He": map[string]string{
+		"He": {
 			"name":  "Helium",
 			"state": "gas",
 		},
-		"Li": map[string]string{
+		"Li": {
 			"name":  "Lithium",
 			"state": "solid",
 		},
-		"Be": map[string]string{
+		"Be": {
 			"name":  "Beryllium",
 			"state": "solid",
 		},
-		"B": map[string]string{
+		"B": {
 			"name":  "Boron",
 			"state": "solid",
 		},
-		"C": map[string]string{
+		"C": {
 			"name":  "Carbon",
 			"state": "solid",
 		},
-		"N": map[string]string{
+		"N": {
 			"name":  "Nitrogen",
 			"state": "gas",
 		},
-		"O": map[string]string{
+		"O": {
 			"name":  "Oxygen",
 			"state": "gas",
 		},
-		"F": map[string]string{
+		"F": {
 			"name":  "Fluorine",
 			"state": "gas",
 		},
-		"Ne": map[string]string{
+		"Ne": {
 			"name":  "Neon",
 			"state": "gas",
 		},
@@ -846,86 +834,86 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testMultipleDepthMapFalse1 := map[string]map[string]string{
-		"H": map[string]string{
+		"H": {
 			"name":  "Hydrogen",
 			"state": "gas",
 		},
-		"He": map[string]string{
+		"He": {
 			"name":  "Helium",
 			"state": "gas",
 		},
-		"Li": map[string]string{
+		"Li": {
 			"name":  "Lithium",
 			"state": "solid",
 		},
-		"Be": map[string]string{
+		"Be": {
 			"name":  "Beryllium",
 			"state": "solid",
 		},
-		"B": map[string]string{
+		"B": {
 			"name":  "Boron",
 			"state": "solid",
 		},
-		"C": map[string]string{
+		"C": {
 			"name":  "Carbon",
 			"state": "solid",
 		},
-		"N": map[string]string{
+		"N": {
 			"name":  "Nitrogen",
 			"state": "gas",
 		},
-		"O": map[string]string{
+		"O": {
 			"name":  "Oxygen",
 			"state": "gas",
 		},
-		"F": map[string]string{
+		"F": {
 			"name":  "Fluorine",
 			"state": "gas",
 		},
-		"Ne": map[string]string{
+		"Ne": {
 			"name":  "Neon",
 			"state": "gas",
 		},
 	}
 
 	testMultipleDepthMapFalse2 := map[string]map[string]string{
-		"H": map[string]string{
+		"H": {
 			"name":  "Hydrogen",
 			"state": "gas",
 		},
-		"He": map[string]string{
+		"He": {
 			"name":  "Helium",
 			"state": "gas",
 		},
-		"Li": map[string]string{
+		"Li": {
 			"name":  "Lithium",
 			"state": "solid",
 		},
-		"Be": map[string]string{
+		"Be": {
 			"name":  "Beryllium",
 			"state": "solid",
 		},
-		"B": map[string]string{
+		"B": {
 			"name":  "Boron",
 			"state": "solid",
 		},
-		"C": map[string]string{
+		"C": {
 			"name":  "Carbon",
 			"state": "solid",
 		},
-		"N": map[string]string{
+		"N": {
 			"name":  "Nitrogen",
 			"state": "gas",
 		},
-		"O": map[string]string{
+		"O": {
 			"name":  "Oxygen1",
 			"state": "gas",
 		},
-		"F": map[string]string{
+		"F": {
 			"name":  "Fluorine",
 			"state": "gas",
 		},
-		"Ne": map[string]string{
+		"Ne": {
 			"name1": "Neon",
 			"state": "gas",
 		},
@@ -937,14 +925,14 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testComplexMap1 := map[string]map[string]map[string]int{
-		"F": map[string]map[string]int{
-			"name": map[string]int{
+		"F": {
+			"name": {
 				"first": 1,
 				"last":  2,
 			},
 		},
-		"A": map[string]map[string]int{
-			"name": map[string]int{
+		"A": {
+			"name": {
 				"first": 11,
 				"last":  21,
 			},
@@ -952,14 +940,14 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testComplexMap2 := map[string]map[string]map[string]int{
-		"F": map[string]map[string]int{
-			"name": map[string]int{
+		"F": {
+			"name": {
 				"first": 11,
 				"last":  12222,
 			},
 		},
-		"A": map[string]map[string]int{
-			"name": map[string]int{
+		"A": {
+			"name": {
 				"first": 11,
 				"last":  21,
 			},
@@ -972,24 +960,24 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	//check : uint in map
-	testMDepthUint1 := map[string]map[string]uint{"H": map[string]uint{"name": 1, "state": 2}}
-	testMDepthUint2 := map[string]map[string]uint{"H": map[string]uint{"name": 1, "state": 3}}
+	testMDepthUint1 := map[string]map[string]uint{"H": {"name": 1, "state": 2}}
+	testMDepthUint2 := map[string]map[string]uint{"H": {"name": 1, "state": 3}}
 	retval, _ = strproc.AnyCompare(testMDepthUint1, testMDepthUint2)
 	if retval == true {
 		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	//check : float in map
-	testMDepthFloat1 := map[string]map[string]float64{"H": map[string]float64{"name": 1, "state": 2}}
-	testMDepthFloat2 := map[string]map[string]float64{"H": map[string]float64{"name": 1, "state": 3}}
+	testMDepthFloat1 := map[string]map[string]float64{"H": {"name": 1, "state": 2}}
+	testMDepthFloat2 := map[string]map[string]float64{"H": {"name": 1, "state": 3}}
 	retval, _ = strproc.AnyCompare(testMDepthFloat1, testMDepthFloat2)
 	if retval == true {
 		t.Errorf("Couldn't make an accurate comparison.")
 	}
 
 	//check : complex in map
-	testMDepthComplex1 := map[string]map[string]complex64{"H": map[string]complex64{"name": 1, "state": 2}}
-	testMDepthComplex2 := map[string]map[string]complex64{"H": map[string]complex64{"name": 1, "state": 3}}
+	testMDepthComplex1 := map[string]map[string]complex64{"H": {"name": 1, "state": 2}}
+	testMDepthComplex2 := map[string]map[string]complex64{"H": {"name": 1, "state": 3}}
 	retval, _ = strproc.AnyCompare(testMDepthComplex1, testMDepthComplex2)
 	if retval == true {
 		t.Errorf("Couldn't make an accurate comparison.")
@@ -1030,8 +1018,8 @@ func TestAnyCompare(t *testing.T) {
 
 	//check : sting != string
 	testDiffrentStringMap1 := map[string]map[string]map[string]string{
-		"F": map[string]map[string]string{
-			"name": map[string]string{
+		"F": {
+			"name": {
 				"first": "1",
 				"last":  "2",
 			},
@@ -1039,8 +1027,8 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testDiffrentStringMap2 := map[string]map[string]map[string]int{
-		"A": map[string]map[string]int{
-			"name": map[string]int{
+		"A": {
+			"name": {
 				"first": 11,
 				"last":  21,
 			},
@@ -1054,8 +1042,8 @@ func TestAnyCompare(t *testing.T) {
 
 	//check : uint != uint
 	testDiffrentUintMap1 := map[string]map[string]map[string]uint{
-		"F": map[string]map[string]uint{
-			"name": map[string]uint{
+		"F": {
+			"name": {
 				"first": 1,
 				"last":  2,
 			},
@@ -1063,8 +1051,8 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testDiffrentUintMap2 := map[string]map[string]map[string]int{
-		"A": map[string]map[string]int{
-			"name": map[string]int{
+		"A": {
+			"name": {
 				"first": 11,
 				"last":  21,
 			},
@@ -1078,8 +1066,8 @@ func TestAnyCompare(t *testing.T) {
 
 	//check : float64 != float64
 	testDiffrentFloatMap1 := map[string]map[string]map[string]float64{
-		"F": map[string]map[string]float64{
-			"name": map[string]float64{
+		"F": {
+			"name": {
 				"first": 1,
 				"last":  2,
 			},
@@ -1087,8 +1075,8 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testDiffrentFloatMap2 := map[string]map[string]map[string]int{
-		"A": map[string]map[string]int{
-			"name": map[string]int{
+		"A": {
+			"name": {
 				"first": 11,
 				"last":  21,
 			},
@@ -1102,8 +1090,8 @@ func TestAnyCompare(t *testing.T) {
 
 	//check : complex64 != complex64
 	testDiffrentComplexMap1 := map[string]map[string]map[string]complex64{
-		"F": map[string]map[string]complex64{
-			"name": map[string]complex64{
+		"F": {
+			"name": {
 				"first": 1,
 				"last":  2,
 			},
@@ -1111,8 +1099,8 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	testDiffrentComplexMap2 := map[string]map[string]map[string]int{
-		"A": map[string]map[string]int{
-			"name": map[string]int{
+		"A": {
+			"name": {
 				"first": 11,
 				"last":  21,
 			},
@@ -1129,8 +1117,8 @@ func TestAnyCompare(t *testing.T) {
 		b int
 	}
 
-	testMapStruct1 := map[string]testStruct1{"a": testStruct1{1, 2}}
-	testMapStruct2 := map[string]testStruct1{"a": testStruct1{1, 2}}
+	testMapStruct1 := map[string]testStruct1{"a": {1, 2}}
+	testMapStruct2 := map[string]testStruct1{"a": {1, 2}}
 	retval, err = strproc.AnyCompare(testMapStruct1, testMapStruct2)
 	if retval == true {
 		t.Errorf("Couldn't make an accurate comparison : %v", err)
