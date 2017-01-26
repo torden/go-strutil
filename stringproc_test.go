@@ -1402,7 +1402,7 @@ func TestFileMD5Hash(t *testing.T) {
 		t.Errorf("Error : %v", err)
 	}
 
-	str_ok := "f3f8954bac465686f0bfc2a757c5200b"
+	str_ok := "64e17a4e1c96bbfce57ab19cd0153e6a"
 	if retval != str_ok { //make use md5sum command
 		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
 	}
