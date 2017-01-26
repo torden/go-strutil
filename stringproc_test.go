@@ -1,4 +1,14 @@
-// testing : string processing
+/*
+The MIT License (MIT)
+
+Copyright (C) 2016-2017 Torden Cho <https://github.com/torden>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
 package strutils_test
 
 import (
@@ -1392,7 +1402,7 @@ func TestFileMD5Hash(t *testing.T) {
 		t.Errorf("Error : %v", err)
 	}
 
-	str_ok := "f3f8954bac465686f0bfc2a757c5200b"
+	str_ok := "64e17a4e1c96bbfce57ab19cd0153e6a"
 	if retval != str_ok { //make use md5sum command
 		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
 	}
