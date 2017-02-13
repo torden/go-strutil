@@ -827,5 +827,7 @@ false
 ```
 
 ----
+
 Please feel free.
+
 [Refer to Example OR Test Code](https://github.com/torden/go-strutil/blob/master/example_test.go)
