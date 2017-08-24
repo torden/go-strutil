@@ -728,8 +728,18 @@ func compareMap(compObj1 reflect.Value, compObj2 reflect.Value) (bool, error) {
 // NOTE : Not safe , Not Test Complete. Require more test data based on the complex dataset.
 func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error) {
 
-	if reflect.TypeOf(obj1).Kind() != reflect.TypeOf(obj2).Kind() {
-		return false, fmt.Errorf("Not Compare type, obj1.(%v) != obj2.(%v)", reflect.TypeOf(obj1).Kind(), reflect.TypeOf(obj2).Kind())
+	compObjVal1 := reflect.ValueOf(obj1)
+	compObjVal2 := reflect.ValueOf(obj2)
+
+	compObjType1 := reflect.TypeOf(obj1)
+	compObjType2 := reflect.TypeOf(obj2)
+
+	if compObjVal1.IsValid() == false || compObjVal2.IsValid() == false {
+		return false, fmt.Errorf("Invalid, obj1(%v) != obj2(%v)", obj1, obj2)
+	}
+
+	if compObjType1.Kind() != compObjType2.Kind() {
+		return false, fmt.Errorf("Not Compare type, obj1.(%v) != obj2.(%v)", compObjType1.Kind(), compObjType2.Kind())
 	}
 
 	recursiveDepthKeypList = make([]string, 0)
@@ -737,42 +747,39 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 	switch obj1.(type) {
 
 	case string, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64, complex64, complex128, bool:
-		if reflect.TypeOf(obj1).Comparable() == true && reflect.TypeOf(obj2).Comparable() == true {
+		if compObjType1.Comparable() == true && compObjType2.Comparable() == true {
 			return obj1 == obj2, nil
 		}
 
 	default:
 
-		compObj1 := reflect.ValueOf(obj1)
-		compObj2 := reflect.ValueOf(obj2)
-
 		switch {
 
-		case compObj1.Kind() == reflect.Slice:
+		case compObjVal1.Kind() == reflect.Slice:
 
-			if compObj1.Len() != compObj2.Len() {
-				return false, fmt.Errorf("Different Size : obj1(%d) != obj2(%d)", compObj1.Len(), compObj2.Len())
+			if compObjVal1.Len() != compObjVal2.Len() {
+				return false, fmt.Errorf("Different Size : obj1(%d) != obj2(%d)", compObjVal1.Len(), compObjVal2.Len())
 			}
 
-			for i := 0; i < compObj1.Len(); i++ {
-				if compObj1.Index(i).Interface() != compObj2.Index(i).Interface() {
-					return false, fmt.Errorf("Different Value : (obj1[%d] := %v) != (obj2[%d] := %v)", i, compObj1.Index(i).Interface(), i, compObj2.Index(i).Interface())
+			for i := 0; i < compObjVal1.Len(); i++ {
+				if compObjVal1.Index(i).Interface() != compObjVal2.Index(i).Interface() {
+					return false, fmt.Errorf("Different Value : (obj1[%d] := %v) != (obj2[%d] := %v)", i, compObjVal1.Index(i).Interface(), i, compObjVal2.Index(i).Interface())
 				}
 			}
 
-		case compObj1.Kind() == reflect.Map:
-			if compObj1.Len() != compObj2.Len() {
-				return false, fmt.Errorf("Different Size : obj1(%d) != obj2(%d)", compObj1.Len(), compObj2.Len())
+		case compObjVal1.Kind() == reflect.Map:
+			if compObjVal1.Len() != compObjVal2.Len() {
+				return false, fmt.Errorf("Different Size : obj1(%d) != obj2(%d)", compObjVal1.Len(), compObjVal2.Len())
 			}
 
 			recursiveDepth = 0
-			retval, err := compareMap(compObj1, compObj2)
+			retval, err := compareMap(compObjVal1, compObjVal2)
 			if retval == false {
 				return retval, err
 			}
 
 		default:
-			return false, fmt.Errorf("Not Support Compare : (obj1[%v]) , (obj2[%v])", compObj1.Kind(), compObj2.Kind())
+			return false, fmt.Errorf("Not Support Compare : (obj1[%v]) , (obj2[%v])", compObjVal1.Kind(), compObjVal2.Kind())
 
 		}
 	}
