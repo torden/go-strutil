@@ -41,6 +41,7 @@ PATH_RACE_REPORT="/tmp/golang-race.report"
 ## Setup Enviroment
 setup::
 	@$(CMD_ECHO)  -e "\033[1;40;32mSetup Build Enviroment.\033[01;m\x1b[0m"
+	@$(CMD_GO) get github.com/Masterminds/glide
 	@$(CMD_GO) get github.com/Songmu/make2help/cmd/make2help
 	@$(CMD_GO) get github.com/davecgh/go-spew/spew
 	@$(CMD_GO) get github.com/k0kubun/pp
