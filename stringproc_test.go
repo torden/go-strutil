@@ -1,7 +1,6 @@
 package strutils_test
 
 import (
-	"fmt"
 	"io/ioutil"
 	"math"
 	"os"
@@ -14,7 +13,7 @@ import (
 
 func TestAddSlashes(t *testing.T) {
 
-	strproc := strutils.NewStringProc()
+	t.Parallel()
 	dataset := map[string]string{
 		`대한민국만세`:     `대한민국만세`,
 		`대한\민국만세`:    `대한\\민국만세`,
@@ -28,15 +27,13 @@ func TestAddSlashes(t *testing.T) {
 	var retval string
 	for k, v := range dataset {
 		retval = strproc.AddSlashes(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
 
 func TestStripSlashes(t *testing.T) {
 
-	strproc := strutils.NewStringProc()
+	t.Parallel()
 	dataset := map[string]string{
 		`대한민국만세`:       `대한민국만세`,
 		`대한\\민국만세`:     `대한\민국만세`,
@@ -50,15 +47,13 @@ func TestStripSlashes(t *testing.T) {
 	var retval string
 	for k, v := range dataset {
 		retval = strproc.StripSlashes(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
 
 func TestNl2Br(t *testing.T) {
 
-	strproc := strutils.NewStringProc()
+	t.Parallel()
 	dataset := map[string]string{
 		"대한\n민국만세":     "대한<br />민국만세",
 		"대한\r\n민국만세":   "대한<br />민국만세",
@@ -76,9 +71,7 @@ func TestNl2Br(t *testing.T) {
 	var retval string
 	for k, v := range dataset {
 		retval = strproc.Nl2Br(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
 
@@ -90,7 +83,8 @@ type wordwrapTestVal struct {
 }
 
 func TestWordWrapSimple(t *testing.T) {
-	strproc := strutils.NewStringProc()
+
+	t.Parallel()
 
 	dataset := make(map[int]wordwrapTestVal)
 
@@ -128,21 +122,17 @@ func TestWordWrapSimple(t *testing.T) {
 	for _, v := range dataset {
 
 		retval, _ := strproc.WordWrapSimple(v.str, v.wd, v.breakstr)
-		if v.okstr != retval {
-			t.Errorf("Original Value : %v\n", v.str)
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v.okstr)
-		}
+		assert.AssertEquals(t, v.okstr, retval, "Original Value : %v\nReturn Value mismatch.\nExpected: %v\nActual: %v", v.str, retval, v)
 	}
 
 	//check : wd = 0
 	_, err := strproc.WordWrapSimple("test", 0, "1234")
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `wd at least 1`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `wd at least 1`")
 }
 
 func TestWordWrapAround(t *testing.T) {
-	strproc := strutils.NewStringProc()
+
+	t.Parallel()
 
 	dataset := make(map[int]wordwrapTestVal)
 
@@ -180,36 +170,27 @@ func TestWordWrapAround(t *testing.T) {
 	for _, v := range dataset {
 
 		retval, _ := strproc.WordWrapAround(v.str, v.wd, v.breakstr)
-		if v.okstr != retval {
-			t.Errorf("Original Value : %v\n", v.str)
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v.okstr)
-		}
+		assert.AssertEquals(t, v.okstr, retval, "Original Value : %v\nReturn Value mismatch.\nExpected: %v\nActual: %v", v.str, retval, v.okstr)
 	}
 
 	var err error
 
 	//check : wd = 0
 	_, err = strproc.WordWrapAround("test", 0, "1234")
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `wd at least 1`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `wd at least 1`")
 
 	//check : lastspc = 1
 	_, err = strproc.WordWrapAround("ttttttt tttttttttt", 2, "1111")
-	if err != nil {
-		t.Errorf("Failure : Couldn't check the `lastspc = 1`")
-	}
+	assert.AssertNil(t, err, "Failure : Couldn't check the `lastspc = 1`")
 
 	//check : except
 	_, err = strproc.WordWrapAround("t t", 1, "*")
-	if err != nil {
-		t.Errorf("Failure : Couldn't check the `specific except`")
-	}
+	assert.AssertNil(t, err, "Failure : Couldn't check the `specific except`")
 }
 
 func TestNumbertFmt(t *testing.T) {
 
-	strproc := strutils.NewStringProc()
+	t.Parallel()
 	dataset := map[interface{}]string{
 		123456789101112: "123,456,789,101,112",
 		123456.1234:     "123,456.1234",
@@ -251,45 +232,32 @@ func TestNumbertFmt(t *testing.T) {
 	//check : common
 	for k, v := range dataset {
 		retval, err := strproc.NumberFmt(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
-		if err != nil {
-			t.Errorf("Return Error : %v", err)
-		}
+
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
+		assert.AssertNil(t, err, "Return Error : %v", err)
 	}
 
 	var err error
 
 	//check : ParseFloat
 	_, err = strproc.NumberFmt("12.11111111111111111111111111111111111111111111111111111111111e12e12e1p029ekj12e")
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `Not Support strconv.ParseFloat`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Not Support strconv.ParseFloat`")
 
 	//check : not support obj
 	_, err = strproc.NumberFmt(complex128(123))
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `not support obj`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj`")
 
 	//check : not support obj
 	_, err = strproc.NumberFmt(complex64(123))
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `not support obj`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj`")
 
 	//check : not support obj
 	_, err = strproc.NumberFmt(true)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `not support obj`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj`")
 
 	//check : not support numric string
 	_, err = strproc.NumberFmt("1234===121212")
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `not support obj`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj`")
 
 }
 
@@ -303,7 +271,7 @@ type paddingTestVal struct {
 
 func TestPadding(t *testing.T) {
 
-	strproc := strutils.NewStringProc()
+	t.Parallel()
 	dataset := make(map[int]paddingTestVal)
 
 	dataset[0] = paddingTestVal{"Life isn't always what one like.", "*", strutils.PadBoth, 38, "***Life isn't always what one like.***"}
@@ -324,25 +292,18 @@ func TestPadding(t *testing.T) {
 	for _, v := range dataset {
 
 		retval := strproc.Padding(v.str, v.fill, v.m, v.mx)
-		if v.okstr != retval {
-			t.Errorf("Original Value : %v\n", v.str)
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v.okstr)
-		}
+		assert.AssertEquals(t, v.okstr, retval, "Original Value : %v\nReturn Value mismatch.\nExpected: %v\nActual: %v", v.str, retval, v.okstr)
 	}
 
 	//check : mx >= byteStrLen
 	testStr := "test"
 	retval := strproc.Padding(testStr, "*", strutils.PadBoth, 1)
-	if retval != testStr {
-
-		t.Errorf("Failure : Couldn't check the `mx >= byteStrLen`")
-
-	}
+	assert.AssertEquals(t, testStr, retval, "Failure : Couldn't check the `mx >= byteStrLen`")
 }
 
 func TestUppercaseFirstWords(t *testing.T) {
 
-	strproc := strutils.NewStringProc()
+	t.Parallel()
 	dataset := map[string]string{
 		"o say, can you see, by the dawn’s early light,":                    "O Say, Can You See, By The Dawn’s Early Light,",
 		"what so proudly we hailed at the twilight’s last gleaming,":        "What So Proudly We Hailed At The Twilight’s Last Gleaming,",
@@ -358,15 +319,13 @@ func TestUppercaseFirstWords(t *testing.T) {
 	//check : common
 	for k, v := range dataset {
 		retval := strproc.UpperCaseFirstWords(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
 
 func TestLowercaseFirstWords(t *testing.T) {
 
-	strproc := strutils.NewStringProc()
+	t.Parallel()
 	dataset := map[string]string{
 		"O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,":                    "o sAY, cAN yOU sEE, bY tHE dAWN’S eARLY lIGHT,",
 		"WHAT SO PROUDLY WE HAILED AT THE TWILIGHT’S LAST GLEAMING,":        "wHAT sO pROUDLY wE hAILED aT tHE tWILIGHT’S lAST gLEAMING,",
@@ -382,15 +341,13 @@ func TestLowercaseFirstWords(t *testing.T) {
 	//check : common
 	for k, v := range dataset {
 		retval := strproc.LowerCaseFirstWords(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
 
 func TestSwapCaseFirstWords(t *testing.T) {
 
-	strproc := strutils.NewStringProc()
+	t.Parallel()
 	dataset := map[string]string{
 		"O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,":                    "o sAY, cAN yOU sEE, bY tHE dAWN’S eARLY lIGHT,",
 		"WHAT SO PROUDLY WE HAILED AT THE TWILIGHT’S LAST GLEAMING,":        "wHAT sO pROUDLY wE hAILED aT tHE tWILIGHT’S lAST gLEAMING,",
@@ -423,15 +380,13 @@ func TestSwapCaseFirstWords(t *testing.T) {
 	//check : common
 	for k, v := range dataset {
 		retval := strproc.SwapCaseFirstWords(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
 
 func TestHumanByteSize(t *testing.T) {
 
-	strproc := strutils.NewStringProc()
+	t.Parallel()
 	dataset := map[interface{}]string{
 		1.7976931348623157e+308: "152270531428124968725096603469261934082567927321390584004196605238063615198482718997460353589210907119043200911085747810785909744915680620242659147418948017662928903247753430023357200398869394856103928002466673473125884404826265988290381563441726944871732658253337089007918982991007711232.00Yb",
 		1170:         "1.14Kb",
@@ -461,48 +416,37 @@ func TestHumanByteSize(t *testing.T) {
 	//check : common
 	for k, v := range dataset {
 		retval, err := strproc.HumanByteSize(k, 2, strutils.CamelCaseDouble)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
-		if err != nil {
-			t.Errorf("Error : %v", err)
-		}
+
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
+		assert.AssertNil(t, err, "Error : %v", err)
 	}
 
 	var err error
 
 	//check : unit < UpperCaseSingle || unit > CamelCaseLong
 	_, err = strproc.HumanByteSize(`1234`, 2, 123)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `retval, err := strproc.HumanByteSize(k, 2, strutils.CamelCaseDouble)`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `retval, err := strproc.HumanByteSize(k, 2, strutils.CamelCaseDouble)`")
 
 	//check : numberToString
 	_, err = strproc.HumanByteSize(`abc`, 2, strutils.UpperCaseDouble)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `can't convert number to string`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `can't convert number to string`")
 
 	//check : ParseFloat
 	_, err = strproc.HumanByteSize("100.7976931348623157e+308", 2, strutils.UpperCaseDouble)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `strconv.ParseFloat(strNum, 64)`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `strconv.ParseFloat(strNum, 64)`")
 
 	//check : Complex64
 	_, err = strproc.HumanByteSize(complex64(13), 2, strutils.UpperCaseDouble)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `not support obj.(complex128)`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj.(complex128)`")
 
 	//check : Complex128
 	_, err = strproc.HumanByteSize(complex128(2+3i), 2, strutils.UpperCaseDouble)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `not support obj.(complex128)`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj.(complex128)`")
 }
 
 func TestHumanFileSize(t *testing.T) {
+
+	t.Parallel()
 
 	const tmpFilePath = "./filesizecheck.touch"
 	const tmpPath = "./testdir"
@@ -513,11 +457,7 @@ func TestHumanFileSize(t *testing.T) {
 	//generating a touch file
 	tmpdata := []byte(strings.Repeat("*", 1024*1024*13))
 	err = ioutil.WriteFile(tmpFilePath, tmpdata, 0750)
-	if err != nil {
-		fmt.Println("Error : ", err)
-	}
-
-	strproc := strutils.NewStringProc()
+	assert.AssertNil(t, err, "Error : ", err)
 
 	dataset := map[uint8]string{
 		strutils.LowerCaseSingle: "13.00m",
@@ -531,98 +471,80 @@ func TestHumanFileSize(t *testing.T) {
 	//check : common
 	for k, v := range dataset {
 		retval, err = strproc.HumanFileSize(tmpFilePath, 2, k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
-		if err != nil {
-			t.Errorf("Error : %v", err)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
+		assert.AssertNil(t, err, "Error : %v", err)
 	}
 
 	//check : lost file description
 	go func() {
 		time.Sleep(time.Nanosecond * 10)
-		os.Remove(tmpFilePath)
+		err := os.Remove(tmpFilePath)
+		assert.AssertNilLog(t, err, "lost file : %s but it's OK", tmpFilePath)
+
 	}()
 	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseDouble)
 	if err == nil {
 		//Sometime, get a error
 	}
 
-	defer os.Remove(tmpFilePath)
+	defer func(t *testing.T) {
+		err := os.Remove(tmpFilePath)
+		assert.AssertNil(t, err, "Error : %v", err)
+
+	}(t)
 
 	//check : isDir
 	err = os.MkdirAll(tmpPath, 0777)
-	if err != nil {
-		t.Errorf("Failure : Couldn't Mkdir %q: %s", tmpPath, err)
-	}
+	assert.AssertNil(t, err, "Failure : Couldn't Mkdir %q: %s", tmpPath, err)
 
 	_, err = strproc.HumanFileSize(tmpPath, 2, strutils.CamelCaseDouble)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `stat.IsDir()`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `stat.IsDir()`")
 
 	//check : os.Open
 	_, err = strproc.HumanFileSize("/hello_word_txt", 2, strutils.CamelCaseDouble)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `os.Open()`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `os.Open()`")
 
 	//check : not support obj.(complex128)
 	_, err = strproc.HumanByteSize(complex128(1+3i), 2, strutils.CamelCaseLong)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `Not Support obj.(complex129)`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Not Support obj.(complex129)`")
 }
 
 func TestAnyCompare(t *testing.T) {
 
+	t.Parallel()
+
 	var retval bool
 	var err error
-
-	strproc := strutils.NewStringProc()
 
 	testStr1 := "ABCD"
 	testStr2 := "ABCD"
 	retval, err = strproc.AnyCompare(testStr1, testStr2)
-	if retval == false {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertTrue(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testUint1 := uint64(1234567)
 	testUint2 := uint64(1234567)
 	retval, err = strproc.AnyCompare(testUint1, testUint2)
-	if retval == false {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertTrue(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testFloat1 := float64(123.123)
 	testFloat2 := float64(123.123)
 	retval, err = strproc.AnyCompare(testFloat1, testFloat2)
-	if retval == false {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertTrue(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testComplex1 := complex64(123.123)
 	testComplex2 := complex64(123.123)
 	retval, err = strproc.AnyCompare(testComplex1, testComplex2)
-	if retval == false {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertTrue(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testInt1 := []int{1, 2, 3}
 	testInt2 := []int{1, 2, 3}
 	retval, err = strproc.AnyCompare(testInt1, testInt2)
-	if retval == false {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertTrue(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testIntFalse1 := []int{1, 2, 3}
 	testIntFalse2 := []int{1, 2, 1}
 	retval, err = strproc.AnyCompare(testIntFalse1, testIntFalse2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison.")
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testMultipleDepthMapDiffType1 := map[string]map[string]string{
 		"H": {
@@ -638,9 +560,7 @@ func TestAnyCompare(t *testing.T) {
 		},
 	}
 	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType1, testMultipleDepthMapDiffType2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testMultipleDepthMapDiffType3 := map[string]map[string]int{
 		"H": {
@@ -656,9 +576,7 @@ func TestAnyCompare(t *testing.T) {
 		},
 	}
 	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType3, testMultipleDepthMapDiffType4)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testMultipleDepthMapDiffType5 := map[string]map[string]uint{
 		"H": {
@@ -674,9 +592,7 @@ func TestAnyCompare(t *testing.T) {
 		},
 	}
 	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType5, testMultipleDepthMapDiffType6)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testMultipleDepthMapDiffType7 := map[string]map[string]float64{
 		"H": {
@@ -692,9 +608,7 @@ func TestAnyCompare(t *testing.T) {
 		},
 	}
 	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType7, testMultipleDepthMapDiffType8)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testMultipleDepthMapDiffType9 := map[string]map[string]complex64{
 		"H": {
@@ -710,37 +624,27 @@ func TestAnyCompare(t *testing.T) {
 		},
 	}
 	retval, err = strproc.AnyCompare(testMultipleDepthMapDiffType9, testMultipleDepthMapDiffType10)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testMapStr1 := map[string]string{"a": "va", "vb": "vb"}
 	testMapStr2 := map[string]string{"a": "va", "vb": "vb"}
 	retval, err = strproc.AnyCompare(testMapStr1, testMapStr2)
-	if retval == false {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertTrue(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testMapStrDiff1 := map[string]string{"a": "va", "vb": "v"}
 	testMapStrDiff2 := map[string]string{"a": "va", "vb": "vb"}
 	retval, err = strproc.AnyCompare(testMapStrDiff1, testMapStrDiff2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testMapStrFalse1 := map[string]string{"a": "va", "vb": "vb"}
 	testMapStrFalse2 := map[string]string{"a": "va", "v": "vb"}
 	retval, err = strproc.AnyCompare(testMapStrFalse1, testMapStrFalse2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison.")
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testMapBool1 := map[string]bool{"a": false, "vb": false}
 	testMapBool2 := map[string]bool{"a": false, "vb": true}
 	retval, err = strproc.AnyCompare(testMapBool1, testMapBool2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testMultipleDepthMap1 := map[string]map[string]string{
 		"H": {
@@ -829,9 +733,7 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	retval, err = strproc.AnyCompare(testMultipleDepthMap1, testMultipleDepthMap2)
-	if retval == false {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertTrue(t, retval, "Couldn't make an accurate comparison : %v", err)
 
 	testMultipleDepthMapFalse1 := map[string]map[string]string{
 		"H": {
@@ -920,9 +822,7 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	retval, _ = strproc.AnyCompare(testMultipleDepthMapFalse1, testMultipleDepthMapFalse2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison.")
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
 	testComplexMap1 := map[string]map[string]map[string]int{
 		"F": {
@@ -955,66 +855,49 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	retval, _ = strproc.AnyCompare(testComplexMap1, testComplexMap2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison.")
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
 	//check : uint in map
 	testMDepthUint1 := map[string]map[string]uint{"H": {"name": 1, "state": 2}}
 	testMDepthUint2 := map[string]map[string]uint{"H": {"name": 1, "state": 3}}
 	retval, _ = strproc.AnyCompare(testMDepthUint1, testMDepthUint2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison.")
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
 	//check : float in map
 	testMDepthFloat1 := map[string]map[string]float64{"H": {"name": 1, "state": 2}}
 	testMDepthFloat2 := map[string]map[string]float64{"H": {"name": 1, "state": 3}}
 	retval, _ = strproc.AnyCompare(testMDepthFloat1, testMDepthFloat2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison.")
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
 	//check : complex in map
 	testMDepthComplex1 := map[string]map[string]complex64{"H": {"name": 1, "state": 2}}
 	testMDepthComplex2 := map[string]map[string]complex64{"H": {"name": 1, "state": 3}}
 	retval, _ = strproc.AnyCompare(testMDepthComplex1, testMDepthComplex2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison.")
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
 	//check : different type
 	testDiffType1 := int(32)
 	testDiffType2 := int64(32)
 	_, err = strproc.AnyCompare(testDiffType1, testDiffType2)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `Different Type`")
-	}
+	assert.AssertNotNil(t, retval, "Failure : Couldn't check the `Different Type`")
 
 	//check : different len
 	testDiffLen1 := []int{1, 2, 3, 4, 5, 6, 7}
 	testDiffLen2 := []int{1, 2, 3}
 	_, err = strproc.AnyCompare(testDiffLen1, testDiffLen2)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `Different Len`")
-	}
+	assert.AssertNotNil(t, retval, "Failure : Couldn't check the `Different Len`")
 
 	//check : different len
 	testDiffMapLen1 := map[int]string{0: "A", 1: "B", 2: "C"}
 	testDiffMapLen2 := map[int]string{0: "A", 1: "B"}
 	_, err = strproc.AnyCompare(testDiffMapLen1, testDiffMapLen2)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `Different Len`")
-	}
+	assert.AssertNotNil(t, retval, "Failure : Couldn't check the `Different Len`")
 
 	//check : not support compre
 	testDiffNotSupport1 := paddingTestVal{}
 	testDiffNotSupport2 := paddingTestVal{}
 	_, err = strproc.AnyCompare(testDiffNotSupport1, testDiffNotSupport2)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `Not Support Compre`")
-		t.Errorf("Error : %v", err)
-	}
+	assert.AssertNotNil(t, retval, "Failure : Couldn't check the `Not Support Compre`\nError : %v", err)
 
 	//check : sting != string
 	testDiffrentStringMap1 := map[string]map[string]map[string]string{
@@ -1036,9 +919,7 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	retval, _ = strproc.AnyCompare(testDiffrentStringMap1, testDiffrentStringMap2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison.")
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
 	//check : uint != uint
 	testDiffrentUintMap1 := map[string]map[string]map[string]uint{
@@ -1060,9 +941,7 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	retval, _ = strproc.AnyCompare(testDiffrentUintMap1, testDiffrentUintMap2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison.")
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
 	//check : float64 != float64
 	testDiffrentFloatMap1 := map[string]map[string]map[string]float64{
@@ -1084,9 +963,7 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	retval, _ = strproc.AnyCompare(testDiffrentFloatMap1, testDiffrentFloatMap2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison.")
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
 	//check : complex64 != complex64
 	testDiffrentComplexMap1 := map[string]map[string]map[string]complex64{
@@ -1108,9 +985,7 @@ func TestAnyCompare(t *testing.T) {
 	}
 
 	retval, _ = strproc.AnyCompare(testDiffrentComplexMap1, testDiffrentComplexMap2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison.")
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
 	type testStruct1 struct {
 		a int
@@ -1120,12 +995,12 @@ func TestAnyCompare(t *testing.T) {
 	testMapStruct1 := map[string]testStruct1{"a": {1, 2}}
 	testMapStruct2 := map[string]testStruct1{"a": {1, 2}}
 	retval, err = strproc.AnyCompare(testMapStruct1, testMapStruct2)
-	if retval == true {
-		t.Errorf("Couldn't make an accurate comparison : %v", err)
-	}
+	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison : %v", err)
 }
 
 func TestStripTags(t *testing.T) {
+
+	t.Parallel()
 
 	str_ok := `
 Just! a String Processing Library for Go-lang
@@ -1203,67 +1078,41 @@ README.md haven’t contain all the examples. Please refer to the the XXXtest.go
 	var retval string
 	var err error
 
-	strproc := strutils.NewStringProc()
-
 	// check : original html
 	retval, err = strproc.StripTags(str_original_html)
-	if err != nil {
-		t.Errorf("Error : %v", err)
-	}
-
-	if retval != str_ok {
-		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
-	}
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, str_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
 
 	// check : html entity encoded html
 	retval, err = strproc.StripTags(str_html_entity_encoded)
-	if err != nil {
-		t.Errorf("Error : %v", err)
-	}
-
-	if retval != str_ok {
-		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
-	}
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, str_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
 
 	// check : url encoded html
 	retval, err = strproc.StripTags(str_html_urlencoded)
-	if err != nil {
-		t.Errorf("Error : %v", err)
-	}
-
-	if retval != str_ok {
-		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
-	}
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, str_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
 
 	// check : html entity encoded after url encoded
 	retval, err = strproc.StripTags(str_htmentity_urlencoded)
-	if err != nil {
-		t.Errorf("Error : %v", err)
-	}
-
-	if retval != str_ok {
-		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
-	}
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, str_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
 
 	// check : url encoded after html entity encoded
 	retval, err = strproc.StripTags(str_urlencoded_htmlentity)
-	if err != nil {
-		t.Errorf("Error : %v", err)
-	}
-
-	if retval != str_ok {
-		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
-	}
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, str_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
 
 	// check : failure at urldecode
 	failTestStr := `html%26gt%3` // clear str is `html%26gt%3B`
 	_, err = strproc.StripTags(failTestStr)
-	if err == nil {
-		t.Errorf("Failure : Couldn't check the `failure at url decoding`")
-	}
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `failure at url decoding`")
+
 }
 
 func TestConvertToStr(t *testing.T) {
+
+	t.Parallel()
 
 	dataset := map[interface{}]string{
 		string("1234567"): "1234567",
@@ -1306,20 +1155,17 @@ func TestConvertToStr(t *testing.T) {
 		false: "false",
 	}
 
-	strproc := strutils.NewStringProc()
-
 	//check : common
 	for k, v := range dataset {
 		retval, err := strproc.ConvertToStr(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-			t.Errorf("Error : %v\n", err)
-		}
+		assert.AssertEquals(t, retval, v, "Return Value mismatch.\nExpected: %v\nActual: %v\nError : %v", retval, v, err)
 	}
 }
 
 func TestReverseStr(t *testing.T) {
 
+	t.Parallel()
+
 	dataset := map[string]string{
 		"0123456789": "9876543210",
 		"가나다라마바사":    "사바마라다나가",
@@ -1327,36 +1173,32 @@ func TestReverseStr(t *testing.T) {
 		"天地玄黃宇宙洪荒":   "荒洪宙宇黃玄地天",
 	}
 
-	strproc := strutils.NewStringProc()
-
 	//check : common
 	for k, v := range dataset {
 		retval := strproc.ReverseStr(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+		assert.AssertEquals(t, retval, v, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
 
 func TestReverseNormalStr(t *testing.T) {
 
+	t.Parallel()
+
 	dataset := map[string]string{
 		"0123456789": "9876543210",
 		"abcdefg":    "gfedcba",
 	}
 
-	strproc := strutils.NewStringProc()
-
 	//check : common
 	for k, v := range dataset {
 		retval := strproc.ReverseNormalStr(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+		assert.AssertEquals(t, retval, v, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
 
 func TestReverseReverseUnicode(t *testing.T) {
+
+	t.Parallel()
 
 	dataset := map[string]string{
 		"0123456789": "9876543210",
@@ -1366,43 +1208,35 @@ func TestReverseReverseUnicode(t *testing.T) {
 		"天地玄黃宇宙洪荒":   "荒洪宙宇黃玄地天",
 	}
 
-	strproc := strutils.NewStringProc()
-
 	//check : common
 	for k, v := range dataset {
 		retval := strproc.ReverseUnicode(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+		assert.AssertEquals(t, retval, v, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
 
 func TestFileMD5Hash(t *testing.T) {
 
-	strproc := strutils.NewStringProc()
+	t.Parallel()
 
 	var retval string
 	var err error
 
 	//check : common
 	retval, err = strproc.FileMD5Hash("./LICENSE")
-	if err != nil {
-		t.Errorf("Error : %v", err)
-	}
+	assert.AssertNil(t, err, "Error : %v", err)
 
 	str_ok := "64e17a4e1c96bbfce57ab19cd0153e6a"
-	if retval != str_ok { //make use md5sum command
-		t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
-	}
+	assert.AssertEquals(t, retval, str_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
 
 	//check : os.Open
 	_, err = strproc.FileMD5Hash("./HELLO_GOLANG")
-	if err == nil {
-		t.Errorf("Couldn't check the `os.Open`")
-	}
+	assert.AssertNotNil(t, err, "Couldn't check the `os.Open`\nError : %v", err)
 }
 
 func TestMD5Hash(t *testing.T) {
+
+	t.Parallel()
 
 	dataset := map[string]string{
 		"0123456789": "781e5e245d69b566979b86e28d23f2c7",
@@ -1410,16 +1244,11 @@ func TestMD5Hash(t *testing.T) {
 		"abcdefgqwdoisef;oijawe;fijq2039jdfs.dnc;oa283hr08uj3o;ijwaef;owhjefo;uhwefwef": "15f764f21d09b11102eb015fc8824d00",
 	}
 
-	strproc := strutils.NewStringProc()
-
 	//check : common
 	for k, v := range dataset {
 		retval, err := strproc.MD5Hash(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
-		if err != nil {
-			t.Errorf("Error : %v", err)
-		}
+
+		assert.AssertNil(t, err, "Error : %v", err)
+		assert.AssertEquals(t, retval, v, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
