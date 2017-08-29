@@ -49,6 +49,7 @@ setup::
 	@$(CMD_GO) get github.com/mattn/goveralls
 	@$(CMD_GO) get golang.org/x/tools/cmd/cover
 	@$(CMD_GO) get github.com/modocache/gover
+	@$(CMD_GO) get github.com/dustin/go-humanize
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
 ## Run a LintChecker (Normal)
