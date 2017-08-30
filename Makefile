@@ -12,6 +12,8 @@ CMD_CP          	:=$(shell which cp)
 CMD_AR          	:=$(shell which ar)
 CMD_RANLIB      	:=$(shell which ranlib)
 CMD_MV          	:=$(shell which mv)
+CMD_AWK				:=$(shell which awk)
+CMD_SED				:=$(shell which sed)
 CMD_TAIL        	:=$(shell which tail)
 CMD_FIND        	:=$(shell which find)
 CMD_LDD         	:=$(shell which ldd)
@@ -38,6 +40,7 @@ CMD_GOVERALLS		:=$(shell which goveralls)
 
 PATH_RACE_REPORT="golang-race.report"
 PATH_CONVER_PROFILE="go-strutil.coverprofile"
+VER_GOLANG=$(shell go version | awk '{print $$3}' | sed -e "s/go//;s/\.//g")
 
 ## Setup Enviroment
 setup::
