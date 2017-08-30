@@ -24,23 +24,32 @@ func NewAssert() *Assert {
 //a.printMsg is equivalent to t.Errorf include other information for easy debug
 func (a *Assert) printMsg(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{}) {
 
+	outf := t.Errorf
+	out := t.Error
+
+	if UNITTESTMODE { //assertion methods test on go test
+		outf = t.Logf
+		out = t.Log
+		t.Log("*** Don't Worry error below, Just Testing ***")
+	}
+
 	funcn, file, line, _ := runtime.Caller(2)
-	t.Errorf(strings.Repeat("-", 120))
-	t.Errorf("+ %v:%v\n", file, line)
-	t.Errorf("+ %+v\n", runtime.FuncForPC(funcn).Name())
-	t.Errorf(strings.Repeat("-", 120))
+	out(strings.Repeat("-", 120))
+	outf("+ %v:%v\n", file, line)
+	outf("+ %+v\n", runtime.FuncForPC(funcn).Name())
+	out(strings.Repeat("-", 120))
 	if len(args) > 1 {
-		t.Errorf(msgfmt, args)
+		outf(msgfmt, args)
 	} else {
-		t.Error(msgfmt)
+		out(msgfmt)
 	}
 
-	t.Errorf("- value1 : %+v\n", v1)
+	outf("- value1 : %+v\n", v1)
 	if v2 != nil {
-		t.Errorf("- value2 : %+v\n", v2)
+		outf("- value2 : %+v\n", v2)
 	}
 
-	t.Errorf(strings.Repeat("-", 120))
+	out(strings.Repeat("-", 120))
 }
 
 //isCompareableNum asserts the specified objects are can compareble
