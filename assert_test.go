@@ -1,6 +1,9 @@
 package strutils_test
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 func TestAssertNilLog(t *testing.T) {
 
@@ -24,6 +27,8 @@ func TestAssertEquals(t *testing.T) {
 
 	assert.AssertEquals(t, "a", "b", "hello")
 	assert.AssertEquals(t, "a", "b", "hello %s", "word")
+
+	assert.AssertEquals(t, math.Log(-1.0), math.Log(-1.0), "hello")
 }
 
 func TestAssertFalse(t *testing.T) {
@@ -115,6 +120,10 @@ func TestAssertLessThanEqualTo(t *testing.T) {
 	assert.AssertLessThanEqualTo(t, uint64(1), uint64(1), "hello")
 	assert.AssertLessThanEqualTo(t, float32(1), float32(1), "hello")
 	assert.AssertLessThanEqualTo(t, float64(1), float64(1), "hello")
+
+	assert.AssertLessThanEqualTo(t, math.Log(-1.0), math.Log(-1.0), "hello")
+	assert.AssertLessThanEqualTo(t, math.Log(-1.0), nil, "hello")
+	assert.AssertLessThanEqualTo(t, math.Log(1.0), nil, "hello")
 }
 
 func TestAssertGreaterThan(t *testing.T) {
@@ -131,6 +140,12 @@ func TestAssertGreaterThan(t *testing.T) {
 	assert.AssertGreaterThan(t, 3, 2, "hello")
 	assert.AssertGreaterThan(t, 3, 2, "hello %s", "word")
 
+	assert.AssertGreaterThan(t, nil, 2, "hello")
+	assert.AssertGreaterThan(t, nil, 2, "hello %s", "word")
+
+	assert.AssertGreaterThan(t, nil, nil, "hello")
+	assert.AssertGreaterThan(t, nil, nil, "hello %s", "word")
+
 	assert.AssertGreaterThan(t, int(1), int(1), "hello")
 	assert.AssertGreaterThan(t, int8(1), int8(1), "hello")
 	assert.AssertGreaterThan(t, int16(1), int16(1), "hello")
@@ -144,21 +159,25 @@ func TestAssertGreaterThan(t *testing.T) {
 	assert.AssertGreaterThan(t, float32(1), float32(1), "hello")
 	assert.AssertGreaterThan(t, float64(1), float64(1), "hello")
 
+	assert.AssertGreaterThan(t, math.Log(-1.0), math.Log(-1.0), "hello")
+	assert.AssertGreaterThan(t, math.Log(-1.0), nil, "hello")
+	assert.AssertGreaterThan(t, math.Log(1.0), nil, "hello")
+
 }
 
 func TestAssertGreaterThanEqualTo(t *testing.T) {
-
-	assert.AssertGreaterThanEqualTo(t, "a", "a", "hello")
-	assert.AssertGreaterThanEqualTo(t, "a", "a", "hello %s", "word")
-
-	assert.AssertGreaterThanEqualTo(t, 1, 1, "hello")
-	assert.AssertGreaterThanEqualTo(t, 1, 1, "hello %s", "word")
 
 	assert.AssertGreaterThanEqualTo(t, 1, 2, "hello")
 	assert.AssertGreaterThanEqualTo(t, 1, 2, "hello %s", "word")
 
 	assert.AssertGreaterThanEqualTo(t, 3, 2, "hello")
 	assert.AssertGreaterThanEqualTo(t, 3, 2, "hello %s", "word")
+
+	assert.AssertGreaterThanEqualTo(t, nil, 2, "hello")
+	assert.AssertGreaterThanEqualTo(t, nil, 2, "hello %s", "word")
+
+	assert.AssertGreaterThanEqualTo(t, nil, nil, "hello")
+	assert.AssertGreaterThanEqualTo(t, nil, nil, "hello %s", "word")
 
 	assert.AssertGreaterThanEqualTo(t, int(1), int(1), "hello")
 	assert.AssertGreaterThanEqualTo(t, int8(1), int8(1), "hello")
@@ -172,7 +191,10 @@ func TestAssertGreaterThanEqualTo(t *testing.T) {
 	assert.AssertGreaterThanEqualTo(t, uint64(1), uint64(1), "hello")
 	assert.AssertGreaterThanEqualTo(t, float32(1), float32(1), "hello")
 	assert.AssertGreaterThanEqualTo(t, float64(1), float64(1), "hello")
-
 	assert.AssertGreaterThanEqualTo(t, complex128(1), float64(1), "hello")
 	assert.AssertGreaterThanEqualTo(t, float64(1), complex128(1), "hello")
+
+	assert.AssertGreaterThanEqualTo(t, math.Log(-1.0), math.Log(-1.0), "hello")
+	assert.AssertGreaterThanEqualTo(t, math.Log(-1.0), nil, "hello")
+	assert.AssertGreaterThanEqualTo(t, math.Log(1.0), nil, "hello")
 }
