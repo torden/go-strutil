@@ -134,18 +134,18 @@ func getIPType(str string, l int) int {
 
 	switch {
 	case hasDot > -1 && hasColon == -1 && l >= 7 && l <= IPv4CIDR:
-		if isCIDR(str, l) == true {
+		if isCIDR(str, l) {
 			return IPv4CIDR
 		}
 		return IPv4
 	case hasDot == -1 && hasColon > -1 && l >= 6 && l <= IPv6CIDR:
-		if isCIDR(str, l) == true {
+		if isCIDR(str, l) {
 			return IPv6CIDR
 		}
 		return IPv6
 
 	case hasDot > -1 && hasColon > -1 && l >= 14 && l <= IPv4MappedIPv6:
-		if isCIDR(str, l) == true {
+		if isCIDR(str, l) {
 			return IPv4MappedIPv6CIDR
 		}
 		return IPv4MappedIPv6
@@ -164,22 +164,14 @@ var checkDenyRelativePath = regexp.MustCompile(`(?m)(` + regexDenyFileNameCharLi
 func (s *StringValidator) IsValidFilePath(str string) bool {
 
 	ret := checkDenyRelativePath.MatchString(str)
-	if ret == false {
-		return true
-	}
-
-	return false
+	return !ret
 }
 
 // IsValidFilePathWithRelativePath is Validates whether the value is a valid FilePath (allow with relative path)
 func (s *StringValidator) IsValidFilePathWithRelativePath(str string) bool {
 
 	ret := checkAllowRelativePath.MatchString(str)
-	if ret == false {
-		return true
-	}
-
-	return false
+	return !ret
 }
 
 // IsPureTextStrict is Validates whether the value is a pure text, Validation use native
@@ -254,7 +246,7 @@ func (s *StringValidator) IsPureTextNormal(str string) (bool, error) {
 	decodedStr := html.UnescapeString(str)
 
 	matchedUrlencoded := urlencodedPattern.MatchString(decodedStr)
-	if matchedUrlencoded == true {
+	if matchedUrlencoded {
 		tempBuf, err := url.QueryUnescape(decodedStr)
 		if err == nil {
 			decodedStr = tempBuf
@@ -262,12 +254,12 @@ func (s *StringValidator) IsPureTextNormal(str string) (bool, error) {
 	}
 
 	matchedElement := elementPattern.MatchString(decodedStr)
-	if matchedElement == true {
+	if matchedElement {
 		return false, errors.New("Detect HTML Element")
 	}
 
 	matchedCc := controlcharPattern.MatchString(decodedStr)
-	if matchedCc == true {
+	if matchedCc {
 		return false, errors.New("Detect Control Character")
 	}
 

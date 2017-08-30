@@ -1,5 +1,6 @@
 coverage.html
 ck.sh
-strutils.coverprofile
+*.coverprofile
+*.coverprofile.*
 .*.swp
 .swp

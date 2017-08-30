@@ -8,46 +8,35 @@ import (
 
 func ipaddrTest(t *testing.T, cktype int, dataset map[string]bool, errfmt string) {
 
-	strvalidator := strutils.NewStringValidator()
-
 	//check : common
 	for k, v := range dataset {
 		retval, _ := strvalidator.IsValidIPAddr(k, cktype)
-		if v != retval {
-			t.Errorf(errfmt, retval)
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+
+		assert.AssertEquals(t, v, retval, errfmt, retval)
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
 
 func TestIPAddrFalse(t *testing.T) {
 
-	strvalidator := strutils.NewStringValidator()
+	t.Parallel()
 	var err error
 
 	//check : wrong IP Addr
 	_, err = strvalidator.IsValidIPAddr("A.B.C.D", strutils.IPv4)
-	if err == nil {
-		t.Errorf("Failured : Couldn't check the `wrong IP Addr`")
-	}
+	assert.AssertNotNil(t, err, "Failured : Couldn't check the `wrong IP Addr`")
 
 	//check : wrong options
 	_, err = strvalidator.IsValidIPAddr("127.0.0.1", 7)
-	if err == nil {
-		t.Errorf("Failured : Couldn't check the `wrong option`")
-	}
+	assert.AssertNotNil(t, err, "Failured : Couldn't check the `wrong option`")
 
 	//check : getIPType
 	_, err = strvalidator.IsValidIPAddr(":F", strutils.IPv6CIDR, strutils.IPv6)
-	if err == nil {
-		t.Errorf("Failured : Couldn't check the `wrong IP Addr`")
-	}
+	assert.AssertNotNil(t, err, "Failured : Couldn't check the `wrong IP Addr`")
 
 	//check : getIPType
 	_, err = strvalidator.IsValidIPAddr("127127127127", strutils.IPv6CIDR, strutils.IPv6)
-	if err == nil {
-		t.Errorf("Failured : Couldn't check the `wrong IP Addr`")
-	}
+	assert.AssertNotNil(t, err, "Failured : Couldn't check the `wrong IP Addr`")
 
 }
 
@@ -158,21 +147,17 @@ func TestMacAddr(t *testing.T) {
 		"ebf8.2bd7.e962":    true,
 	}
 
-	strvalidator := strutils.NewStringValidator()
+	t.Parallel()
 
 	//check : common
 	for k, v := range macaddrList {
 		retval := strvalidator.IsValidMACAddr(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 
 	//check : return FALSE
 	retval := strvalidator.IsValidMACAddr("127.0.0.1")
-	if retval != false {
-		t.Errorf("Failured : Couldn't check the `return false`")
-	}
+	assert.AssertFalse(t, retval, "Failured : Couldn't check the `return false`")
 }
 
 func TestDomain(t *testing.T) {
@@ -230,14 +215,12 @@ func TestDomain(t *testing.T) {
 		"www.google.idf.il":        true,
 	}
 
-	strvalidator := strutils.NewStringValidator()
+	t.Parallel()
 
 	//check : common
 	for k, v := range testDomains {
 		retval := strvalidator.IsValidDomain(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
 
@@ -258,14 +241,12 @@ func TestURL(t *testing.T) {
 		"http://ftp.yz.yamagata-u.ac.jp/pub/linux/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1611.iso":                           true,
 	}
 
-	strvalidator := strutils.NewStringValidator()
+	t.Parallel()
 
 	//check : common
 	for k, v := range testUrls {
 		retval := strvalidator.IsValidURL(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 }
 
@@ -300,14 +281,12 @@ func TestPureTextNormal(t *testing.T) {
 		"AbcEd-=qwdoijqdwoijaaaaaaqwdqwdqwwdqwdqw	qwdqwdqwqdw": false,
 	}
 
-	strvalidator := strutils.NewStringValidator()
+	t.Parallel()
 
 	//check : common
 	for k, v := range testTxts {
 		retval, _ := strvalidator.IsPureTextNormal(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nTest Value : %#v\nExpected: %v\nActual: %v", k, retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nTest Value : %#v\nExpected: %v\nActual: %v", k, retval, v)
 	}
 }
 
@@ -342,14 +321,12 @@ func TestPureTextStrict(t *testing.T) {
 		"AbcEd-=qwdoijqdwoijaaaaaaqwdqwdqwwdqwdqw	qwdqwdqwqdw": false,
 	}
 
-	strvalidator := strutils.NewStringValidator()
+	t.Parallel()
 
 	//check : common
 	for k, v := range testTxts {
 		retval, _ := strvalidator.IsPureTextStrict(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nTest Value : %#v\nExpected: %v\nActual: %v", k, retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nTest Value : %#v\nExpected: %v\nActual: %v", k, retval, v)
 	}
 
 }
@@ -372,14 +349,12 @@ func TestFilePathOnlyFilePath(t *testing.T) {
 		"a-1-e-r-t-_1_21234_d_1234_qwed_1423_.txt": true,
 	}
 
-	strvalidator := strutils.NewStringValidator()
+	t.Parallel()
 
 	//check : common
 	for k, v := range testFilepaths {
 		retval := strvalidator.IsValidFilePath(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nTest Value : %#v\nExpected: %v\nActual: %v", k, retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nTest Value : %#v\nExpected: %v\nActual: %v", k, retval, v)
 	}
 }
 
@@ -402,14 +377,11 @@ func TestFilePathAllowRelativePath(t *testing.T) {
 		"/asdasd/asdasdasd/qwdqwd_qwdqwd/12-12/a-1-e-r-t-_1_21234_d_1234_qwed_1423_.txt": true,
 	}
 
-	strvalidator := strutils.NewStringValidator()
+	t.Parallel()
 
 	//check : common
 	for k, v := range testFilepaths {
 		retval := strvalidator.IsValidFilePathWithRelativePath(k)
-		if v != retval {
-			t.Errorf("Return Value mismatch.\nTest Value : %#v\nExpected: %v\nActual: %v", k, retval, v)
-		}
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nTest Value : %#v\nExpected: %v\nActual: %v", k, retval, v)
 	}
-
 }
