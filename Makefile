@@ -36,7 +36,8 @@ CMD_GLIDE			:=$(shell which glide)
 CMD_GOVER			:=$(shell which gover)
 CMD_GOVERALLS		:=$(shell which goveralls)
 
-PATH_RACE_REPORT="/tmp/golang-race.report"
+PATH_RACE_REPORT="golang-race.report"
+PATH_CONVER_PROFILE="go-strutil.coverprofile"
 
 ## Setup Enviroment
 setup::
@@ -68,12 +69,20 @@ strictlint: setup
 	@$(CMD_GOMETALINTER) $$($(CMD_GLIDE) novendor)
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
-### Run Go Test with Data Race Detection
+## Run Go Test with Data Race Detection
 test::
 	@$(CMD_ECHO)  -e "\033[1;40;32mRun Go Test.\033[01;m\x1b[0m"
 	@$(CMD_ECHO) -e "\033[1;40;36mYou will get a report of data race detection in $(PATH_RACE_REPORT).pid\033[01;m\x1b[0m"
-	@GORACE="log_path=$(PATH_RACE_REPORT)" $(CMD_GO) test -v -test.parallel 4 -race -coverprofile=go-strutil.coverprofile
-	@$(CMD_GOVER)
+	@GORACE="log_path=$(PATH_RACE_REPORT)" $(CMD_GO) test -v -test.parallel 4 -race -coverprofile=$(PATH_CONVER_PROFILE)
+	@$(CMD_GOVERALLS) -coverprofile=$(PATH_CONVER_PROFILE) -service=travis-ci
+	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
+
+## Generate a report about coverage
+cover: test
+	@$(CMD_ECHO)  -e "\033[1;40;32mGenerate a report about coverage.\033[01;m\x1b[0m"
+	@$(CMD_GO) tool cover -func=$(PATH_CONVER_PROFILE)
+	@$(CMD_GO) tool cover -func=$(PATH_CONVER_PROFILE)  -o $(PATH_CONVER_PROFILE).html
+	@$(CMD_ECHO) -e "\033[1;40;36mGenerated a report file : $(PATH_CONVER_PROFILE).html\033[01;m\x1b[0m"
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
 ## Show Help
@@ -87,7 +96,7 @@ run::
 ## Clean-up
 clean::
 	@$(CMD_ECHO)  -e "\033[1;40;32mClean-up.\033[01;m\x1b[0m"
-	@$(CMD_RM) -rfv *.coverprofile *.swp *.core
+	@$(CMD_RM) -rfv *.coverprofile *.swp *.core *.html
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
 .PHONY: setup deps updeps lint strictlint help test
