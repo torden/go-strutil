@@ -50,6 +50,7 @@ func TestAssertNil(t *testing.T) {
 }
 
 func TestAssertNotNil(t *testing.T) {
+
 	assert.AssertNotNil(t, nil, "hello")
 	assert.AssertNotNil(t, true, "hello %s", "word")
 }
@@ -86,6 +87,10 @@ func TestAssertLessThan(t *testing.T) {
 	assert.AssertLessThan(t, uint64(1), uint64(1), "hello")
 	assert.AssertLessThan(t, float32(1), float32(1), "hello")
 	assert.AssertLessThan(t, float64(1), float64(1), "hello")
+
+	assert.AssertLessThan(t, math.Log(-1.0), math.Log(-1.0), "hello")
+	assert.AssertLessThan(t, math.Log(-1.0), nil, "hello")
+	assert.AssertLessThan(t, math.Log(1.0), nil, "hello")
 }
 
 func TestAssertLessThanEqualTo(t *testing.T) {
@@ -102,11 +107,11 @@ func TestAssertLessThanEqualTo(t *testing.T) {
 	assert.AssertLessThanEqualTo(t, 3, 2, "hello")
 	assert.AssertLessThanEqualTo(t, 3, 2, "hello %s", "word")
 
-	assert.AssertLessThan(t, nil, 2, "hello")
-	assert.AssertLessThan(t, nil, 2, "hello %s", "word")
+	assert.AssertLessThanEqualTo(t, nil, 2, "hello")
+	assert.AssertLessThanEqualTo(t, nil, 2, "hello %s", "word")
 
-	assert.AssertLessThan(t, nil, nil, "hello")
-	assert.AssertLessThan(t, nil, nil, "hello %s", "word")
+	assert.AssertLessThanEqualTo(t, nil, nil, "hello")
+	assert.AssertLessThanEqualTo(t, nil, nil, "hello %s", "word")
 
 	assert.AssertLessThanEqualTo(t, int(1), int(1), "hello")
 	assert.AssertLessThanEqualTo(t, int8(1), int8(1), "hello")

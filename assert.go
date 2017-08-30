@@ -1,7 +1,6 @@
 package strutils
 
 import (
-	"reflect"
 	"runtime"
 	"strings"
 	"testing"
@@ -38,11 +37,7 @@ func (a *Assert) printMsg(t *testing.T, v1 interface{}, v2 interface{}, msgfmt s
 	outf("+ %v:%v\n", file, line)
 	outf("+ %+v\n", runtime.FuncForPC(funcn).Name())
 	out(strings.Repeat("-", 120))
-	if len(args) > 1 {
-		outf(msgfmt, args)
-	} else {
-		out(msgfmt)
-	}
+	outf(msgfmt, args)
 
 	outf("- value1 : %+v\n", v1)
 	if v2 != nil {
@@ -52,6 +47,8 @@ func (a *Assert) printMsg(t *testing.T, v1 interface{}, v2 interface{}, msgfmt s
 	out(strings.Repeat("-", 120))
 }
 
+/*
+//TODO: will remove below, numericTypeUpCase better than below
 //isCompareableNum asserts the specified objects are can compareble
 func (a *Assert) isComparableNum(t *testing.T, v1 interface{}, v2 interface{}) bool {
 
@@ -81,6 +78,7 @@ func (a *Assert) isComparableNum(t *testing.T, v1 interface{}, v2 interface{}) b
 	a.printMsg(t, v1, v2, "Different Type v1.(%+v) != v2(%+v)", refv1k, refv2k)
 	return false
 }
+*/
 
 //numericTypeUpCase converts the any numeric type to upsize type of that
 func (a *Assert) numericTypeUpCase(val interface{}) (int64, uint64, float64, bool) {
@@ -177,9 +175,11 @@ func (a *Assert) AssertNotNil(t *testing.T, v1 interface{}, msgfmt string, args 
 //AssertLessThan asserts that the specified value are v1 less than v2
 func (a *Assert) AssertLessThan(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{}) {
 
-	if !a.isComparableNum(t, v1, v2) {
-		return
-	}
+	/*
+		if !a.isComparableNum(t, v1, v2) {
+			return
+		}
+	*/
 
 	tmpv1int, tmpv1uint, tmpv1float, ok := a.numericTypeUpCase(v1)
 	if !ok {
@@ -212,9 +212,11 @@ func (a *Assert) AssertLessThan(t *testing.T, v1 interface{}, v2 interface{}, ms
 //AssertLessThanEqualTo asserts that the specified value are v1 less than v2 or equal to
 func (a *Assert) AssertLessThanEqualTo(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{}) {
 
-	if !a.isComparableNum(t, v1, v2) {
-		return
-	}
+	/*
+		if !a.isComparableNum(t, v1, v2) {
+			return
+		}
+	*/
 
 	tmpv1int, tmpv1uint, tmpv1float, ok := a.numericTypeUpCase(v1)
 	if !ok {
@@ -247,9 +249,11 @@ func (a *Assert) AssertLessThanEqualTo(t *testing.T, v1 interface{}, v2 interfac
 //AssertGreaterThan nsserts that the specified value are v1 greater than v2
 func (a *Assert) AssertGreaterThan(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{}) {
 
-	if !a.isComparableNum(t, v1, v2) {
-		return
-	}
+	/*
+		if !a.isComparableNum(t, v1, v2) {
+			return
+		}
+	*/
 
 	tmpv1int, tmpv1uint, tmpv1float, ok := a.numericTypeUpCase(v1)
 	if !ok {
@@ -282,9 +286,11 @@ func (a *Assert) AssertGreaterThan(t *testing.T, v1 interface{}, v2 interface{},
 //AssertGreaterThanEqualTo asserts that the specified value are v1 greater than v2 or equal to
 func (a *Assert) AssertGreaterThanEqualTo(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{}) {
 
-	if !a.isComparableNum(t, v1, v2) {
-		return
-	}
+	/*
+		if !a.isComparableNum(t, v1, v2) {
+			return
+		}
+	*/
 
 	tmpv1int, tmpv1uint, tmpv1float, ok := a.numericTypeUpCase(v1)
 	if !ok {
