@@ -74,6 +74,11 @@ test::
 	@$(CMD_ECHO)  -e "\033[1;40;32mRun Go Test.\033[01;m\x1b[0m"
 	@$(CMD_ECHO) -e "\033[1;40;36mYou will get a report of data race detection in $(PATH_RACE_REPORT).pid\033[01;m\x1b[0m"
 	@GORACE="log_path=$(PATH_RACE_REPORT)" $(CMD_GO) test -v -test.parallel 4 -race -coverprofile=$(PATH_CONVER_PROFILE)
+	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
+
+## Send a report of coverage profile to coveralls.io
+coveralls::
+	@$(CMD_ECHO)  -e "\033[1;40;32mSend a report of coverage profile to coveralls.io.\033[01;m\x1b[0m"
 	@$(CMD_GOVERALLS) -coverprofile=$(PATH_CONVER_PROFILE) -service=travis-ci
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
