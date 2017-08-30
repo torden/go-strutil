@@ -85,8 +85,8 @@ coveralls::
 ## Generate a report about coverage
 cover: test
 	@$(CMD_ECHO)  -e "\033[1;40;32mGenerate a report about coverage.\033[01;m\x1b[0m"
-	@$(CMD_GO) tool cover -func=$(PATH_CONVER_PROFILE)
-	@$(CMD_GO) tool cover -func=$(PATH_CONVER_PROFILE)  -o $(PATH_CONVER_PROFILE).html
+	@$(CMD_GO) tool cover -func=$(PATH_CONVER_PROFILE) -o $(PATH_CONVER_PROFILE).txt
+	@$(CMD_GO) tool cover -html=$(PATH_CONVER_PROFILE)  -o $(PATH_CONVER_PROFILE).html
 	@$(CMD_ECHO) -e "\033[1;40;36mGenerated a report file : $(PATH_CONVER_PROFILE).html\033[01;m\x1b[0m"
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
