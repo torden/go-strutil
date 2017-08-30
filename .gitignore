@@ -1,5 +1,6 @@
 coverage.html
 ck.sh
 *.coverprofile
+*.coverprofile.*
 .*.swp
 .swp

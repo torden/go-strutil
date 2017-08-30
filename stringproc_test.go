@@ -879,25 +879,25 @@ func TestAnyCompare(t *testing.T) {
 	testDiffType1 := int(32)
 	testDiffType2 := int64(32)
 	_, err = strproc.AnyCompare(testDiffType1, testDiffType2)
-	assert.AssertNotNil(t, retval, "Failure : Couldn't check the `Different Type`")
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Different Type`\nError : %v", err)
 
 	//check : different len
 	testDiffLen1 := []int{1, 2, 3, 4, 5, 6, 7}
 	testDiffLen2 := []int{1, 2, 3}
 	_, err = strproc.AnyCompare(testDiffLen1, testDiffLen2)
-	assert.AssertNotNil(t, retval, "Failure : Couldn't check the `Different Len`")
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Different Len`\nError : %v", err)
 
 	//check : different len
 	testDiffMapLen1 := map[int]string{0: "A", 1: "B", 2: "C"}
 	testDiffMapLen2 := map[int]string{0: "A", 1: "B"}
 	_, err = strproc.AnyCompare(testDiffMapLen1, testDiffMapLen2)
-	assert.AssertNotNil(t, retval, "Failure : Couldn't check the `Different Len`")
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Different Len`\nError : %v", err)
 
 	//check : not support compre
 	testDiffNotSupport1 := paddingTestVal{}
 	testDiffNotSupport2 := paddingTestVal{}
 	_, err = strproc.AnyCompare(testDiffNotSupport1, testDiffNotSupport2)
-	assert.AssertNotNil(t, retval, "Failure : Couldn't check the `Not Support Compre`\nError : %v", err)
+	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Not Support Compre`\nError : %v", err)
 
 	//check : sting != string
 	testDiffrentStringMap1 := map[string]map[string]map[string]string{
