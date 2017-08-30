@@ -164,22 +164,14 @@ var checkDenyRelativePath = regexp.MustCompile(`(?m)(` + regexDenyFileNameCharLi
 func (s *StringValidator) IsValidFilePath(str string) bool {
 
 	ret := checkDenyRelativePath.MatchString(str)
-	if !ret {
-		return true
-	}
-
-	return false
+	return !ret
 }
 
 // IsValidFilePathWithRelativePath is Validates whether the value is a valid FilePath (allow with relative path)
 func (s *StringValidator) IsValidFilePathWithRelativePath(str string) bool {
 
 	ret := checkAllowRelativePath.MatchString(str)
-	if !ret {
-		return true
-	}
-
-	return false
+	return !ret
 }
 
 // IsPureTextStrict is Validates whether the value is a pure text, Validation use native
