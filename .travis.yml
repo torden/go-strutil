@@ -2,6 +2,7 @@ sudo: false
 language: go
 go:
     - 1.x
+    - 1.8.x
     - 1.7.x
     - 1.6.x
     - 1.5.x
@@ -12,13 +13,13 @@ before_install:
     - go get golang.org/x/tools/cmd/cover
     - go get github.com/mattn/goveralls
     - go get github.com/modocache/gover
+    - go get github.com/dustin/go-humanize
 
 before_script:
     - go fmt ./...
 script:
-    - go test -coverprofile=strutils.coverprofile
-    - gover
-    - goveralls -coverprofile=gover.coverprofile -service=travis-ci
+    - make test
+    - make coveralls
 matrix:
     allow_failures:
         - go: tip
