@@ -61,7 +61,7 @@ func (a *Assert) isComparableNum(t *testing.T, v1 interface{}, v2 interface{}) b
 	}
 
 	refv1 := reflect.TypeOf(v1)
-	refv2 := reflect.TypeOf(v1)
+	refv2 := reflect.TypeOf(v2)
 
 	if refv1.Comparable() != refv2.Comparable() {
 		a.printMsg(t, v1, v2, "Not Comparable")
@@ -78,7 +78,7 @@ func (a *Assert) isComparableNum(t *testing.T, v1 interface{}, v2 interface{}) b
 		return true
 	}
 
-	a.printMsg(t, v1, v2, "Different Type v1.(%d) != v2(%v)", refv1k.String(), refv2k.String())
+	a.printMsg(t, v1, v2, "Different Type v1.(%+v) != v2(%+v)", refv1k, refv2k)
 	return false
 }
 
@@ -253,11 +253,13 @@ func (a *Assert) AssertGreaterThan(t *testing.T, v1 interface{}, v2 interface{},
 
 	tmpv1int, tmpv1uint, tmpv1float, ok := a.numericTypeUpCase(v1)
 	if !ok {
+		a.printMsg(t, v1, v2, "Required Numeric (int,uint,float with bit (8~64)")
 		return
 	}
 
 	tmpv2int, tmpv2uint, tmpv2float, ok := a.numericTypeUpCase(v2)
 	if !ok {
+		a.printMsg(t, v1, v2, "Required Numeric (int,uint,float with bit (8~64)")
 		return
 	}
 
@@ -280,17 +282,19 @@ func (a *Assert) AssertGreaterThan(t *testing.T, v1 interface{}, v2 interface{},
 //AssertGreaterThanEqualTo asserts that the specified value are v1 greater than v2 or equal to
 func (a *Assert) AssertGreaterThanEqualTo(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{}) {
 
-	if a.isComparableNum(t, v1, v2) {
+	if !a.isComparableNum(t, v1, v2) {
 		return
 	}
 
 	tmpv1int, tmpv1uint, tmpv1float, ok := a.numericTypeUpCase(v1)
 	if !ok {
+		a.printMsg(t, v1, v2, "Required Numeric (int,uint,float with bit (8~64)")
 		return
 	}
 
 	tmpv2int, tmpv2uint, tmpv2float, ok := a.numericTypeUpCase(v2)
 	if !ok {
+		a.printMsg(t, v1, v2, "Required Numeric (int,uint,float with bit (8~64)")
 		return
 	}
 
