@@ -489,7 +489,7 @@ func TestHumanFileSize(t *testing.T) {
 
 	defer func(t *testing.T) {
 		err := os.Remove(tmpFilePath)
-		assert.AssertNil(t, err, "Error : %v", err)
+		assert.AssertNilLog(t, err, "lost file : %s but it's OK", tmpFilePath)
 
 	}(t)
 
