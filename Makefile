@@ -38,8 +38,13 @@ CMD_GLIDE			:=$(shell which glide)
 CMD_GOVER			:=$(shell which gover)
 CMD_GOVERALLS		:=$(shell which goveralls)
 
-PATH_RACE_REPORT="golang-race.report"
-PATH_CONVER_PROFILE="go-strutil.coverprofile"
+PKG_NAME="go-strutil"
+PATH_RACE_REPORT="$(PKG_NAME).race.report"
+PATH_CONVER_PROFILE="$(PKG_NAME).coverprofile"
+PATH_PROF_CPU="$(PKG_NAME).cpu.prof"
+PATH_PROF_MEM="$(PKG_NAME).mem.prof"
+PATH_PROF_BLOCK="$(PKG_NAME).block.prof"
+
 VER_GOLANG=$(shell go version | awk '{print $$3}' | sed -e "s/go//;s/\.//g")
 
 ## Setup Enviroment
@@ -93,6 +98,17 @@ cover: test
 	@$(CMD_ECHO) -e "\033[1;40;36mGenerated a report file : $(PATH_CONVER_PROFILE).html\033[01;m\x1b[0m"
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
+## Profiling
+prof::
+	@$(CMD_ECHO)  -e "\033[1;40;32mGenerate profiles.\033[01;m\x1b[0m"
+	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate a CPU profile.\033[01;m\x1b[0m"
+	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -cpuprofile $(PATH_PROF_CPU)
+	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate a Memory profile.\033[01;m\x1b[0m"
+	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -memprofile $(PATH_PROF_MEM)
+	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate a Block profile.\033[01;m\x1b[0m"
+	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -blockprofile $(PATH_PROF_BLOCK)
+	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
+
 ## Show Help
 help::
 	@$(CMD_MAKE2HELP) $(MAKEFILE_LIST)
@@ -104,7 +120,7 @@ run::
 ## Clean-up
 clean::
 	@$(CMD_ECHO)  -e "\033[1;40;32mClean-up.\033[01;m\x1b[0m"
-	@$(CMD_RM) -rfv *.coverprofile *.swp *.core *.html
+	@$(CMD_RM) -rfv *.coverprofile *.swp *.core *.html *.prof *.test *.report
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
 .PHONY: setup deps updeps lint strictlint help test
