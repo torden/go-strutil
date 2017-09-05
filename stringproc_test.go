@@ -479,17 +479,15 @@ func TestHumanFileSize(t *testing.T) {
 	go func() {
 		time.Sleep(time.Nanosecond * 10)
 		err := os.Remove(tmpFilePath)
-		assert.AssertNilLog(t, err, "lost file : %s but it's OK", tmpFilePath)
+		assert.AssertLog(t, err, "lost file : %s but it's OK", tmpFilePath)
 
 	}()
 	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseDouble)
-	if err == nil {
-		//Sometime, get a error
-	}
+	assert.AssertLog(t, err, "PASS")
 
 	defer func(t *testing.T) {
 		err := os.Remove(tmpFilePath)
-		assert.AssertNilLog(t, err, "lost file : %s but it's OK", tmpFilePath)
+		assert.AssertLog(t, err, "lost file : %s but it's OK", tmpFilePath)
 
 	}(t)
 
