@@ -2,5 +2,5 @@
 
 package strutils
 
-//go [run|build] -flags unittest
+//UNITTESTMODE runs on go [run|build] -flags unittest command
 const UNITTESTMODE = true
