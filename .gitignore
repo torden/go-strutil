@@ -6,3 +6,5 @@
 *.prof
 *.test
 *.report
+report/
+vendor/
