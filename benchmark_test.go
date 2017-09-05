@@ -53,22 +53,6 @@ func BenchmarkReverseStrSwap(b *testing.B) {
 	}
 }
 
-func reverseStrUseReverseLoop(str string) string {
-
-	bufbyte_str := []byte(str)
-	bufbyte_str_l := len(bufbyte_str)
-
-	retval := make([]byte, bufbyte_str_l)
-
-	for _, v := range bufbyte_str {
-
-		bufbyte_str_l--
-		retval[bufbyte_str_l] = v
-	}
-
-	return string(retval[:])
-}
-
 func BenchmarkNl2Br(b *testing.B) {
 
 	strproc := strutils.NewStringProc()
