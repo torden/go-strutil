@@ -1,3 +1,5 @@
+PKG_NAME=go-strutil
+
 VERSION				:= $(shell git describe --tags --always --dirty="-dev")
 DATE				:= $(shell date -u '+%Y-%m-%d-%H%M UTC')
 VERSION_FLAGS		:= -ldflags='-X "main.Version=$(VERSION)" -X "main.BuildTime=$(DATE)"'
@@ -38,12 +40,13 @@ CMD_GLIDE			:=$(shell which glide)
 CMD_GOVER			:=$(shell which gover)
 CMD_GOVERALLS		:=$(shell which goveralls)
 
-PKG_NAME="go-strutil"
-PATH_RACE_REPORT="$(PKG_NAME).race.report"
-PATH_CONVER_PROFILE="$(PKG_NAME).coverprofile"
-PATH_PROF_CPU="$(PKG_NAME).cpu.prof"
-PATH_PROF_MEM="$(PKG_NAME).mem.prof"
-PATH_PROF_BLOCK="$(PKG_NAME).block.prof"
+PATH_REPORT=report
+PATH_RACE_REPORT=$(PKG_NAME).race.report
+PATH_CONVER_PROFILE=$(PKG_NAME).coverprofile
+PATH_PROF_CPU=$(PKG_NAME).cpu.prof
+PATH_PROF_MEM=$(PKG_NAME).mem.prof
+PATH_PROF_BLOCK=$(PKG_NAME).block.prof
+PATH_PROF_MUTEX=$(PKG_NAME).mutex.prof
 
 VER_GOLANG=$(shell go version | awk '{print $$3}' | sed -e "s/go//;s/\.//g")
 
@@ -60,6 +63,8 @@ setup::
 	@$(CMD_GO) get github.com/modocache/gover
 	@$(CMD_GO) get github.com/dustin/go-humanize
 	@$(CMD_GO) get github.com/golang/lint/golint
+	@$(CMD_GO) get -u github.com/awalterschulze/gographviz
+	@$(CMD_GOMETALINTER) install
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
 ## Run a LintChecker (Normal)
@@ -67,7 +72,7 @@ lint: setup
 	@$(CMD_ECHO)  -e "\033[1;40;32mRun a LintChecker (Normal).\033[01;m\x1b[0m"
 	@$(CMD_GO) vet $$($(CMD_GLIDE) novendor)
 	@for pkg in $$($(CMD_GLIDE) novendor -x); do \
-		$(CMD_GOLINT)  -set_exit_status $$pkg || exit $$?; \
+		$(CMD_GOLINT) -set_exit_status $$pkg || exit $$?; \
 	done
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
@@ -78,16 +83,17 @@ strictlint: setup
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
 ## Run Go Test with Data Race Detection
-test::
+test: clean
+	@$(CMD_MKDIR) -p $(PATH_REPORT)/raw/ $(PATH_REPORT)/doc/
 	@$(CMD_ECHO)  -e "\033[1;40;32mRun Go Test.\033[01;m\x1b[0m"
-	@$(CMD_ECHO) -e "\033[1;40;36mYou will get a report of data race detection in $(PATH_RACE_REPORT).pid\033[01;m\x1b[0m"
-	@GORACE="log_path=$(PATH_RACE_REPORT)" $(CMD_GO) test -tags unittest -v -test.parallel 4 -race -coverprofile=$(PATH_CONVER_PROFILE)
+	@GORACE="log_path=$(PATH_REPORT)/doc/$(PATH_RACE_REPORT)" $(CMD_GO) test -tags unittest -v -test.parallel 4 -race -coverprofile=$(PATH_REPORT)/raw/$(PATH_CONVER_PROFILE)
+	@$(CMD_ECHO) -e "\033[1;40;36mGenerated a report of data race detection in $(PATH_REPORT)/doc/$(PATH_RACE_REPORT).pid\033[01;m\x1b[0m"
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
 ## Send a report of coverage profile to coveralls.io
 coveralls::
 	@$(CMD_ECHO)  -e "\033[1;40;32mSend a report of coverage profile to coveralls.io.\033[01;m\x1b[0m"
-	@$(CMD_GOVERALLS) -coverprofile=$(PATH_CONVER_PROFILE) -service=travis-ci
+	@$(CMD_GOVERALLS) -coverprofile=$(PATH_REPORT)/raw/$(PATH_CONVER_PROFILE) -service=travis-ci
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
 ## Generate a report about coverage
@@ -99,28 +105,43 @@ cover: test
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
 ## Profiling
-prof::
+pprof: clean
+	@$(CMD_MKDIR) -p $(PATH_REPORT)/raw/ $(PATH_REPORT)/doc/
 	@$(CMD_ECHO)  -e "\033[1;40;32mGenerate profiles.\033[01;m\x1b[0m"
 	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate a CPU profile.\033[01;m\x1b[0m"
-	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -cpuprofile $(PATH_PROF_CPU)
+	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -cpuprofile=$(PATH_REPORT)/raw/$(PATH_PROF_CPU)
 	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate a Memory profile.\033[01;m\x1b[0m"
-	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -memprofile $(PATH_PROF_MEM)
+	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -memprofile=$(PATH_REPORT)/raw/$(PATH_PROF_MEM)
 	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate a Block profile.\033[01;m\x1b[0m"
-	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -blockprofile $(PATH_PROF_BLOCK)
+	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -blockprofile=$(PATH_REPORT)/raw/$(PATH_PROF_BLOCK)
+	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate a Mutex profile.\033[01;m\x1b[0m"
+	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -mutexprofile=$(PATH_REPORT)/raw/$(PATH_PROF_MUTEX)
+	@$(CMD_MV) -f *.test $(PATH_REPORT)/raw/
+	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
+
+## Generate report fo profiling
+report: pprof
+	@$(CMD_MKDIR) -p $(PATH_REPORT)/raw/ $(PATH_REPORT)/doc/
+	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate all report in text format.\033[01;m\x1b[0m"
+	@$(CMD_GO) tool pprof -text $(PATH_REPORT)/raw/$(PKG_NAME).test $(PATH_REPORT)/raw/$(PATH_PROF_CPU) > $(PATH_REPORT)/doc/$(PATH_PROF_CPU).txt
+	@$(CMD_GO) tool pprof -text $(PATH_REPORT)/raw/$(PKG_NAME).test $(PATH_REPORT)/raw/$(PATH_PROF_MEM) > $(PATH_REPORT)/doc/$(PATH_PROF_MEM).txt
+	@$(CMD_GO) tool pprof -text $(PATH_REPORT)/raw/$(PKG_NAME).test $(PATH_REPORT)/raw/$(PATH_PROF_BLOCK) > $(PATH_REPORT)/doc/$(PATH_PROF_BLOCK).txt
+	@$(CMD_GO) tool pprof -text $(PATH_REPORT)/raw/$(PKG_NAME).test $(PATH_REPORT)/raw/$(PATH_PROF_MUTEX) > $(PATH_REPORT)/doc/$(PATH_PROF_MUTEX).txt
+	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate all report in pdf format.\033[01;m\x1b[0m"
+	@$(CMD_GO) tool pprof -pdf $(PATH_REPORT)/raw/$(PKG_NAME).test $(PATH_REPORT)/raw/$(PATH_PROF_CPU) > $(PATH_REPORT)/doc/$(PATH_PROF_CPU).pdf
+	@$(CMD_GO) tool pprof -pdf $(PATH_REPORT)/raw/$(PKG_NAME).test $(PATH_REPORT)/raw/$(PATH_PROF_MEM) > $(PATH_REPORT)/doc/$(PATH_PROF_MEM).pdf
+	@$(CMD_GO) tool pprof -pdf $(PATH_REPORT)/raw/$(PKG_NAME).test $(PATH_REPORT)/raw/$(PATH_PROF_BLOCK) > $(PATH_REPORT)/doc/$(PATH_PROF_BLOCK).pdf
+	@$(CMD_GO) tool pprof -pdf $(PATH_REPORT)/raw/$(PKG_NAME).test $(PATH_REPORT)/raw/$(PATH_PROF_MUTEX) > $(PATH_REPORT)/doc/$(PATH_PROF_MUTEX).pdf
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
 ## Show Help
 help::
 	@$(CMD_MAKE2HELP) $(MAKEFILE_LIST)
 
-## Run the cmd/example.go for development
-run::
-	@$(CMD_GO) run  -tags debug cmd/example.go
-
 ## Clean-up
 clean::
 	@$(CMD_ECHO)  -e "\033[1;40;32mClean-up.\033[01;m\x1b[0m"
-	@$(CMD_RM) -rfv *.coverprofile *.swp *.core *.html *.prof *.test *.report
+	@$(CMD_RM) -rfv *.coverprofile *.swp *.core *.html *.prof *.test *.report ./$(PATH_REPORT)/*
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
-.PHONY: setup deps updeps lint strictlint help test
+.PHONY: clean cover coveralls help lint pprof report run setup strictlint test

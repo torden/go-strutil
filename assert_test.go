@@ -5,10 +5,10 @@ import (
 	"testing"
 )
 
-func TestAssertNilLog(t *testing.T) {
+func TestAssertLog(t *testing.T) {
 
-	assert.AssertNilLog(t, "test", "hello")
-	assert.AssertNilLog(t, "test", "hello %s", "word")
+	assert.AssertLog(t, nil, "test", "hello")
+	assert.AssertLog(t, nil, "test", "hello %s", "word")
 }
 
 func TestAssertEquals(t *testing.T) {
