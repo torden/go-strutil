@@ -119,15 +119,17 @@ func (a *Assert) numericTypeUpCase(val interface{}) (int64, uint64, float64, boo
 	return tmpint, tmpuint, tmpfloat, true
 }
 
-//AssertNilLog formats its arguments using default formatting, analogous to t.Log
-func (a *Assert) AssertNilLog(t *testing.T, v1 interface{}, msgfmt string, args ...interface{}) {
+//AssertLog formats its arguments using default formatting, analogous to t.Log
+func (a *Assert) AssertLog(t *testing.T, err error, msgfmt string, args ...interface{}) {
 
-	if v1 != nil {
-		if len(args) > 0 {
-			t.Logf(msgfmt, args)
-		} else {
-			t.Log(msgfmt)
-		}
+	if err != nil {
+		t.Logf("Error : %v", err)
+	}
+
+	if len(args) > 0 {
+		t.Logf(msgfmt, args)
+	} else {
+		t.Log(msgfmt)
 	}
 }
 
@@ -183,13 +185,13 @@ func (a *Assert) AssertLessThan(t *testing.T, v1 interface{}, v2 interface{}, ms
 
 	tmpv1int, tmpv1uint, tmpv1float, ok := a.numericTypeUpCase(v1)
 	if !ok {
-		a.printMsg(t, v1, v2, "Required Numeric (int,uint,float with bit (8~64)")
+		a.printMsg(t, v1, v2, "Required value 1 must be a numeric (int,uint,float with bit (8~64)")
 		return
 	}
 
 	tmpv2int, tmpv2uint, tmpv2float, ok := a.numericTypeUpCase(v2)
 	if !ok {
-		a.printMsg(t, v1, v2, "Required Numeric (int,uint,float with bit (8~64)")
+		a.printMsg(t, v1, v2, "Required value 2 must be a numeric (int,uint,float with bit (8~64)")
 		return
 	}
 
@@ -220,13 +222,13 @@ func (a *Assert) AssertLessThanEqualTo(t *testing.T, v1 interface{}, v2 interfac
 
 	tmpv1int, tmpv1uint, tmpv1float, ok := a.numericTypeUpCase(v1)
 	if !ok {
-		a.printMsg(t, v1, v2, "Required Numeric (int,uint,float with bit (8~64)")
+		a.printMsg(t, v1, v2, "Required value 1 must be a numeric (int,uint,float with bit (8~64)")
 		return
 	}
 
 	tmpv2int, tmpv2uint, tmpv2float, ok := a.numericTypeUpCase(v2)
 	if !ok {
-		a.printMsg(t, v1, v2, "Required Numeric (int,uint,float with bit (8~64)")
+		a.printMsg(t, v1, v2, "Required value 2 must be a numeric (int,uint,float with bit (8~64)")
 		return
 	}
 
@@ -257,13 +259,13 @@ func (a *Assert) AssertGreaterThan(t *testing.T, v1 interface{}, v2 interface{},
 
 	tmpv1int, tmpv1uint, tmpv1float, ok := a.numericTypeUpCase(v1)
 	if !ok {
-		a.printMsg(t, v1, v2, "Required Numeric (int,uint,float with bit (8~64)")
+		a.printMsg(t, v1, v2, "Required value 1 must be a numeric (int,uint,float with bit (8~64)")
 		return
 	}
 
 	tmpv2int, tmpv2uint, tmpv2float, ok := a.numericTypeUpCase(v2)
 	if !ok {
-		a.printMsg(t, v1, v2, "Required Numeric (int,uint,float with bit (8~64)")
+		a.printMsg(t, v1, v2, "Required value 2 must be a numeric (int,uint,float with bit (8~64)")
 		return
 	}
 
@@ -294,13 +296,13 @@ func (a *Assert) AssertGreaterThanEqualTo(t *testing.T, v1 interface{}, v2 inter
 
 	tmpv1int, tmpv1uint, tmpv1float, ok := a.numericTypeUpCase(v1)
 	if !ok {
-		a.printMsg(t, v1, v2, "Required Numeric (int,uint,float with bit (8~64)")
+		a.printMsg(t, v1, v2, "Required value 1 must be a numeric (int,uint,float with bit (8~64)")
 		return
 	}
 
 	tmpv2int, tmpv2uint, tmpv2float, ok := a.numericTypeUpCase(v2)
 	if !ok {
-		a.printMsg(t, v1, v2, "Required Numeric (int,uint,float with bit (8~64)")
+		a.printMsg(t, v1, v2, "Required value 2 must be a numeric (int,uint,float with bit (8~64)")
 		return
 	}
 
