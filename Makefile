@@ -53,7 +53,11 @@ else
 	@$(CMD_ECHO) -e "Not Support Mutex Profling"
 endif
 
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 4d45e55525e808d6cb7c91641c65e38619364e97
 removedep::
 	@$(CMD_ECHO)  -e "\033[1;40;32mRemove Deps. Pkgs..\033[01;m\x1b[0m"
 	@go clean -i -n github.com/Masterminds/glide
