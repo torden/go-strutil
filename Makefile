@@ -109,13 +109,13 @@ pprof: clean
 	@$(CMD_MKDIR) -p $(PATH_REPORT)/raw/ $(PATH_REPORT)/doc/
 	@$(CMD_ECHO)  -e "\033[1;40;32mGenerate profiles.\033[01;m\x1b[0m"
 	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate a CPU profile.\033[01;m\x1b[0m"
-	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -cpuprofile=$(PATH_REPORT)/raw/$(PATH_PROF_CPU)
+	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -benchmem -cpuprofile=$(PATH_REPORT)/raw/$(PATH_PROF_CPU)
 	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate a Memory profile.\033[01;m\x1b[0m"
-	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -memprofile=$(PATH_REPORT)/raw/$(PATH_PROF_MEM)
+	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -benchmem -memprofile=$(PATH_REPORT)/raw/$(PATH_PROF_MEM)
 	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate a Block profile.\033[01;m\x1b[0m"
-	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -blockprofile=$(PATH_REPORT)/raw/$(PATH_PROF_BLOCK)
+	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -benchmem -blockprofile=$(PATH_REPORT)/raw/$(PATH_PROF_BLOCK)
 	@$(CMD_ECHO)  -e "\033[1;40;33mGenerate a Mutex profile.\033[01;m\x1b[0m"
-	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -mutexprofile=$(PATH_REPORT)/raw/$(PATH_PROF_MUTEX)
+	@$(CMD_GO) test -tags unittest -test.parallel 4 -bench . -benchmem -mutexprofile=$(PATH_REPORT)/raw/$(PATH_PROF_MUTEX)
 	@$(CMD_MV) -f *.test $(PATH_REPORT)/raw/
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
