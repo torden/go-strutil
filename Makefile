@@ -53,9 +53,9 @@ GOLANGV18_OVER=$(shell [ "$(VER_GOLANG)" -ge "180" ] && echo 1 || echo 0)
 
 all: clean setup
 
-## Setup Enviroment
+## Setup Build Environment
 setup::
-	@$(CMD_ECHO)  -e "\033[1;40;32mSetup Build Enviroment.\033[01;m\x1b[0m"
+	@$(CMD_ECHO)  -e "\033[1;40;32mSetup Build Environment.\033[01;m\x1b[0m"
 	@$(CMD_GO) get github.com/Masterminds/glide
 	@$(CMD_GO) get github.com/Songmu/make2help/cmd/make2help
 	@$(CMD_GO) get github.com/davecgh/go-spew/spew
