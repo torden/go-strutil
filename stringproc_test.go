@@ -1160,6 +1160,57 @@ func TestConvertToStr(t *testing.T) {
 	}
 }
 
+func TestConvertToArByte(t *testing.T) {
+
+	t.Parallel()
+
+	dataset := map[interface{}]string{
+		string("1234567"): "1234567",
+		int(1):            "1",
+		int8(1):           "1",
+		int16(256):        "256",
+		int32(256):        "256",
+		int64(1234567):    "1234567",
+		uint(1):           "1",
+		uint8(1):          "1",
+		uint16(256):       "256",
+		uint32(256):       "256",
+		uint64(1234567):   "1234567",
+		float32(12):       "12",
+		float64(12):       "12",
+		complex64(12):     "(12+0i)",
+		complex128(12):    "(12+0i)",
+
+		int(-1):         "-1",
+		int8(-1):        "-1",
+		int16(-256):     "-256",
+		int32(-256):     "-256",
+		int64(-1234567): "-1234567",
+		float32(-12):    "-12",
+		float64(-12):    "-12",
+		complex64(-12):  "(-12+0i)",
+		complex128(-12): "(-12+0i)",
+
+		float32(12.1):    "12.1",
+		float64(12.1):    "12.1",
+		complex64(12.1):  "(12.1+0i)",
+		complex128(12.1): "(12.1+0i)",
+
+		float32(-12.1):    "-12.1",
+		float64(-12.1):    "-12.1",
+		complex64(-12.1):  "(-12.1+0i)",
+		complex128(-12.1): "(-12.1+0i)",
+
+		true:  "true",
+		false: "false",
+	}
+
+	//check : common
+	for k, v := range dataset {
+		retval, err := strproc.ConvertToArByte(k)
+		assert.AssertEquals(t, string(retval), v, "Return Value mismatch.\nExpected: %v\nActual: %v\nError : %v", retval, v, err)
+	}
+}
 func TestReverseStr(t *testing.T) {
 
 	t.Parallel()
