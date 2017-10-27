@@ -839,6 +839,59 @@ func (s *StringProc) ConvertToStr(obj interface{}) (string, error) {
 	return "false", nil
 }
 
+// ConvertToArByte returns Convert basic data type to []byte
+func (s *StringProc) ConvertToArByte(obj interface{}) ([]byte, error) {
+
+	switch obj.(type) {
+
+	case bool:
+		if obj.(bool) {
+			return []byte("true"), nil
+		} else {
+			return []byte("false"), nil
+		}
+
+	case byte:
+		return []byte{obj.(byte)}, nil
+
+	case []uint8:
+		return reflect.ValueOf(obj).Bytes(), nil
+
+	case string:
+		return []byte(obj.(string)), nil
+
+	case int:
+		return []byte(strconv.FormatInt(int64(obj.(int)), 10)), nil
+	case int8:
+		return []byte(strconv.FormatInt(int64(obj.(int8)), 10)), nil
+	case int16:
+		return []byte(strconv.FormatInt(int64(obj.(int16)), 10)), nil
+	case int32:
+		return []byte(strconv.FormatInt(int64(obj.(int32)), 10)), nil
+	case int64:
+		return []byte(strconv.FormatInt(obj.(int64), 10)), nil
+	case uint:
+		return []byte(strconv.FormatUint(uint64(obj.(uint)), 10)), nil
+	case uint16:
+		return []byte(strconv.FormatUint(uint64(obj.(uint16)), 10)), nil
+	case uint32:
+		return []byte(strconv.FormatUint(uint64(obj.(uint32)), 10)), nil
+	case uint64:
+		return []byte(strconv.FormatUint(obj.(uint64), 10)), nil
+	case float32:
+		return []byte(fmt.Sprintf("%g", obj.(float32))), nil
+	case float64:
+		return []byte(fmt.Sprintf("%g", obj.(float64))), nil
+	case complex64:
+		return []byte(fmt.Sprintf("%g", obj.(complex64))), nil
+	case complex128:
+		return []byte(fmt.Sprintf("%g", obj.(complex128))), nil
+
+	default:
+		return nil, fmt.Errorf("not support type(%s)", reflect.TypeOf(obj).String())
+	}
+}
+
 // ReverseStr is Reverse a String , According to value type between ascii or rune
 // TODO : improve performance (use goroutin)
 func (s *StringProc) ReverseStr(str string) string {
