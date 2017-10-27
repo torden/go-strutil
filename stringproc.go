@@ -827,6 +827,8 @@ func (s *StringProc) ConvertToStr(obj interface{}) (string, error) {
 	case bool:
 		if obj.(bool) {
 			return "true", nil
+		} else {
+			return "false", nil
 		}
 
 	default:
