@@ -146,11 +146,7 @@ func (a *Assert) AssertEquals(t *testing.T, v1 interface{}, v2 interface{}, msgf
 func (a *Assert) AssertNotEquals(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{}) {
 
 	_, err := a.plib.AnyCompare(v1, v2)
-	if err != nil {
-		a.printMsg(t, v1, v2, err.Error())
-	}
-
-	if v1 == v2 {
+	if err == nil && v1 == v2 {
 		a.printMsg(t, v1, v2, msgfmt, args)
 	}
 }
