@@ -13,22 +13,24 @@ func TestAssertLog(t *testing.T) {
 
 func TestAssertEquals(t *testing.T) {
 
-	assert.AssertEquals(t, nil, 1, "hello")
-	assert.AssertEquals(t, 1, nil, "hello %s", "word")
-
 	assert.AssertEquals(t, 1, 1, "hello")
 	assert.AssertEquals(t, 1, 1, "hello %s", "word")
-
-	assert.AssertEquals(t, 1, 2, "hello")
-	assert.AssertEquals(t, 1, 2, "hello %s", "word")
 
 	assert.AssertEquals(t, "a", "a", "hello")
 	assert.AssertEquals(t, "a", "a", "hello %s", "word")
 
-	assert.AssertEquals(t, "a", "b", "hello")
-	assert.AssertEquals(t, "a", "b", "hello %s", "word")
-
 	assert.AssertEquals(t, math.Log(-1.0), math.Log(-1.0), "hello")
+}
+
+func TestAssertNotEquals(t *testing.T) {
+
+	assert.AssertNotEquals(t, 1, 2, "hello")
+	assert.AssertNotEquals(t, 1, 2, "hello %s", "word")
+
+	assert.AssertNotEquals(t, "a", "b", "hello")
+	assert.AssertNotEquals(t, "a", "b", "hello %s", "word")
+
+	assert.AssertNotEquals(t, math.Log(-1.0), math.Log(-1.1), "hello")
 }
 
 func TestAssertFalse(t *testing.T) {
