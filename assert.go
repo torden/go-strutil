@@ -37,7 +37,7 @@ func (a *Assert) printMsg(t *testing.T, v1 interface{}, v2 interface{}, msgfmt s
 	outf("+ %v:%v\n", file, line)
 	outf("+ %+v\n", runtime.FuncForPC(funcn).Name())
 	out(strings.Repeat("-", 120))
-	outf(msgfmt, args)
+	outf(msgfmt, args...)
 
 	outf("- value1 : %+v\n", v1)
 	if v2 != nil {
@@ -127,7 +127,7 @@ func (a *Assert) AssertLog(t *testing.T, err error, msgfmt string, args ...inter
 	}
 
 	if len(args) > 0 {
-		t.Logf(msgfmt, args)
+		t.Logf(msgfmt, args...)
 	} else {
 		t.Log(msgfmt)
 	}
@@ -147,7 +147,7 @@ func (a *Assert) AssertNotEquals(t *testing.T, v1 interface{}, v2 interface{}, m
 
 	_, err := a.plib.AnyCompare(v1, v2)
 	if err == nil && v1 == v2 {
-		a.printMsg(t, v1, v2, msgfmt, args)
+		a.printMsg(t, v1, v2, msgfmt, args...)
 	}
 }
 
@@ -155,7 +155,7 @@ func (a *Assert) AssertNotEquals(t *testing.T, v1 interface{}, v2 interface{}, m
 func (a *Assert) AssertFalse(t *testing.T, v1 bool, msgfmt string, args ...interface{}) {
 
 	if v1 {
-		a.printMsg(t, v1, nil, msgfmt, args)
+		a.printMsg(t, v1, nil, msgfmt, args...)
 	}
 }
 
@@ -163,7 +163,7 @@ func (a *Assert) AssertFalse(t *testing.T, v1 bool, msgfmt string, args ...inter
 func (a *Assert) AssertTrue(t *testing.T, v1 bool, msgfmt string, args ...interface{}) {
 
 	if !v1 {
-		a.printMsg(t, v1, nil, msgfmt, args)
+		a.printMsg(t, v1, nil, msgfmt, args...)
 	}
 }
 
@@ -171,7 +171,7 @@ func (a *Assert) AssertTrue(t *testing.T, v1 bool, msgfmt string, args ...interf
 func (a *Assert) AssertNil(t *testing.T, v1 interface{}, msgfmt string, args ...interface{}) {
 
 	if v1 != nil {
-		a.printMsg(t, v1, nil, msgfmt, args)
+		a.printMsg(t, v1, nil, msgfmt, args...)
 	}
 }
 
@@ -179,7 +179,7 @@ func (a *Assert) AssertNil(t *testing.T, v1 interface{}, msgfmt string, args ...
 func (a *Assert) AssertNotNil(t *testing.T, v1 interface{}, msgfmt string, args ...interface{}) {
 
 	if v1 == nil {
-		a.printMsg(t, v1, nil, msgfmt, args)
+		a.printMsg(t, v1, nil, msgfmt, args...)
 	}
 }
 
@@ -216,7 +216,7 @@ func (a *Assert) AssertLessThan(t *testing.T, v1 interface{}, v2 interface{}, ms
 	}
 
 	if !retval {
-		a.printMsg(t, v1, v2, msgfmt, args)
+		a.printMsg(t, v1, v2, msgfmt, args...)
 	}
 }
 
@@ -253,7 +253,7 @@ func (a *Assert) AssertLessThanEqualTo(t *testing.T, v1 interface{}, v2 interfac
 	}
 
 	if !retval {
-		a.printMsg(t, v1, v2, msgfmt, args)
+		a.printMsg(t, v1, v2, msgfmt, args...)
 	}
 }
 
@@ -290,7 +290,7 @@ func (a *Assert) AssertGreaterThan(t *testing.T, v1 interface{}, v2 interface{},
 	}
 
 	if !retval {
-		a.printMsg(t, v1, v2, msgfmt, args)
+		a.printMsg(t, v1, v2, msgfmt, args...)
 	}
 }
 
@@ -327,6 +327,6 @@ func (a *Assert) AssertGreaterThanEqualTo(t *testing.T, v1 interface{}, v2 inter
 	}
 
 	if !retval {
-		a.printMsg(t, v1, v2, msgfmt, args)
+		a.printMsg(t, v1, v2, msgfmt, args...)
 	}
 }
