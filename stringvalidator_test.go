@@ -17,7 +17,7 @@ func ipaddrTest(t *testing.T, cktype int, dataset map[string]bool, errfmt string
 	}
 }
 
-func TestIPAddrFalse(t *testing.T) {
+func Test_strutils_IPAddrFalse(t *testing.T) {
 
 	t.Parallel()
 	var err error
@@ -40,7 +40,7 @@ func TestIPAddrFalse(t *testing.T) {
 
 }
 
-func TestIPAddr(t *testing.T) {
+func Test_strutils_IPAddr(t *testing.T) {
 
 	//IPv4
 	testIpv4Ipaddrs := map[string]bool{
@@ -130,7 +130,7 @@ func TestIPAddr(t *testing.T) {
 	ipaddrTest(t, strutils.IPv4MappedIPv6CIDR, testIpv4MappedIpv6IpaddrsCIDR, "invalid (%s) IPv4-Mapped Embedded IPv6 address With CIDR")
 }
 
-func TestMacAddr(t *testing.T) {
+func Test_strutils_MacAddr(t *testing.T) {
 
 	macaddrList := map[string]bool{
 		"02:f3:71:eb:9e:4b": true,
@@ -160,7 +160,7 @@ func TestMacAddr(t *testing.T) {
 	assert.AssertFalse(t, retval, "Failured : Couldn't check the `return false`")
 }
 
-func TestDomain(t *testing.T) {
+func Test_strutils_Domain(t *testing.T) {
 
 	testDomains := map[string]bool{
 		"대한민국.xn-korea.co.kr":           true,
@@ -224,7 +224,7 @@ func TestDomain(t *testing.T) {
 	}
 }
 
-func TestURL(t *testing.T) {
+func Test_strutils_URL(t *testing.T) {
 
 	testUrls := map[string]bool{
 		"https://www.google.co.kr/url?sa=t&rct=j&q=&esrc=s&source=web":                                      true,
@@ -250,7 +250,7 @@ func TestURL(t *testing.T) {
 	}
 }
 
-func TestPureTextNormal(t *testing.T) {
+func Test_strutils_PureTextNormal(t *testing.T) {
 
 	testTxts := map[string]bool{
 		`<script ?>qwdpijqwd</script>qd08j123lneqw\t\nqwedojiqwd\rqwdoihjqwd1d[08jaedl;jkqwd\r\nqdolijqdwqwd`:       false,
@@ -290,7 +290,7 @@ func TestPureTextNormal(t *testing.T) {
 	}
 }
 
-func TestPureTextStrict(t *testing.T) {
+func Test_strutils_PureTextStrict(t *testing.T) {
 
 	testTxts := map[string]bool{
 		`<script ?>qwdpijqwd</script>qd08j123lneqw\t\nqwedojiqwd\rqwdoihjqwd1d[08jaedl;jkqwd\r\nqdolijqdwqwd`:       false,
@@ -331,7 +331,7 @@ func TestPureTextStrict(t *testing.T) {
 
 }
 
-func TestFilePathOnlyFilePath(t *testing.T) {
+func Test_strutils_FilePathOnlyFilePath(t *testing.T) {
 
 	testFilepaths := map[string]bool{
 		"../../qwdqwdqwd/../qwdqwdqwd.txt": false,
@@ -358,7 +358,7 @@ func TestFilePathOnlyFilePath(t *testing.T) {
 	}
 }
 
-func TestFilePathAllowRelativePath(t *testing.T) {
+func Test_strutils_FilePathAllowRelativePath(t *testing.T) {
 
 	testFilepaths := map[string]bool{
 		"../../qwdqwdqwd/../qwdqwdqwd.txt": true,
