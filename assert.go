@@ -1,6 +1,7 @@
 package strutils
 
 import (
+	"reflect"
 	"runtime"
 	"strings"
 	"testing"
@@ -29,7 +30,7 @@ func (a *Assert) printMsg(t *testing.T, v1 interface{}, v2 interface{}, msgfmt s
 	if UNITTESTMODE { //assertion methods test on go test
 		outf = t.Logf
 		out = t.Log
-		t.Log("*** Don't Worry error below, Just Testing ***")
+		t.Log("*** The following message is just error testing ***")
 	}
 
 	funcn, file, line, _ := runtime.Caller(2)
@@ -324,6 +325,57 @@ func (a *Assert) AssertGreaterThanEqualTo(t *testing.T, v1 interface{}, v2 inter
 		retval = (tmpv1uint >= tmpv2uint)
 	case float32, float64:
 		retval = (tmpv1float >= tmpv2float)
+	}
+
+	if !retval {
+		a.printMsg(t, v1, v2, msgfmt, args...)
+	}
+}
+
+//AssertLengthOf asserts that object has a length property with the expected value.
+func (a *Assert) AssertLengthOf(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{}) {
+
+	var tmplen int
+	retval := false
+
+	v1val := reflect.ValueOf(v1)
+
+	switch v1val.Kind() {
+
+	case reflect.String:
+		tmplen = len(v1val.String())
+		break
+	case reflect.Array, reflect.Chan, reflect.Slice:
+		tmplen = v1val.Len()
+		break
+	case reflect.Map:
+		tmplen = len(v1val.MapKeys())
+		break
+	default:
+		a.printMsg(t, v1, v2, "Required data type of value 1 must be countable data-type (String,Array,Chan,Map,Slice)")
+		return
+		break
+	}
+
+	if tmplen < 0 {
+		a.printMsg(t, v1, v2, "Failured, can't count the value 1([%s]=%v)", v1val.Kind().String(), v1)
+		return
+	}
+
+	tmpv2int, tmpv2uint, _, ok := a.numericTypeUpCase(v2)
+	if !ok {
+		a.printMsg(t, v1, v2, "Required value 2 must be a numeric (int,uint,float with bit (8~64)")
+		return
+	}
+
+	tmpv1int := int64(tmplen)
+	tmpv1uint := uint64(tmplen)
+
+	switch v2.(type) {
+	case int, int8, int16, int32, int64:
+		retval = (tmpv1int == tmpv2int)
+	case uint, uint8, uint16, uint32, uint64:
+		retval = (tmpv1uint == tmpv2uint)
 	}
 
 	if !retval {
