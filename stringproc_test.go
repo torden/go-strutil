@@ -11,7 +11,7 @@ import (
 	"github.com/torden/go-strutil"
 )
 
-func TestAddSlashes(t *testing.T) {
+func Test_strutils_AddSlashes(t *testing.T) {
 
 	t.Parallel()
 	dataset := map[string]string{
@@ -31,7 +31,7 @@ func TestAddSlashes(t *testing.T) {
 	}
 }
 
-func TestStripSlashes(t *testing.T) {
+func Test_strutils_StripSlashes(t *testing.T) {
 
 	t.Parallel()
 	dataset := map[string]string{
@@ -51,7 +51,7 @@ func TestStripSlashes(t *testing.T) {
 	}
 }
 
-func TestNl2Br(t *testing.T) {
+func Test_strutils_Nl2Br(t *testing.T) {
 
 	t.Parallel()
 	dataset := map[string]string{
@@ -82,7 +82,7 @@ type wordwrapTestVal struct {
 	okstr    string
 }
 
-func TestWordWrapSimple(t *testing.T) {
+func Test_strutils_WordWrapSimple(t *testing.T) {
 
 	t.Parallel()
 
@@ -130,7 +130,7 @@ func TestWordWrapSimple(t *testing.T) {
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `wd at least 1`")
 }
 
-func TestWordWrapAround(t *testing.T) {
+func Test_strutils_WordWrapAround(t *testing.T) {
 
 	t.Parallel()
 
@@ -188,7 +188,7 @@ func TestWordWrapAround(t *testing.T) {
 	assert.AssertNil(t, err, "Failure : Couldn't check the `specific except`")
 }
 
-func TestNumbertFmt(t *testing.T) {
+func Test_strutils_NumbertFmt(t *testing.T) {
 
 	t.Parallel()
 	dataset := map[interface{}]string{
@@ -269,7 +269,7 @@ type paddingTestVal struct {
 	okstr string
 }
 
-func TestPadding(t *testing.T) {
+func Test_strutils_Padding(t *testing.T) {
 
 	t.Parallel()
 	dataset := make(map[int]paddingTestVal)
@@ -301,7 +301,7 @@ func TestPadding(t *testing.T) {
 	assert.AssertEquals(t, testStr, retval, "Failure : Couldn't check the `mx >= byteStrLen`")
 }
 
-func TestUppercaseFirstWords(t *testing.T) {
+func Test_strutils_UppercaseFirstWords(t *testing.T) {
 
 	t.Parallel()
 	dataset := map[string]string{
@@ -323,7 +323,7 @@ func TestUppercaseFirstWords(t *testing.T) {
 	}
 }
 
-func TestLowercaseFirstWords(t *testing.T) {
+func Test_strutils_LowercaseFirstWords(t *testing.T) {
 
 	t.Parallel()
 	dataset := map[string]string{
@@ -345,7 +345,7 @@ func TestLowercaseFirstWords(t *testing.T) {
 	}
 }
 
-func TestSwapCaseFirstWords(t *testing.T) {
+func Test_strutils_SwapCaseFirstWords(t *testing.T) {
 
 	t.Parallel()
 	dataset := map[string]string{
@@ -384,7 +384,7 @@ func TestSwapCaseFirstWords(t *testing.T) {
 	}
 }
 
-func TestHumanByteSize(t *testing.T) {
+func Test_strutils_HumanByteSize(t *testing.T) {
 
 	t.Parallel()
 	dataset := map[interface{}]string{
@@ -444,7 +444,7 @@ func TestHumanByteSize(t *testing.T) {
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj.(complex128)`")
 }
 
-func TestHumanFileSize(t *testing.T) {
+func Test_strutils_HumanFileSize(t *testing.T) {
 
 	t.Parallel()
 
@@ -507,7 +507,7 @@ func TestHumanFileSize(t *testing.T) {
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Not Support obj.(complex129)`")
 }
 
-func TestAnyCompare(t *testing.T) {
+func Test_strutils_AnyCompare(t *testing.T) {
 
 	t.Parallel()
 
@@ -996,7 +996,7 @@ func TestAnyCompare(t *testing.T) {
 	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison : %v", err)
 }
 
-func TestStripTags(t *testing.T) {
+func Test_strutils_StripTags(t *testing.T) {
 
 	t.Parallel()
 
@@ -1108,7 +1108,7 @@ README.md haven’t contain all the examples. Please refer to the the XXXtest.go
 
 }
 
-func TestConvertToStr(t *testing.T) {
+func Test_strutils_ConvertToStr(t *testing.T) {
 
 	t.Parallel()
 
@@ -1160,7 +1160,7 @@ func TestConvertToStr(t *testing.T) {
 	}
 }
 
-func TestConvertToArByte(t *testing.T) {
+func Test_strutils_ConvertToArByte(t *testing.T) {
 
 	t.Parallel()
 
@@ -1211,7 +1211,7 @@ func TestConvertToArByte(t *testing.T) {
 		assert.AssertEquals(t, string(retval), v, "Return Value mismatch.\nExpected: %v\nActual: %v\nError : %v", retval, v, err)
 	}
 }
-func TestReverseStr(t *testing.T) {
+func Test_strutils_ReverseStr(t *testing.T) {
 
 	t.Parallel()
 
@@ -1229,7 +1229,7 @@ func TestReverseStr(t *testing.T) {
 	}
 }
 
-func TestReverseNormalStr(t *testing.T) {
+func Test_strutils_ReverseNormalStr(t *testing.T) {
 
 	t.Parallel()
 
@@ -1245,7 +1245,7 @@ func TestReverseNormalStr(t *testing.T) {
 	}
 }
 
-func TestReverseReverseUnicode(t *testing.T) {
+func Test_strutils_ReverseReverseUnicode(t *testing.T) {
 
 	t.Parallel()
 
@@ -1264,7 +1264,7 @@ func TestReverseReverseUnicode(t *testing.T) {
 	}
 }
 
-func TestFileMD5Hash(t *testing.T) {
+func Test_strutils_FileMD5Hash(t *testing.T) {
 
 	t.Parallel()
 
@@ -1283,7 +1283,7 @@ func TestFileMD5Hash(t *testing.T) {
 	assert.AssertNotNil(t, err, "Couldn't check the `os.Open`\nError : %v", err)
 }
 
-func TestMD5Hash(t *testing.T) {
+func Test_strutils_MD5Hash(t *testing.T) {
 
 	t.Parallel()
 

@@ -5,13 +5,13 @@ import (
 	"testing"
 )
 
-func TestAssertLog(t *testing.T) {
+func Test_strutils_AssertLog(t *testing.T) {
 
 	assert.AssertLog(t, nil, "test", "hello")
 	assert.AssertLog(t, nil, "test", "hello %s", "word")
 }
 
-func TestAssertEquals(t *testing.T) {
+func Test_strutils_AssertEquals(t *testing.T) {
 
 	assert.AssertEquals(t, 1, 1, "hello")
 	assert.AssertEquals(t, 1, 1, "hello %s", "word")
@@ -22,7 +22,7 @@ func TestAssertEquals(t *testing.T) {
 	assert.AssertEquals(t, math.Log(-1.0), math.Log(-1.0), "hello")
 }
 
-func TestAssertNotEquals(t *testing.T) {
+func Test_strutils_AssertNotEquals(t *testing.T) {
 
 	assert.AssertNotEquals(t, 1, 2, "hello")
 	assert.AssertNotEquals(t, 1, 2, "hello %s", "word")
@@ -33,31 +33,31 @@ func TestAssertNotEquals(t *testing.T) {
 	assert.AssertNotEquals(t, math.Log(-1.0), math.Log(-1.1), "hello")
 }
 
-func TestAssertFalse(t *testing.T) {
+func Test_strutils_AssertFalse(t *testing.T) {
 
 	assert.AssertFalse(t, false, "hello")
 	assert.AssertFalse(t, true, "hello %s", "word")
 }
 
-func TestAssertTrue(t *testing.T) {
+func Test_strutils_AssertTrue(t *testing.T) {
 
 	assert.AssertTrue(t, false, "hello")
 	assert.AssertTrue(t, true, "hello %s", "word")
 }
 
-func TestAssertNil(t *testing.T) {
+func Test_strutils_AssertNil(t *testing.T) {
 
 	assert.AssertNil(t, nil, "hello")
 	assert.AssertNil(t, true, "hello %s", "word")
 }
 
-func TestAssertNotNil(t *testing.T) {
+func Test_strutils_AssertNotNil(t *testing.T) {
 
 	assert.AssertNotNil(t, nil, "hello")
 	assert.AssertNotNil(t, true, "hello %s", "word")
 }
 
-func TestAssertLessThan(t *testing.T) {
+func Test_strutils_AssertLessThan(t *testing.T) {
 
 	assert.AssertLessThan(t, "a", "a", "hello")
 	assert.AssertLessThan(t, "a", "a", "hello %s", "word")
@@ -95,7 +95,7 @@ func TestAssertLessThan(t *testing.T) {
 	assert.AssertLessThan(t, math.Log(1.0), nil, "hello")
 }
 
-func TestAssertLessThanEqualTo(t *testing.T) {
+func Test_strutils_AssertLessThanEqualTo(t *testing.T) {
 
 	assert.AssertLessThanEqualTo(t, "a", "a", "hello")
 	assert.AssertLessThanEqualTo(t, "a", "a", "hello %s", "word")
@@ -133,7 +133,7 @@ func TestAssertLessThanEqualTo(t *testing.T) {
 	assert.AssertLessThanEqualTo(t, math.Log(1.0), nil, "hello")
 }
 
-func TestAssertGreaterThan(t *testing.T) {
+func Test_strutils_AssertGreaterThan(t *testing.T) {
 
 	assert.AssertGreaterThan(t, "a", "a", "hello")
 	assert.AssertGreaterThan(t, "a", "a", "hello %s", "word")
@@ -172,7 +172,7 @@ func TestAssertGreaterThan(t *testing.T) {
 
 }
 
-func TestAssertGreaterThanEqualTo(t *testing.T) {
+func Test_strutils_AssertGreaterThanEqualTo(t *testing.T) {
 
 	assert.AssertGreaterThanEqualTo(t, 1, 2, "hello")
 	assert.AssertGreaterThanEqualTo(t, 1, 2, "hello %s", "word")
@@ -204,4 +204,20 @@ func TestAssertGreaterThanEqualTo(t *testing.T) {
 	assert.AssertGreaterThanEqualTo(t, math.Log(-1.0), math.Log(-1.0), "hello")
 	assert.AssertGreaterThanEqualTo(t, math.Log(-1.0), nil, "hello")
 	assert.AssertGreaterThanEqualTo(t, math.Log(1.0), nil, "hello")
+}
+
+func Test_strutils_AssertLengthOf(t *testing.T) {
+
+	assert.AssertLengthOf(t, "asdfg456", 8, "hello")
+	assert.AssertLengthOf(t, []int{1, 2, 3, 4, 5, 6, 7}, 7, "hello")
+	assert.AssertLengthOf(t, []string{"a", "b", "c"}, 3, "hello")
+	assert.AssertLengthOf(t, map[int]string{1: "a", 2: "b", 3: "c"}, 3, "hello")
+
+	var chans [9]chan int
+	for i := range chans {
+		chans[i] = make(chan int)
+	}
+
+	assert.AssertLengthOf(t, chans, 9, "hello")
+
 }
