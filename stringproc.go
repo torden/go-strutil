@@ -780,7 +780,8 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 			}
 
 		default:
-			return false, fmt.Errorf("Not Support Compare : (obj1[%v]) , (obj2[%v])", compObjVal1.Kind(), compObjVal2.Kind())
+			return reflect.DeepEqual(obj1, obj2), nil
+			//return false, fmt.Errorf("Not Support Compare : (obj1[%v]) , (obj2[%v])", compObjVal1.Kind(), compObjVal2.Kind())
 
 		}
 	}
@@ -827,16 +828,12 @@ func (s *StringProc) ConvertToStr(obj interface{}) (string, error) {
 	case bool:
 		if obj.(bool) {
 			return "true", nil
-		} else {
-			return "false", nil
 		}
+		return "false", nil
 
 	default:
 		return s.numberToString(obj)
 	}
-
-	//according to golint guide-line...
-	return "false", nil
 }
 
 // ConvertToArByte returns Convert basic data type to []byte
@@ -847,9 +844,8 @@ func (s *StringProc) ConvertToArByte(obj interface{}) ([]byte, error) {
 	case bool:
 		if obj.(bool) {
 			return []byte("true"), nil
-		} else {
-			return []byte("false"), nil
 		}
+		return []byte("false"), nil
 
 	case byte:
 		return []byte{obj.(byte)}, nil
