@@ -344,17 +344,13 @@ func (a *Assert) AssertLengthOf(t *testing.T, v1 interface{}, v2 interface{}, ms
 
 	case reflect.String:
 		tmplen = len(v1val.String())
-		break
 	case reflect.Array, reflect.Chan, reflect.Slice:
 		tmplen = v1val.Len()
-		break
 	case reflect.Map:
 		tmplen = len(v1val.MapKeys())
-		break
 	default:
 		a.printMsg(t, v1, v2, "Required data type of value 1 must be countable data-type (String,Array,Chan,Map,Slice)")
 		return
-		break
 	}
 
 	if tmplen < 0 {
