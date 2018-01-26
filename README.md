@@ -16,7 +16,7 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
 - [Installation](#installation)
 - [Examples](#example)
 - Methods
-  - [Processing Methods](#processing methods)
+  - [Processing Methods](#processing-methods)
     - [AddSlashes](#addslashes)
     - [StripSlashes](#stripslashes)
     - [NL2BR](#nl2br)
@@ -36,7 +36,7 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
     - [ReverseUnicode](#reverseunicode)
     - [FileMD5Hash](#filemd5hash)
     - [MD5Hash](#md5hash)
-  - [Validation Methods](#validation methods)
+  - [Validation Methods](#validation-methods)
     - [IsValidEmail](#isvalidemail)
     - [IsValidDomain](#isvaliddomain)
     - [IsValidURL](#isvalidurl)
