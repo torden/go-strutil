@@ -66,8 +66,21 @@ setup::
 	@$(CMD_GO) get github.com/modocache/gover
 	@$(CMD_GO) get github.com/dustin/go-humanize
 	@$(CMD_GO) get github.com/golang/lint/golint
-	@$(CMD_GO) get -u github.com/awalterschulze/gographviz
+	@$(CMD_GO) get github.com/awalterschulze/gographviz
+	@$(CMD_GO) get github.com/golang/dep/cmd/dep
 	@$(CMD_GOMETALINTER) install
+	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
+
+## Build the go-strutil
+build::
+	@$(CMD_ECHO)  -e "\033[1;40;32mBuild the go-strutil.\033[01;m\x1b[0m"
+	@$(CMD_GO) build
+	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
+
+## Build the go-strutil for development
+devbuild::
+	@$(CMD_ECHO)  -e "\033[1;40;32mBuild the go-strutil.\033[01;m\x1b[0m"
+	@$(CMD_GO) build -x -v -gcflags="-N -l" 
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
 ## Run a LintChecker (Normal)
