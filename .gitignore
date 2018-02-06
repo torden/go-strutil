@@ -1,6 +1,10 @@
-coverage.html
-ck.sh
-strutils.coverprofile
-.*.swp
-.swp
+*.swp
+*.coverprofile
+*.swp
+*.core
+*.html
+*.prof
+*.test
+*.report
+report/
 vendor/

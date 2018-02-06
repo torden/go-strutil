@@ -13,7 +13,7 @@ BenchmarkReverseStrSwap-8                     	 1000000	      1137 ns/op
 BenchmarkReverseStrUseReverseLoop-8           	 1000000	      1608 ns/op
 */
 
-func BenchmarkReverseStr(b *testing.B) {
+func Benchmark_strutils_ReverseStr(b *testing.B) {
 
 	benchMarkStr1 := strings.Repeat("0123456789", 100)
 
@@ -23,7 +23,7 @@ func BenchmarkReverseStr(b *testing.B) {
 	}
 }
 
-func BenchmarkReverseNormalStr(b *testing.B) {
+func Benchmark_strutils_ReverseNormalStr(b *testing.B) {
 
 	benchMarkStr1 := strings.Repeat("0123456789", 100)
 
@@ -33,7 +33,7 @@ func BenchmarkReverseNormalStr(b *testing.B) {
 	}
 }
 
-func BenchmarkReverseReverseUnicode(b *testing.B) {
+func Benchmark_strutils_ReverseReverseUnicode(b *testing.B) {
 
 	benchMarkStr1 := strings.Repeat("0123456789", 100)
 
@@ -43,7 +43,7 @@ func BenchmarkReverseReverseUnicode(b *testing.B) {
 	}
 }
 
-func BenchmarkReverseStrSwap(b *testing.B) {
+func Benchmark_strutils_ReverseStrSwap(b *testing.B) {
 
 	benchMarkStr1 := strings.Repeat("0123456789", 100)
 
@@ -53,23 +53,7 @@ func BenchmarkReverseStrSwap(b *testing.B) {
 	}
 }
 
-func reverseStrUseReverseLoop(str string) string {
-
-	bufbyte_str := []byte(str)
-	bufbyte_str_l := len(bufbyte_str)
-
-	retval := make([]byte, bufbyte_str_l)
-
-	for _, v := range bufbyte_str {
-
-		bufbyte_str_l--
-		retval[bufbyte_str_l] = v
-	}
-
-	return string(retval[:])
-}
-
-func BenchmarkNl2Br(b *testing.B) {
+func Benchmark_strutils_Nl2Br(b *testing.B) {
 
 	strproc := strutils.NewStringProc()
 	dataset := map[string]string{
@@ -97,7 +81,7 @@ func BenchmarkNl2Br(b *testing.B) {
 	}
 }
 
-func BenchmarkNl2BrUseStringReplace(b *testing.B) {
+func Benchmark_strutils_Nl2BrUseStringReplace(b *testing.B) {
 
 	dataset := map[string]string{
 		"대한\n민국만세":     "대한<br />민국만세",
@@ -125,7 +109,7 @@ func BenchmarkNl2BrUseStringReplace(b *testing.B) {
 		}
 	}
 }
-func BenchmarkTestNumbertFmt(b *testing.B) {
+func Benchmark_strutils_TestNumbertFmt(b *testing.B) {
 
 	strproc := strutils.NewStringProc()
 	dataset := map[interface{}]string{
@@ -158,7 +142,7 @@ func BenchmarkTestNumbertFmt(b *testing.B) {
 	}
 }
 
-func BenchmarkTestNumbertFmtInt64(b *testing.B) {
+func Benchmark_strutils_TestNumbertFmtInt64(b *testing.B) {
 	//BenchmarkTestNumbertFmtInt64-8                	 2000000	       712 ns/op
 	//BenchmarkTestNumbertFmtInt64UseHumanUnits-8   	 2000000	       761 ns/op
 
@@ -182,7 +166,7 @@ func BenchmarkTestNumbertFmtInt64(b *testing.B) {
 
 }
 
-func BenchmarkTestNumbertFmtInt64UseHumanUnits(b *testing.B) {
+func Benchmark_strutils_TestNumbertFmtInt64UseHumanUnits(b *testing.B) {
 
 	dataset := map[int64]string{
 		123456789101112: "123,456,789,101,112",
