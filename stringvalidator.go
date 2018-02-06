@@ -214,7 +214,7 @@ func (s *StringValidator) IsPureTextStrict(str string) (bool, error) {
 				}
 
 				// 62 (>)
-				if ds == 1 && str[n] == 62 {
+				if (str[n] == 62 && n >= (i+2)) || (ds == 1 && str[n] == 62) {
 					return false, errors.New("Detect Tag (<[!|?]~>)")
 				}
 			}

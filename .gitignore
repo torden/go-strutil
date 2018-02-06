@@ -3,3 +3,4 @@ ck.sh
 strutils.coverprofile
 .*.swp
 .swp
+vendor/
