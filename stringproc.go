@@ -14,6 +14,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 	"unicode/utf8"
 )
 
@@ -25,9 +26,11 @@ var entityEncodedPattern = regexp.MustCompile(`(?ims)(&(?:[a-z0-9]{2,8}|#[0-9]{2
 var urlEncodedPattern = regexp.MustCompile(`(?ims)(%[A-Z0-9]{2})`)
 
 // StringProc is String processing methods, All operations on this object
-type StringProc struct{}
+type StringProc struct {
+	sync.RWMutex
+}
 
-// NewStringProc is Creates and returns a String processing methods's pointer.
+// NewStringProc Creates and returns a String processing methods's pointer.
 func NewStringProc() *StringProc {
 	return &StringProc{}
 }
@@ -41,7 +44,7 @@ func (s *StringProc) AddSlashes(str string) string {
 
 	for i := 0; i < l; i++ {
 
-		buf = append(buf, byte(str[i]))
+		buf = append(buf, str[i])
 
 		switch str[i] {
 
@@ -68,7 +71,7 @@ func (s *StringProc) StripSlashes(str string) string {
 
 	for i := 0; i < l; i++ {
 
-		buf = append(buf, byte(str[i]))
+		buf = append(buf, str[i])
 		if l > i+1 && str[i+1] == 92 {
 			i++
 		}
@@ -93,9 +96,7 @@ func (s *StringProc) Nl2Br(str string) string {
 
 		case 10, 13: //NL or CR
 
-			for _, v := range brtag {
-				buf = append(buf, v)
-			}
+			buf = append(buf, brtag...)
 
 			if l >= i+1 {
 				if l > i+1 && (str[i+1] == 10 || str[i+1] == 13) { //NL+CR or CR+NL
@@ -128,9 +129,7 @@ func (s *StringProc) WordWrapSimple(str string, wd int, breakstr string) (string
 	for _, v := range bufstr {
 
 		if (v == 9 || v == 32) && brpos >= wd {
-			for _, vbk := range []byte(breakstr) {
-				buf = append(buf, vbk)
-			}
+			buf = append(buf, []byte(breakstr)...)
 			brpos = -1
 
 		} else {
@@ -197,10 +196,8 @@ func (s *StringProc) WordWrapAround(str string, wd int, breakstr string) (string
 
 		//fmt.Printf("(%v) %d > %d && %d <= %d\n", v, injectcnt, breakno, inject[breakno], loopcnt)
 		if injectcnt > breakno && inject[breakno] == loopcnt {
-			for _, vbk := range []byte(breakstr) {
-				buf = append(buf, vbk)
-			}
 
+			buf = append(buf, []byte(breakstr)...)
 			if injectcnt > breakno+1 {
 				breakno++
 			}
@@ -214,7 +211,7 @@ func (s *StringProc) WordWrapAround(str string, wd int, breakstr string) (string
 	return string(buf), nil
 }
 
-func numberToString(obj interface{}) (string, error) {
+func (s *StringProc) numberToString(obj interface{}) (string, error) {
 
 	var strNum string
 
@@ -222,7 +219,7 @@ func numberToString(obj interface{}) (string, error) {
 
 	case string:
 		strNum = obj.(string)
-		if numericPattern.MatchString(strNum) == false {
+		if !numericPattern.MatchString(strNum) {
 			return strNum, fmt.Errorf("Not Support obj.(%v) := %v ", reflect.TypeOf(obj), strNum)
 		}
 	case int:
@@ -234,7 +231,7 @@ func numberToString(obj interface{}) (string, error) {
 	case int32:
 		strNum = strconv.FormatInt(int64(obj.(int32)), 10)
 	case int64:
-		strNum = strconv.FormatInt(int64(obj.(int64)), 10)
+		strNum = strconv.FormatInt(obj.(int64), 10)
 	case uint:
 		strNum = strconv.FormatUint(uint64(obj.(uint)), 10)
 	case uint8:
@@ -244,7 +241,7 @@ func numberToString(obj interface{}) (string, error) {
 	case uint32:
 		strNum = strconv.FormatUint(uint64(obj.(uint32)), 10)
 	case uint64:
-		strNum = strconv.FormatUint(uint64(obj.(uint64)), 10)
+		strNum = strconv.FormatUint(obj.(uint64), 10)
 	case float32:
 		strNum = fmt.Sprintf("%g", obj.(float32))
 	case float64:
@@ -271,7 +268,7 @@ func (s *StringProc) NumberFmt(obj interface{}) (string, error) {
 		return "", fmt.Errorf("Not Support obj.(%v)", reflect.TypeOf(obj))
 	}
 
-	strNum, err := numberToString(obj)
+	strNum, err := s.numberToString(obj)
 	if err != nil {
 		return "", err
 	}
@@ -283,10 +280,7 @@ func (s *StringProc) NumberFmt(obj interface{}) (string, error) {
 	bufbyteTail := make([]byte, bufbyteStrLen-1)
 
 	//init.
-	foundDot := 0
-	foundPos := 0
-	dotcnt := 0
-	bufbyteSize := 0
+	var foundDot, foundPos, dotcnt, bufbyteSize int
 
 	//looking for dot
 	for i := bufbyteStrLen - 1; i >= 0; i-- {
@@ -422,9 +416,7 @@ func (s *StringProc) Padding(str string, fill string, m int, mx int) string {
 		}
 	}
 
-	for _, v := range byteStr {
-		buf = append(buf, v)
-	}
+	buf = append(buf, byteStr...)
 
 	if m == PadRight || m == PadBoth {
 		for i := 0; i < rightsize; {
@@ -545,7 +537,7 @@ func (s *StringProc) HumanByteSize(obj interface{}, decimals int, unit uint8) (s
 		return "", fmt.Errorf("Not allow unit parameter : %v", unit)
 	}
 
-	strNum, err := numberToString(obj)
+	strNum, err := s.numberToString(obj)
 	if err != nil {
 		return "", err
 	}
@@ -628,14 +620,14 @@ func (s *StringProc) HumanFileSize(filepath string, decimals int, unit uint8) (s
 		return "", fmt.Errorf("%v", err)
 	}
 
-	defer fd.Close()
+	defer s.closeFd(fd)
 
 	stat, err := fd.Stat() // impossible?. maybe it can be broken fd after file open. anyway can't make a test case..
 	if err != nil {
 		return "", fmt.Errorf("%v", err)
 	}
 
-	if stat.IsDir() == true {
+	if stat.IsDir() {
 		return "", fmt.Errorf("%v isn't file", filepath)
 	}
 
@@ -644,16 +636,21 @@ func (s *StringProc) HumanFileSize(filepath string, decimals int, unit uint8) (s
 
 // compare with map
 var recursiveDepth = 0
-var recursiveDepthKeypList []string
+var recursiveDepthKeypList = struct {
+	sync.RWMutex
+	ar []string
+}{ar: make([]string, 32)}
 
-func compareMap(compObj1 reflect.Value, compObj2 reflect.Value) (bool, error) {
+func (s *StringProc) compareMap(compObj1 reflect.Value, compObj2 reflect.Value) (bool, error) {
 
 	recursiveDepth++
 	var valueCompareErr bool
 
 	for _, k := range compObj1.MapKeys() {
 
-		recursiveDepthKeypList = append(recursiveDepthKeypList, k.String())
+		recursiveDepthKeypList.Lock()
+		recursiveDepthKeypList.ar = append(recursiveDepthKeypList.ar, k.String())
+		recursiveDepthKeypList.Unlock()
 
 		//check : Type
 		if compObj1.MapIndex(k).Kind() != compObj2.MapIndex(k).Kind() {
@@ -700,8 +697,8 @@ func compareMap(compObj1 reflect.Value, compObj2 reflect.Value) (bool, error) {
 
 		//Map : recursive loop
 		case reflect.Map:
-			retval, err := compareMap(compObj1.MapIndex(k), compObj2.MapIndex(k))
-			if retval == false {
+			retval, err := s.compareMap(compObj1.MapIndex(k), compObj2.MapIndex(k))
+			if !retval {
 				return retval, err
 			}
 
@@ -709,12 +706,14 @@ func compareMap(compObj1 reflect.Value, compObj2 reflect.Value) (bool, error) {
 			return false, fmt.Errorf("Not Support Compare : (obj1[%v] := %v) != (obj2[%v] := %v)", k, compObj1.MapIndex(k), k, compObj2.MapIndex(k))
 		}
 
-		if valueCompareErr == true {
+		if valueCompareErr {
 			if recursiveDepth == 1 {
 				return false, fmt.Errorf("Different Value : (obj1[%v] := %v) != (obj2[%v] := %v)", k, compObj1.MapIndex(k), k, compObj2.MapIndex(k))
 			}
 
-			depthStr := strings.Join(recursiveDepthKeypList, "][")
+			recursiveDepthKeypList.Lock()
+			depthStr := strings.Join(recursiveDepthKeypList.ar, "][")
+			recursiveDepthKeypList.Unlock()
 			return false, fmt.Errorf("Different Value : (obj1[%v] := %v) != (obj2[%v] := %v)", depthStr, compObj1.MapIndex(k).Interface(), depthStr, compObj2.MapIndex(k))
 
 		}
@@ -734,7 +733,7 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 	compObjType1 := reflect.TypeOf(obj1)
 	compObjType2 := reflect.TypeOf(obj2)
 
-	if compObjVal1.IsValid() == false || compObjVal2.IsValid() == false {
+	if !compObjVal1.IsValid() || !compObjVal2.IsValid() {
 		return false, fmt.Errorf("Invalid, obj1(%v) != obj2(%v)", obj1, obj2)
 	}
 
@@ -742,12 +741,14 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 		return false, fmt.Errorf("Not Compare type, obj1.(%v) != obj2.(%v)", compObjType1.Kind(), compObjType2.Kind())
 	}
 
-	recursiveDepthKeypList = make([]string, 0)
+	recursiveDepthKeypList.Lock()
+	recursiveDepthKeypList.ar = make([]string, 0)
+	recursiveDepthKeypList.Unlock()
 
 	switch obj1.(type) {
 
 	case string, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64, complex64, complex128, bool:
-		if compObjType1.Comparable() == true && compObjType2.Comparable() == true {
+		if compObjType1.Comparable() && compObjType2.Comparable() {
 			return obj1 == obj2, nil
 		}
 
@@ -773,13 +774,14 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 			}
 
 			recursiveDepth = 0
-			retval, err := compareMap(compObjVal1, compObjVal2)
-			if retval == false {
+			retval, err := s.compareMap(compObjVal1, compObjVal2)
+			if !retval {
 				return retval, err
 			}
 
 		default:
-			return false, fmt.Errorf("Not Support Compare : (obj1[%v]) , (obj2[%v])", compObjVal1.Kind(), compObjVal2.Kind())
+			return reflect.DeepEqual(obj1, obj2), nil
+			//return false, fmt.Errorf("Not Support Compare : (obj1[%v]) , (obj2[%v])", compObjVal1.Kind(), compObjVal2.Kind())
 
 		}
 	}
@@ -794,13 +796,13 @@ func (s *StringProc) StripTags(str string) (string, error) {
 	//looking for html entities code in str
 ENTITY_DECODE:
 	retval = entityEncodedPattern.MatchString(str)
-	if retval == true {
+	if retval {
 		str = html.UnescapeString(str)
 	}
 
 	//looking for html entities code in str
 	retval = urlEncodedPattern.MatchString(str)
-	if retval == true {
+	if retval {
 		tmpstr, err := url.QueryUnescape(str)
 		if err == nil {
 			str = tmpstr
@@ -824,16 +826,66 @@ func (s *StringProc) ConvertToStr(obj interface{}) (string, error) {
 
 	switch obj.(type) {
 	case bool:
-		if obj.(bool) == true {
+		if obj.(bool) {
 			return "true", nil
 		}
+		return "false", nil
 
 	default:
-		return numberToString(obj)
+		return s.numberToString(obj)
 	}
+}
 
-	//according to golint guide-line...
-	return "false", nil
+// ConvertToArByte returns Convert basic data type to []byte
+func (s *StringProc) ConvertToArByte(obj interface{}) ([]byte, error) {
+
+	switch obj.(type) {
+
+	case bool:
+		if obj.(bool) {
+			return []byte("true"), nil
+		}
+		return []byte("false"), nil
+
+	case byte:
+		return []byte{obj.(byte)}, nil
+
+	case []uint8:
+		return reflect.ValueOf(obj).Bytes(), nil
+
+	case string:
+		return []byte(obj.(string)), nil
+
+	case int:
+		return []byte(strconv.FormatInt(int64(obj.(int)), 10)), nil
+	case int8:
+		return []byte(strconv.FormatInt(int64(obj.(int8)), 10)), nil
+	case int16:
+		return []byte(strconv.FormatInt(int64(obj.(int16)), 10)), nil
+	case int32:
+		return []byte(strconv.FormatInt(int64(obj.(int32)), 10)), nil
+	case int64:
+		return []byte(strconv.FormatInt(obj.(int64), 10)), nil
+	case uint:
+		return []byte(strconv.FormatUint(uint64(obj.(uint)), 10)), nil
+	case uint16:
+		return []byte(strconv.FormatUint(uint64(obj.(uint16)), 10)), nil
+	case uint32:
+		return []byte(strconv.FormatUint(uint64(obj.(uint32)), 10)), nil
+	case uint64:
+		return []byte(strconv.FormatUint(obj.(uint64), 10)), nil
+	case float32:
+		return []byte(fmt.Sprintf("%g", obj.(float32))), nil
+	case float64:
+		return []byte(fmt.Sprintf("%g", obj.(float64))), nil
+	case complex64:
+		return []byte(fmt.Sprintf("%g", obj.(complex64))), nil
+	case complex128:
+		return []byte(fmt.Sprintf("%g", obj.(complex128))), nil
+
+	default:
+		return nil, fmt.Errorf("not support type(%s)", reflect.TypeOf(obj).String())
+	}
 }
 
 // ReverseStr is Reverse a String , According to value type between ascii or rune
@@ -897,7 +949,7 @@ func (s *StringProc) FileMD5Hash(filepath string) (string, error) {
 		return "", err
 	}
 
-	defer fd.Close()
+	defer s.closeFd(fd)
 
 	md5Hash := md5.New()
 	if _, err := io.Copy(md5Hash, fd); err != nil {
@@ -916,4 +968,12 @@ func (s *StringProc) MD5Hash(str string) (string, error) {
 	}
 
 	return hex.EncodeToString(md5Hash.Sum(nil)), nil
+}
+
+func (s *StringProc) closeFd(fd *os.File) {
+
+	err := fd.Close()
+	if err != nil {
+		fmt.Printf("Error : %+v\n", err)
+	}
 }

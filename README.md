@@ -1,6 +1,6 @@
 # Just! a String Processing Library for Go-lang
 
-Just a few methods for helping processing the string
+Just Several methods for helping processing/handling the string in Go (go-lang)
 
 README.md haven't contain all the examples. Please refer to the the XXXtest.go files.
 
@@ -9,10 +9,64 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
 [![GoDoc](https://godoc.org/github.com/torden/go-strutil?status.svg)](https://godoc.org/github.com/torden/go-strutil)
 [![Coverage Status](https://coveralls.io/repos/github/torden/go-strutil/badge.svg?branch=master)](https://coveralls.io/github/torden/go-strutil?branch=master)
 [![Go Walker](http://gowalker.org/api/v1/badge)](https://gowalker.org/github.com/torden/go-strutil)
+[![GitHub version](https://badge.fury.io/gh/torden%2Fgo-strutil.svg)](https://badge.fury.io/gh/torden%2Fgo-strutil)
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Examples](#example)
+- Methods
+  - [Processing Methods](#processing-methods)
+    - [AddSlashes](#addslashes)
+    - [StripSlashes](#stripslashes)
+    - [NL2BR](#nl2br)
+    - [WordWrapSimple , WordWrapAround](#wordwrapsimple--wordwraparound)
+    - [NumberFmt](#numberfmt)
+    - [PaddingBoth , PaddingLeft, PaddingRight](#paddingboth--paddingleft-paddingright)
+    - [LowerCaseFirstWords](#lowercasefirstwords)
+    - [UpperCaseFirstWords](#uppercasefirstwords)
+    - [SwapCaseFirstWords](#swapcasefirstwords)
+    - [HumanByteSize](#humanbytesize)
+    - [HumanFileSize](#humanfilesize)
+    - [AnyCompare](#anycompare)
+    - [StripTags](#striptags)
+    - [ConvertToStr](#converttostr)
+    - [ReverseStr](#reversestr)
+    - [ReverseNormalStr](#reversenormalstr)
+    - [ReverseUnicode](#reverseunicode)
+    - [FileMD5Hash](#filemd5hash)
+    - [MD5Hash](#md5hash)
+  - [Validation Methods](#validation-methods)
+    - [IsValidEmail](#isvalidemail)
+    - [IsValidDomain](#isvaliddomain)
+    - [IsValidURL](#isvalidurl)
+    - [IsValidMACAddr](#isvalidmacaddr)
+    - [IsValidIPAddr](#isvalidipaddr)
+    - [IsValidFilePath](#isvalidfilepath)
+    - [IsValidFilePathWithRelativePath](#isvalidfilepathwithrelativepath)
+    - [IsPureTextStrict](#ispuretextstrict)
+    - [IsPureTextNormal](#ispuretextnormal)
+  - [Assertion Methods](#assertion-methods)
+    - [AssertLog](#assertlog)
+    - [AssertEquals](#assertequals)
+    - [AssertNotEquals](#assertnotequals)
+    - [AssertFalse](#assertfalse)
+    - [AssertTrue](#asserttrue)
+    - [AssertNil](#assertnil)
+    - [AssertNotNil](#assertnotnil)
+    - [AssertLessThan](#assertlessthan)
+    - [AssertLessThanEqualTo](#assertlessthanequalto)
+    - [AssertGreaterThan](#assertgreaterthan)
+    - [AssertGreaterThanEqualTo](#assertgreaterthanequalto)
+    - [AssertLengthOf](#assertlengthof)
 
 ## Installation
 
 `go get github.com/torden/go-strutils`, import it as `"github.com/torden/go-strutils"`, use it as `StringProc or StringValidator`
+
+## Examples
+
+See the [Example Source](https://github.com/torden/go-strutil/blob/master/example_test.go) for more details
 
 ## Processing Methods
 
@@ -113,7 +167,7 @@ The*quick*brown*fox*jumped*over*the*lazy*dog.
 The quick*brown fox*jumped*over the*lazy*dog.
 ```
 
-## NumberFmt
+### NumberFmt
 
 format a number with english notation grouped thousands
 
@@ -171,7 +225,7 @@ The above example will output:
 123,456,789
 ```
 
-## PaddingBoth , PaddingLeft, PaddingRight
+### PaddingBoth , PaddingLeft, PaddingRight
 
 pad a string to a certain length with another string
 
@@ -826,8 +880,114 @@ The above example will output:
 false
 ```
 
+## Assertion Methods
+
+### AssertLog
+
+AssertLog formats its arguments using default formatting, analogous to t.Log
+
+```go
+AssertLog(t *testing.T, err error, msgfmt string, args ...interface{})
+```
+
+### AssertEquals
+
+AssertEquals asserts that two objects are equal.
+
+```go
+AssertEquals(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{})
+```
+
+
+### AssertNotEquals
+
+AssertNotEquals asserts that two objects are not equal.
+
+```go
+AssertNotEquals(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{})
+```
+
+
+### AssertFalse
+
+AssertFalse asserts that the specified value is false.
+
+```go
+AssertFalse(t *testing.T, v1 bool, msgfmt string, args ...interface{})
+```
+
+
+### AssertTrue
+
+AssertTrue asserts that the specified value is true.
+
+```go
+AssertTrue(t *testing.T, v1 bool, msgfmt string, args ...interface{})
+```
+
+
+### AssertNil
+
+AssertNil asserts that the specified value is nil.
+
+```go
+AssertNil(t *testing.T, v1 interface{}, msgfmt string, args ...interface{})
+```
+
+
+### AssertNotNil
+
+AssertNotNil asserts that the specified value isn't nil.
+
+```go
+AssertNotNil(t *testing.T, v1 interface{}, msgfmt string, args ...interface{})
+```
+
+
+### AssertLessThan
+
+AssertLessThan asserts that the specified value are v1 less than v2
+
+```go
+AssertLessThan(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{})
+```
+
+
+### AssertLessThanEqualTo
+
+AssertLessThanEqualTo asserts that the specified value are v1 less than v2 or equal to
+
+```go
+AssertLessThanEqualTo(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{})
+```
+
+
+### AssertGreaterThan
+
+AssertGreaterThan nsserts that the specified value are v1 greater than v2
+
+```go
+AssertGreaterThan(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{})
+```
+
+
+### AssertGreaterThanEqualTo
+
+AssertGreaterThanEqualTo asserts that the specified value are v1 greater than v2 or equal to
+
+```go
+AssertGreaterThanEqualTo(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{})
+```
+
+
+### AssertLengthOf
+
+AssertLengthOf asserts that object has a length property with the expected value.
+
+```go
+AssertLengthOf(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{})
+```
+
 ----
 
-Please feel free.
-
-[Refer to Example OR Test Code](https://github.com/torden/go-strutil/blob/master/example_test.go)
+*Please feel free. I hope it is helpful for you*
