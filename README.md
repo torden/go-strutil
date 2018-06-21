@@ -62,7 +62,7 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
 
 ## Installation
 
-`go get github.com/torden/go-strutils`, import it as `"github.com/torden/go-strutils"`, use it as `StringProc or StringValidator`
+`go get github.com/torden/go-strutil`, import it as `"github.com/torden/go-strutil"`, use it as `StringProc or StringValidator`
 
 ## Examples
 
