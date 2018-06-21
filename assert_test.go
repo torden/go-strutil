@@ -7,8 +7,8 @@ import (
 
 func Test_strutils_AssertLog(t *testing.T) {
 
-	assert.AssertLog(t, nil, "test", "hello")
-	assert.AssertLog(t, nil, "test", "hello %s", "word")
+	assert.AssertLog(t, nil, "test : %s", "hello")
+	assert.AssertLog(t, nil, "test : %s %s!", "hello", "word")
 }
 
 func Test_strutils_AssertEquals(t *testing.T) {
