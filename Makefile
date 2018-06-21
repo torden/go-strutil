@@ -107,7 +107,7 @@ test: clean
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
 ## Send a report of coverage profile to coveralls.io
-coveralls::
+coveralls: setup
 	@$(CMD_ECHO)  -e "\033[1;40;32mSend a report of coverage profile to coveralls.io.\033[01;m\x1b[0m"
 	@$(CMD_GOVERALLS) -coverprofile=$(PATH_REPORT)/raw/$(PATH_CONVER_PROFILE) -service=travis-ci
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
