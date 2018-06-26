@@ -7,7 +7,7 @@ import (
 
 func Test_strutils_AssertLog(t *testing.T) {
 
-	assert.RevertUnitTestMode()
+	assert.TurnOffUnitTestMode()
 
 	assert.AssertLog(t, nil, "test : %s", "hello")
 	assert.AssertLog(t, nil, "test : %s %s!", "hello", "word")
@@ -15,7 +15,7 @@ func Test_strutils_AssertLog(t *testing.T) {
 
 func Test_strutils_AssertEquals(t *testing.T) {
 
-	assert.RevertUnitTestMode()
+	assert.TurnOffUnitTestMode()
 
 	assert.AssertEquals(t, 1, 1, "hello")
 	assert.AssertEquals(t, 1, 1, "hello %s", "word")
@@ -28,7 +28,7 @@ func Test_strutils_AssertEquals(t *testing.T) {
 
 func Test_strutils_AssertNotEquals(t *testing.T) {
 
-	assert.RevertUnitTestMode()
+	assert.TurnOffUnitTestMode()
 
 	assert.AssertNotEquals(t, 1, 2, "hello")
 	assert.AssertNotEquals(t, 1, 2, "hello %s", "word")
@@ -41,7 +41,7 @@ func Test_strutils_AssertNotEquals(t *testing.T) {
 
 func Test_strutils_AssertFalse(t *testing.T) {
 
-	assert.RevertUnitTestMode()
+	assert.TurnOffUnitTestMode()
 
 	assert.AssertFalse(t, false, "hello")
 	assert.AssertFalse(t, true, "hello %s", "word")
@@ -49,7 +49,7 @@ func Test_strutils_AssertFalse(t *testing.T) {
 
 func Test_strutils_AssertTrue(t *testing.T) {
 
-	assert.RevertUnitTestMode()
+	assert.TurnOffUnitTestMode()
 
 	assert.AssertTrue(t, false, "hello")
 	assert.AssertTrue(t, true, "hello %s", "word")
@@ -57,7 +57,7 @@ func Test_strutils_AssertTrue(t *testing.T) {
 
 func Test_strutils_AssertNil(t *testing.T) {
 
-	assert.RevertUnitTestMode()
+	assert.TurnOffUnitTestMode()
 
 	assert.AssertNil(t, nil, "hello")
 	assert.AssertNil(t, true, "hello %s", "word")
@@ -65,7 +65,7 @@ func Test_strutils_AssertNil(t *testing.T) {
 
 func Test_strutils_AssertNotNil(t *testing.T) {
 
-	assert.RevertUnitTestMode()
+	assert.TurnOffUnitTestMode()
 
 	assert.AssertNotNil(t, nil, "hello")
 	assert.AssertNotNil(t, true, "hello %s", "word")
@@ -73,7 +73,7 @@ func Test_strutils_AssertNotNil(t *testing.T) {
 
 func Test_strutils_AssertLessThan(t *testing.T) {
 
-	assert.RevertUnitTestMode()
+	assert.TurnOffUnitTestMode()
 
 	assert.AssertLessThan(t, "a", "a", "hello")
 	assert.AssertLessThan(t, "a", "a", "hello %s", "word")
@@ -113,7 +113,7 @@ func Test_strutils_AssertLessThan(t *testing.T) {
 
 func Test_strutils_AssertLessThanEqualTo(t *testing.T) {
 
-	assert.RevertUnitTestMode()
+	assert.TurnOffUnitTestMode()
 
 	assert.AssertLessThanEqualTo(t, "a", "a", "hello")
 	assert.AssertLessThanEqualTo(t, "a", "a", "hello %s", "word")
@@ -153,7 +153,7 @@ func Test_strutils_AssertLessThanEqualTo(t *testing.T) {
 
 func Test_strutils_AssertGreaterThan(t *testing.T) {
 
-	assert.RevertUnitTestMode()
+	assert.TurnOffUnitTestMode()
 
 	assert.AssertGreaterThan(t, "a", "a", "hello")
 	assert.AssertGreaterThan(t, "a", "a", "hello %s", "word")
@@ -194,7 +194,7 @@ func Test_strutils_AssertGreaterThan(t *testing.T) {
 
 func Test_strutils_AssertGreaterThanEqualTo(t *testing.T) {
 
-	assert.RevertUnitTestMode()
+	assert.TurnOffUnitTestMode()
 
 	assert.AssertGreaterThanEqualTo(t, 1, 2, "hello")
 	assert.AssertGreaterThanEqualTo(t, 1, 2, "hello %s", "word")
@@ -230,7 +230,7 @@ func Test_strutils_AssertGreaterThanEqualTo(t *testing.T) {
 
 func Test_strutils_AssertLengthOf(t *testing.T) {
 
-	assert.RevertUnitTestMode()
+	assert.TurnOffUnitTestMode()
 
 	assert.AssertLengthOf(t, "asdfg456", 8, "hello")
 	assert.AssertLengthOf(t, []int{1, 2, 3, 4, 5, 6, 7}, 7, "hello")

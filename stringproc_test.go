@@ -14,7 +14,7 @@ import (
 func Test_strutils_AddSlashes(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		`대한민국만세`:     `대한민국만세`,
@@ -37,7 +37,7 @@ func Test_strutils_AddSlashes(t *testing.T) {
 func Test_strutils_StripSlashes(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		`대한민국만세`:       `대한민국만세`,
@@ -60,7 +60,7 @@ func Test_strutils_StripSlashes(t *testing.T) {
 func Test_strutils_Nl2Br(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"대한\n민국만세":     "대한<br />민국만세",
@@ -86,7 +86,7 @@ func Test_strutils_Nl2Br(t *testing.T) {
 func Test_strutils_Br2Nl(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"대한<br />민국만세":   "대한\n민국만세",
@@ -138,7 +138,7 @@ type wordwrapTestVal struct {
 func Test_strutils_WordWrapSimple(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := make(map[int]wordwrapTestVal)
 
@@ -187,7 +187,7 @@ func Test_strutils_WordWrapSimple(t *testing.T) {
 func Test_strutils_WordWrapAround(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := make(map[int]wordwrapTestVal)
 
@@ -246,7 +246,7 @@ func Test_strutils_WordWrapAround(t *testing.T) {
 func Test_strutils_NumbertFmt(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[interface{}]string{
 		123456789101112: "123,456,789,101,112",
@@ -329,7 +329,7 @@ type paddingTestVal struct {
 func Test_strutils_Padding(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := make(map[int]paddingTestVal)
 
@@ -363,7 +363,7 @@ func Test_strutils_Padding(t *testing.T) {
 func Test_strutils_UppercaseFirstWords(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"o say, can you see, by the dawn’s early light,":                    "O Say, Can You See, By The Dawn’s Early Light,",
@@ -387,7 +387,7 @@ func Test_strutils_UppercaseFirstWords(t *testing.T) {
 func Test_strutils_LowercaseFirstWords(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,":                    "o sAY, cAN yOU sEE, bY tHE dAWN’S eARLY lIGHT,",
@@ -411,7 +411,7 @@ func Test_strutils_LowercaseFirstWords(t *testing.T) {
 func Test_strutils_SwapCaseFirstWords(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,":                    "o sAY, cAN yOU sEE, bY tHE dAWN’S eARLY lIGHT,",
@@ -452,7 +452,7 @@ func Test_strutils_SwapCaseFirstWords(t *testing.T) {
 func Test_strutils_HumanByteSize(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[interface{}]string{
 		1.7976931348623157e+308: "152270531428124968725096603469261934082567927321390584004196605238063615198482718997460353589210907119043200911085747810785909744915680620242659147418948017662928903247753430023357200398869394856103928002466673473125884404826265988290381563441726944871732658253337089007918982991007711232.00Yb",
@@ -514,7 +514,7 @@ func Test_strutils_HumanByteSize(t *testing.T) {
 func Test_strutils_HumanFileSize(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	const tmpFilePath = "./filesizecheck.touch"
 	const tmpPath = "./testdir"
@@ -578,7 +578,7 @@ func Test_strutils_HumanFileSize(t *testing.T) {
 func Test_strutils_AnyCompare(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	var retval bool
 	var err error
@@ -1068,7 +1068,7 @@ func Test_strutils_AnyCompare(t *testing.T) {
 func Test_strutils_StripTags(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	str_ok := `
 Just! a String Processing Library for Go-lang
@@ -1181,7 +1181,7 @@ README.md haven’t contain all the examples. Please refer to the the XXXtest.go
 func Test_strutils_ConvertToStr(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[interface{}]string{
 		string("1234567"): "1234567",
@@ -1234,7 +1234,7 @@ func Test_strutils_ConvertToStr(t *testing.T) {
 func Test_strutils_ConvertToArByte(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[interface{}]string{
 		string("1234567"): "1234567",
@@ -1286,7 +1286,7 @@ func Test_strutils_ConvertToArByte(t *testing.T) {
 func Test_strutils_ReverseStr(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"0123456789": "9876543210",
@@ -1305,7 +1305,7 @@ func Test_strutils_ReverseStr(t *testing.T) {
 func Test_strutils_ReverseNormalStr(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"0123456789": "9876543210",
@@ -1322,7 +1322,7 @@ func Test_strutils_ReverseNormalStr(t *testing.T) {
 func Test_strutils_ReverseReverseUnicode(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"0123456789": "9876543210",
@@ -1342,7 +1342,7 @@ func Test_strutils_ReverseReverseUnicode(t *testing.T) {
 func Test_strutils_FileMD5Hash(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	var retval string
 	var err error
@@ -1362,7 +1362,7 @@ func Test_strutils_FileMD5Hash(t *testing.T) {
 func Test_strutils_MD5Hash(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOffUnitTestMode()
+	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"0123456789": "781e5e245d69b566979b86e28d23f2c7",
