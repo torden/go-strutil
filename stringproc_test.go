@@ -75,6 +75,49 @@ func Test_strutils_Nl2Br(t *testing.T) {
 	}
 }
 
+func Test_strutils_Br2Nl(t *testing.T) {
+
+	t.Parallel()
+	dataset := map[string]string{
+		"대한<br />민국만세":   "대한\n민국만세",
+		"대한민국만세<br />":   "대한민국만세\n",
+		"abc<br />defgh": "abc\ndefgh",
+		"abcde<br />fgh": "abcde\nfgh",
+		"abcdefgh<br />": "abcdefgh\n",
+
+		"대한<br/>민국만세":   "대한\n민국만세",
+		"대한민국만세<br/>":   "대한민국만세\n",
+		"abc<br/>defgh": "abc\ndefgh",
+		"abcde<br/>fgh": "abcde\nfgh",
+		"abcdefgh<br/>": "abcdefgh\n",
+
+		"대한<br>민국만세":   "대한\n민국만세",
+		"대한민국만세<br>":   "대한민국만세\n",
+		"abc<br>defgh": "abc\ndefgh",
+		"abcde<br>fgh": "abcde\nfgh",
+		"abcdefgh<br>": "abcdefgh\n",
+
+		"abcdefgh": "abcdefgh",
+		"대한민국만세":   "대한민국만세",
+
+		"<a href='http://www.president.go.kr/'>대한민국만세</a><br>":   "<a href='http://www.president.go.kr/'>대한민국만세</a>\n",
+		"<a href='http://www.president.go.kr/'>abcde</a><br>fgh": "abcde\nfgh",
+
+		"world peace!!<a href='http://www.president.go.kr/'>대한민국만세</a><br>":   "world peace!!<a href='http://www.president.go.kr/'>대한민국만세</a>\n",
+		"world peace!!<a href='http://www.president.go.kr/'>abcde</a><br>fgh": "world peace!!<a href='http://www.president.go.kr/'>abcde</a>\nfgh",
+
+		"world peace!!<a href='http://www.president.go.kr/'><br />대한민국만세</a><br>":   "world peace!!<a href='http://www.president.go.kr/'>\n대한민국만세</a>\n",
+		"world peace!!<a href='http://www.president.go.kr/'><br />abcde</a><br>fgh": "world peace!!<a href='http://www.president.go.kr/'>\nabcde</a>\nfgh",
+	}
+
+	//check : common
+	var retval string
+	for k, v := range dataset {
+		retval = strproc.Br2Nl(k)
+		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
+	}
+}
+
 type wordwrapTestVal struct {
 	str      string
 	wd       int
