@@ -20,7 +20,6 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
     - [AddSlashes](#addslashes)
     - [StripSlashes](#stripslashes)
     - [NL2BR](#nl2br)
-    - [BR2NL](#br2nl)
     - [WordWrapSimple , WordWrapAround](#wordwrapsimple--wordwraparound)
     - [NumberFmt](#numberfmt)
     - [PaddingBoth , PaddingLeft, PaddingRight](#paddingboth--paddingleft-paddingright)
@@ -136,37 +135,6 @@ The above example will output:
 ```bash
 abc<br />defgh
 ```
-
-### BR2NL
-
-replaces HTML line breaks to a newline
-
-```go
-func (s *StringProc) Br2Nl(str string) string
-```
-
-Example:
-
-```go
-strutil := strutils.NewStringProc()
-example_str1 := "abc<br>defgh"
-fmt.Println("%v", strutil.Br2Nl(example_str1))
-
-example_str2 := "abc<br />defgh"
-fmt.Println("%v", strutil.Br2Nl(example_str2))
-
-example_str3 := "abc<br/>defgh"
-fmt.Println("%v", strutil.Br2Nl(example_str3))
-```
-
-The above example will output:
-
-```bash
-abc\ndefgh
-abc\ndefgh
-abc\ndefgh
-```
-
 
 ### WordWrapSimple , WordWrapAround
 
