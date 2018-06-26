@@ -12,7 +12,6 @@ import (
 BenchmarkReverseStrSwap-8                     	 1000000	      1137 ns/op
 BenchmarkReverseStrUseReverseLoop-8           	 1000000	      1608 ns/op
 */
-
 func Benchmark_strutils_ReverseStr(b *testing.B) {
 
 	benchMarkStr1 := strings.Repeat("0123456789", 100)

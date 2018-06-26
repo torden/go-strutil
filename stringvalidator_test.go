@@ -20,6 +20,8 @@ func ipaddrTest(t *testing.T, cktype int, dataset map[string]bool, errfmt string
 func Test_strutils_IPAddrFalse(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
+
 	var err error
 
 	//check : wrong IP Addr
@@ -148,6 +150,7 @@ func Test_strutils_MacAddr(t *testing.T) {
 	}
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	//check : common
 	for k, v := range macaddrList {
@@ -216,6 +219,7 @@ func Test_strutils_Domain(t *testing.T) {
 	}
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	//check : common
 	for k, v := range testDomains {
@@ -242,6 +246,7 @@ func Test_strutils_URL(t *testing.T) {
 	}
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	//check : common
 	for k, v := range testUrls {
@@ -288,6 +293,7 @@ func Test_strutils_PureTextNormal(t *testing.T) {
 	}
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	//check : common
 	for k, v := range testTxts {
@@ -333,6 +339,7 @@ func Test_strutils_PureTextStrict(t *testing.T) {
 	}
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	//check : common
 	for k, v := range testTxts {
@@ -361,6 +368,7 @@ func Test_strutils_FilePathOnlyFilePath(t *testing.T) {
 	}
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	//check : common
 	for k, v := range testFilepaths {
@@ -389,6 +397,7 @@ func Test_strutils_FilePathAllowRelativePath(t *testing.T) {
 	}
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	//check : common
 	for k, v := range testFilepaths {
