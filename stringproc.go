@@ -903,8 +903,10 @@ func (s *StringProc) ConvertToArByte(obj interface{}) ([]byte, error) {
 		}
 		return []byte("false"), nil
 
-	case byte:
-		return []byte{obj.(byte)}, nil
+		/*
+			case byte:
+				return []byte{obj.(byte)}, nil
+		*/
 
 	case []uint8:
 		return reflect.ValueOf(obj).Bytes(), nil
@@ -924,6 +926,8 @@ func (s *StringProc) ConvertToArByte(obj interface{}) ([]byte, error) {
 		return []byte(strconv.FormatInt(obj.(int64), 10)), nil
 	case uint:
 		return []byte(strconv.FormatUint(uint64(obj.(uint)), 10)), nil
+	case uint8: //same byte
+		return []byte(strconv.FormatUint(uint64(obj.(uint8)), 10)), nil
 	case uint16:
 		return []byte(strconv.FormatUint(uint64(obj.(uint16)), 10)), nil
 	case uint32:

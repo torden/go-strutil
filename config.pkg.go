@@ -3,4 +3,4 @@
 package strutils
 
 //UNITTESTMODE runs on go [run|build] -flags unittest command
-const UNITTESTMODE = false
+const UNITTESTMODE = true

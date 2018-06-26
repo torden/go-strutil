@@ -14,6 +14,8 @@ import (
 func Test_strutils_AddSlashes(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
+
 	dataset := map[string]string{
 		`대한민국만세`:     `대한민국만세`,
 		`대한\민국만세`:    `대한\\민국만세`,
@@ -25,6 +27,7 @@ func Test_strutils_AddSlashes(t *testing.T) {
 
 	//check : common
 	var retval string
+
 	for k, v := range dataset {
 		retval = strproc.AddSlashes(k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
@@ -34,6 +37,8 @@ func Test_strutils_AddSlashes(t *testing.T) {
 func Test_strutils_StripSlashes(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
+
 	dataset := map[string]string{
 		`대한민국만세`:       `대한민국만세`,
 		`대한\\민국만세`:     `대한\민국만세`,
@@ -45,6 +50,7 @@ func Test_strutils_StripSlashes(t *testing.T) {
 
 	//check : common
 	var retval string
+
 	for k, v := range dataset {
 		retval = strproc.StripSlashes(k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
@@ -54,6 +60,8 @@ func Test_strutils_StripSlashes(t *testing.T) {
 func Test_strutils_Nl2Br(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
+
 	dataset := map[string]string{
 		"대한\n민국만세":     "대한<br />민국만세",
 		"대한\r\n민국만세":   "대한<br />민국만세",
@@ -78,6 +86,8 @@ func Test_strutils_Nl2Br(t *testing.T) {
 func Test_strutils_Br2Nl(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
+
 	dataset := map[string]string{
 		"대한<br />민국만세":   "대한\n민국만세",
 		"대한민국만세<br />":   "대한민국만세\n",
@@ -101,7 +111,7 @@ func Test_strutils_Br2Nl(t *testing.T) {
 		"대한민국만세":   "대한민국만세",
 
 		"<a href='http://www.president.go.kr/'>대한민국만세</a><br>":   "<a href='http://www.president.go.kr/'>대한민국만세</a>\n",
-		"<a href='http://www.president.go.kr/'>abcde</a><br>fgh": "abcde\nfgh",
+		"<a href='http://www.president.go.kr/'>abcde</a><br>fgh": "<a href='http://www.president.go.kr/'>abcde</a>\nfgh",
 
 		"world peace!!<a href='http://www.president.go.kr/'>대한민국만세</a><br>":   "world peace!!<a href='http://www.president.go.kr/'>대한민국만세</a>\n",
 		"world peace!!<a href='http://www.president.go.kr/'>abcde</a><br>fgh": "world peace!!<a href='http://www.president.go.kr/'>abcde</a>\nfgh",
@@ -128,6 +138,7 @@ type wordwrapTestVal struct {
 func Test_strutils_WordWrapSimple(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	dataset := make(map[int]wordwrapTestVal)
 
@@ -176,6 +187,7 @@ func Test_strutils_WordWrapSimple(t *testing.T) {
 func Test_strutils_WordWrapAround(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	dataset := make(map[int]wordwrapTestVal)
 
@@ -234,6 +246,8 @@ func Test_strutils_WordWrapAround(t *testing.T) {
 func Test_strutils_NumbertFmt(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
+
 	dataset := map[interface{}]string{
 		123456789101112: "123,456,789,101,112",
 		123456.1234:     "123,456.1234",
@@ -315,6 +329,8 @@ type paddingTestVal struct {
 func Test_strutils_Padding(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
+
 	dataset := make(map[int]paddingTestVal)
 
 	dataset[0] = paddingTestVal{"Life isn't always what one like.", "*", strutils.PadBoth, 38, "***Life isn't always what one like.***"}
@@ -347,6 +363,8 @@ func Test_strutils_Padding(t *testing.T) {
 func Test_strutils_UppercaseFirstWords(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
+
 	dataset := map[string]string{
 		"o say, can you see, by the dawn’s early light,":                    "O Say, Can You See, By The Dawn’s Early Light,",
 		"what so proudly we hailed at the twilight’s last gleaming,":        "What So Proudly We Hailed At The Twilight’s Last Gleaming,",
@@ -369,6 +387,8 @@ func Test_strutils_UppercaseFirstWords(t *testing.T) {
 func Test_strutils_LowercaseFirstWords(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
+
 	dataset := map[string]string{
 		"O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,":                    "o sAY, cAN yOU sEE, bY tHE dAWN’S eARLY lIGHT,",
 		"WHAT SO PROUDLY WE HAILED AT THE TWILIGHT’S LAST GLEAMING,":        "wHAT sO pROUDLY wE hAILED aT tHE tWILIGHT’S lAST gLEAMING,",
@@ -391,6 +411,8 @@ func Test_strutils_LowercaseFirstWords(t *testing.T) {
 func Test_strutils_SwapCaseFirstWords(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
+
 	dataset := map[string]string{
 		"O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,":                    "o sAY, cAN yOU sEE, bY tHE dAWN’S eARLY lIGHT,",
 		"WHAT SO PROUDLY WE HAILED AT THE TWILIGHT’S LAST GLEAMING,":        "wHAT sO pROUDLY wE hAILED aT tHE tWILIGHT’S lAST gLEAMING,",
@@ -430,6 +452,8 @@ func Test_strutils_SwapCaseFirstWords(t *testing.T) {
 func Test_strutils_HumanByteSize(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
+
 	dataset := map[interface{}]string{
 		1.7976931348623157e+308: "152270531428124968725096603469261934082567927321390584004196605238063615198482718997460353589210907119043200911085747810785909744915680620242659147418948017662928903247753430023357200398869394856103928002466673473125884404826265988290381563441726944871732658253337089007918982991007711232.00Yb",
 		1170:         "1.14Kb",
@@ -490,6 +514,7 @@ func Test_strutils_HumanByteSize(t *testing.T) {
 func Test_strutils_HumanFileSize(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	const tmpFilePath = "./filesizecheck.touch"
 	const tmpPath = "./testdir"
@@ -553,6 +578,7 @@ func Test_strutils_HumanFileSize(t *testing.T) {
 func Test_strutils_AnyCompare(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	var retval bool
 	var err error
@@ -938,7 +964,7 @@ func Test_strutils_AnyCompare(t *testing.T) {
 	testDiffNotSupport1 := paddingTestVal{}
 	testDiffNotSupport2 := paddingTestVal{}
 	_, err = strproc.AnyCompare(testDiffNotSupport1, testDiffNotSupport2)
-	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Not Support Compre`\nError : %v", err)
+	assert.AssertNil(t, err, "Failure : Couldn't check the `Not Support Compre`\nError : %v", err)
 
 	//check : sting != string
 	testDiffrentStringMap1 := map[string]map[string]map[string]string{
@@ -1042,6 +1068,7 @@ func Test_strutils_AnyCompare(t *testing.T) {
 func Test_strutils_StripTags(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	str_ok := `
 Just! a String Processing Library for Go-lang
@@ -1154,6 +1181,7 @@ README.md haven’t contain all the examples. Please refer to the the XXXtest.go
 func Test_strutils_ConvertToStr(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	dataset := map[interface{}]string{
 		string("1234567"): "1234567",
@@ -1206,6 +1234,7 @@ func Test_strutils_ConvertToStr(t *testing.T) {
 func Test_strutils_ConvertToArByte(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	dataset := map[interface{}]string{
 		string("1234567"): "1234567",
@@ -1248,15 +1277,16 @@ func Test_strutils_ConvertToArByte(t *testing.T) {
 		false: "false",
 	}
 
-	//check : common
 	for k, v := range dataset {
 		retval, err := strproc.ConvertToArByte(k)
 		assert.AssertEquals(t, string(retval), v, "Return Value mismatch.\nExpected: %v\nActual: %v\nError : %v", retval, v, err)
 	}
 }
+
 func Test_strutils_ReverseStr(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	dataset := map[string]string{
 		"0123456789": "9876543210",
@@ -1275,6 +1305,7 @@ func Test_strutils_ReverseStr(t *testing.T) {
 func Test_strutils_ReverseNormalStr(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	dataset := map[string]string{
 		"0123456789": "9876543210",
@@ -1291,6 +1322,7 @@ func Test_strutils_ReverseNormalStr(t *testing.T) {
 func Test_strutils_ReverseReverseUnicode(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	dataset := map[string]string{
 		"0123456789": "9876543210",
@@ -1310,6 +1342,7 @@ func Test_strutils_ReverseReverseUnicode(t *testing.T) {
 func Test_strutils_FileMD5Hash(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	var retval string
 	var err error
@@ -1329,6 +1362,7 @@ func Test_strutils_FileMD5Hash(t *testing.T) {
 func Test_strutils_MD5Hash(t *testing.T) {
 
 	t.Parallel()
+	assert.TurnOffUnitTestMode()
 
 	dataset := map[string]string{
 		"0123456789": "781e5e245d69b566979b86e28d23f2c7",
