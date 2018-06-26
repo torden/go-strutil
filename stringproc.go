@@ -111,6 +111,50 @@ func (s *StringProc) Nl2Br(str string) string {
 	return string(buf)
 }
 
+// Br2Nl is replaces HTML line breaks to a newline
+func (s *StringProc) Br2Nl(str string) string {
+
+	// <br> , <br /> , <br/>
+	// <BR> , <BR /> , <BR/>
+	nlchar := []byte("\n")
+
+	l := len(str)
+	buf := make([]byte, 0, l) //prealloca
+
+	for i := 0; i < l; i++ {
+
+		switch str[i] {
+
+		case 60: //<
+
+			if l >= i+4 {
+
+				//  b              || B               &&  r              || R                &&  SPACE          || /               &&  >              || /
+				if (str[i+1] == 98 || str[i+1] == 66) && (str[i+2] == 82 || str[i+2] == 114) && (str[i+3] == 32 || str[i+3] == 47) && (str[i+4] == 62 || str[i+4] == 47) {
+
+					if l >= i+5 && (str[i+4] == 47 && str[i+5] != 62) {
+						continue
+					} else {
+						buf = append(buf, nlchar...)
+						i += 5
+						continue
+					}
+
+					if str[i+4] == 62 {
+						buf = append(buf, nlchar...)
+						i += 4
+					}
+				}
+			}
+
+		default:
+			buf = append(buf, str[i])
+		}
+	}
+
+	return string(buf)
+}
+
 // WordWrapSimple is Wraps a string to a given number of characters using break characters (TAB, SPACE)
 func (s *StringProc) WordWrapSimple(str string, wd int, breakstr string) (string, error) {
 
