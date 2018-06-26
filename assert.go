@@ -4,12 +4,15 @@ import (
 	"reflect"
 	"runtime"
 	"strings"
+	"sync"
 	"testing"
 )
 
 // Assert is Methods for helping testing the strutils pkg.
 type Assert struct {
-	plib *StringProc
+	mutx         sync.RWMutex
+	plib         *StringProc
+	unitTestMode bool
 }
 
 // NewAssert Creates and returns a String processing methods's pointer.
@@ -18,16 +21,34 @@ func NewAssert() *Assert {
 	obj := &Assert{}
 	obj.plib = NewStringProc()
 
+	obj.unitTestMode = UNITTESTMODE
+
 	return obj
 }
 
-//a.printMsg is equivalent to t.Errorf include other information for easy debug
+//TurnOffUnitTestMode is turn off unitTestMode
+func (a *Assert) TurnOffUnitTestMode() {
+
+	a.mutx.Lock()
+	defer a.mutx.Unlock()
+	a.unitTestMode = false
+}
+
+//RevertUnitTestMode is revert unitTestMode
+func (a *Assert) RevertUnitTestMode() {
+
+	a.mutx.Lock()
+	defer a.mutx.Unlock()
+	a.unitTestMode = UNITTESTMODE
+}
+
+//printMsg is equivalent to t.Errorf include other information for easy debug
 func (a *Assert) printMsg(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{}) {
 
 	outf := t.Errorf
 	out := t.Error
 
-	if UNITTESTMODE { //assertion methods test on go test
+	if a.unitTestMode { //assertion methods test on go test
 		outf = t.Logf
 		out = t.Log
 		t.Log("*** The following message is just error testing ***")
@@ -137,9 +158,13 @@ func (a *Assert) AssertLog(t *testing.T, err error, msgfmt string, args ...inter
 //AssertEquals asserts that two objects are equal.
 func (a *Assert) AssertEquals(t *testing.T, v1 interface{}, v2 interface{}, msgfmt string, args ...interface{}) {
 
-	_, err := a.plib.AnyCompare(v1, v2)
+	ok, err := a.plib.AnyCompare(v1, v2)
 	if err != nil {
 		a.printMsg(t, v1, v2, err.Error())
+	}
+
+	if !ok {
+		a.printMsg(t, v1, v2, "not compare")
 	}
 }
 
