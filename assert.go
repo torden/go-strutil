@@ -27,19 +27,19 @@ func NewAssert() *Assert {
 }
 
 //TurnOffUnitTestMode is turn off unitTestMode
+func (a *Assert) TurnOnUnitTestMode() {
+
+	a.mutx.Lock()
+	defer a.mutx.Unlock()
+	a.unitTestMode = true
+}
+
+//RevertUnitTestMode is revert unitTestMode
 func (a *Assert) TurnOffUnitTestMode() {
 
 	a.mutx.Lock()
 	defer a.mutx.Unlock()
 	a.unitTestMode = false
-}
-
-//RevertUnitTestMode is revert unitTestMode
-func (a *Assert) RevertUnitTestMode() {
-
-	a.mutx.Lock()
-	defer a.mutx.Unlock()
-	a.unitTestMode = UNITTESTMODE
 }
 
 //printMsg is equivalent to t.Errorf include other information for easy debug
@@ -48,10 +48,10 @@ func (a *Assert) printMsg(t *testing.T, v1 interface{}, v2 interface{}, msgfmt s
 	outf := t.Errorf
 	out := t.Error
 
-	if a.unitTestMode { //assertion methods test on go test
+	if !a.unitTestMode { //assertion methods test on go test
 		outf = t.Logf
 		out = t.Log
-		t.Log("*** The following message is just error testing ***")
+		t.Log("*** The following message is just failure testing ***")
 	}
 
 	funcn, file, line, _ := runtime.Caller(2)
