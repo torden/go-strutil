@@ -23,7 +23,7 @@ var numericPattern = regexp.MustCompile(`^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?
 var tagElementsPattern = regexp.MustCompile(`(?ims)(?P<tag><(/*\s*|\?*|\!*)(figcaption|expression|blockquote|plaintext|textarea|progress|optgroup|noscript|noframes|menuitem|frameset|fieldset|!DOCTYPE|datalist|colgroup|behavior|basefont|summary|section|isindex|details|caption|bgsound|article|address|acronym|strong|strike|source|select|script|output|option|object|legend|keygen|ilayer|iframe|header|footer|figure|dialog|center|canvas|button|applet|video|track|title|thead|tfoot|tbody|table|style|small|param|meter|layer|label|input|frame|embed|blink|audio|aside|alert|time|span|samp|ruby|meta|menu|mark|main|link|html|head|form|font|code|cite|body|base|area|abbr|xss|xml|wbr|var|svg|sup|sub|pre|nav|map|kbd|ins|img|div|dir|dfn|del|col|big|bdo|bdi|!--|ul|tt|tr|th|td|rt|rp|ol|li|hr|em|dt|dl|dd|br|u|s|q|p|i|b|a|(h[0-9]+))([^><]*)([><]*))`)
 var whiteSpacePattern = regexp.MustCompile(`(?im)\s{2,}`)
 var entityEncodedPattern = regexp.MustCompile(`(?ims)(&(?:[a-z0-9]{2,8}|#[0-9]{2,3});)`)
-var urlEncodedPattern = regexp.MustCompile(`(?ims)(%[A-Z0-9]{2})`)
+var urlEncodedPattern = regexp.MustCompile(`(?ims)(%[a-zA-Z0-9]{2})`)
 
 // StringProc is String processing methods, All operations on this object
 type StringProc struct {
@@ -127,25 +127,37 @@ func (s *StringProc) Br2Nl(str string) string {
 
 		case 60: //<
 
-			if l >= i+4 {
+			if l >= i+3 {
 
-				//  b              || B               &&  r              || R                &&  SPACE          || /               &&  >              || /
-				if (str[i+1] == 98 || str[i+1] == 66) && (str[i+2] == 82 || str[i+2] == 114) && (str[i+3] == 32 || str[i+3] == 47) && (str[i+4] == 62 || str[i+4] == 47) {
+				/*
+					b = 98
+					B = 66
+					r = 82
+					R = 114
+					SPACE = 32
+					/ = 47
+					> = 62
+				*/
 
-					if l >= i+5 && (str[i+4] == 47 && str[i+5] != 62) {
-						continue
-					} else {
-						buf = append(buf, nlchar...)
-						i += 5
-						continue
-					}
+				if l >= i+3 && ((str[i+1] == 98 || str[i+1] == 66) && (str[i+2] == 82 || str[i+2] == 114) && str[i+3] == 62) { // <br> || <BR>
+					buf = append(buf, nlchar...)
+					i += 3
+					continue
+				}
 
-					if str[i+4] == 62 {
-						buf = append(buf, nlchar...)
-						i += 4
-					}
+				if l >= i+4 && ((str[i+1] == 98 || str[i+1] == 66) && (str[i+2] == 82 || str[i+2] == 114) && str[i+3] == 47 && str[i+4] == 62) { // <br/> || <BR/>
+					buf = append(buf, nlchar...)
+					i += 4
+					continue
+				}
+
+				if l >= i+5 && ((str[i+1] == 98 || str[i+1] == 66) && (str[i+2] == 82 || str[i+2] == 114) && str[i+3] == 32 && str[i+4] == 47 && str[i+5] == 62) { // <br /> || <BR />
+					buf = append(buf, nlchar...)
+					i += 5
+					continue
 				}
 			}
+			fallthrough
 
 		default:
 			buf = append(buf, str[i])
