@@ -462,9 +462,78 @@ Return :  false
 Error :  different value : (obj1[A][name][first][last][F][name][first] := 1) != (obj2[A][name][first][last][F][name][first] := 11)
 ```
 
+### DecodeUnicodeEntities
+
+DecodeUnicodeEntities Decodes Unicode Entities
+
+```go
+func (s *StringProc) DecodeUnicodeEntities(val string) (string, error)
+```
+
+Example:
+
+```go
+StrUnicodeEntityEncodedMultipleLine := "%uC548%uB155%uD558%uC138%uC694.%0A%uBC29%uAC11%uC2B5%uB2C8%uB2E4.%0A%uAC10%uC0AC%uD569%uB2C8%uB2E4.%0A%u304A%u306F%u3088%u3046%u3054%u3056%u3044%u307E%u3059%0A%u3053%u3093%u306B%u3061%u306F%uFF0E%0A%u3053%u3093%u3070%u3093%u306F%uFF0E%0A%u304A%u3084%u3059%u307F%u306A%u3055%u3044%uFF0E%0A%u3042%u308A%u304C%u3068%u3046%u3054%u3056%u3044%u307E%u3059%0A%u4F60%u597D%0A%u518D%u898B%0A%u8C22%u8C22%21%u0E2A%u0E27%u0E31%u0E2A%u0E14%u0E35%u0E04%u0E23%u0E31%u0E1A%0A%u0E41%u0E25%u0E49%u0E27%u0E40%u0E08%u0E2D%u0E01%u0E31%u0E19%u0E04%u0E23%u0E31%u0E1A%0A%u0E02%u0E2D%u0E1A%u0E04%u0E38%u0E13%u0E04%u0E23%u0E31%u0E1A%0A%u0421%u0430%u0439%u043D%20%u0431%u0430%u0439%u043D%u0430%u0443%u0443"
+
+retval, err := strproc.DecodeUnicodeEntities(StrUnicodeEntityEncodedMultipleLine)
+
+fmt.Println("Return : ", retval)
+fmt.Println("Error : ", err)
+```
+
+
+The above example will output:
+
+```bash
+Return : 안녕하세요.
+방갑습니다.
+감사합니다.
+おはようございます
+こんにちは．
+こんばんは．
+おやすみなさい．
+ありがとうございます
+你好
+再見
+谢谢!สวัสดีครับ
+แล้วเจอกันครับ
+ขอบคุณครับ
+Сайн байнауу
+Error : <nil>
+```
+
+### DecodeURLEncoded 
+
+DecodeURLEncoded Decodes URL-encoded string (including unicode entities)
+
+```go
+func (s *StringProc) DecodeURLEncoded(val string) (string, error)
+```
+
+Example:
+
+```go
+
+URLWithJapanWorld := "http://hello.%E4%B8%96%E7%95%8C.com/foo"
+
+retval, err := strproc.DecodeURLEncoded(URLWithJapanWorld)
+
+fmt.Println("Return : ", retval)
+fmt.Println("Error : ", err)
+
+
+```
+
+The abose example will output:
+
+```bash
+Result : http://hello.世界.com/foo
+Err : <nil>
+```
+
 ### StripTags
 
-StipTags is remove all tag in string (Pure String or URL Encoded or Html Entity Encoded or Mixed String)
+StipTags is remove all tag in string (Pure String or URL Encoded or Html (Unicode) Entities Encoded or Mixed String)
 
 ```go
 func (s *StringProc) StripTags(str string) (string, error)

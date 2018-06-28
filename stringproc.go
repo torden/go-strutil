@@ -24,6 +24,7 @@ var tagElementsPattern = regexp.MustCompile(`(?ims)(?P<tag><(/*\s*|\?*|\!*)(figc
 var whiteSpacePattern = regexp.MustCompile(`(?im)\s{2,}`)
 var entityEncodedPattern = regexp.MustCompile(`(?ims)(&(?:[a-z0-9]{2,8}|#[0-9]{2,3});)`)
 var urlEncodedPattern = regexp.MustCompile(`(?ims)(%[a-zA-Z0-9]{2})`)
+var detectUnicodeEntities = regexp.MustCompile(`(?ims)u([0-9a-z]{4})`)
 
 // StringProc is String processing methods, All operations on this object
 type StringProc struct {
@@ -844,6 +845,101 @@ func (s *StringProc) AnyCompare(obj1 interface{}, obj2 interface{}) (bool, error
 	return true, nil
 }
 
+func (s *StringProc) isHex(c byte) bool {
+
+	if (c >= 48 && c <= 57) || (c >= 65 && c <= 70) || (c >= 97 && c <= 102) { //0~9, a~f, A~F
+		return true
+	}
+
+	return false
+}
+
+func (s *StringProc) unHex(c byte) byte { //from golang. unhex
+
+	switch {
+	case '0' <= c && c <= '9':
+		return c - '0'
+	case 'a' <= c && c <= 'f':
+		return c - 'a' + 10
+	case 'A' <= c && c <= 'F':
+		return c - 'A' + 10
+	}
+
+	return 0
+}
+
+// DecodeUnicodeEntities Decodes Unicode Entities
+func (s *StringProc) DecodeUnicodeEntities(val string) (string, error) {
+
+	var tmpret []byte
+
+	l := len(val)
+	for i := 0; i < l; i++ {
+
+		if val[i] == 37 && val[i+1] == 117 && l >= i+6 { // % + u
+
+			var tmpval []byte
+			tmpval = append(tmpval, val[i+2], val[i+3], val[i+4], val[i+5])
+
+			runeval, err := strconv.ParseInt(string(tmpval), 16, 64)
+			if err != nil {
+				return "", err
+			}
+
+			tmprune := []byte(string(rune(runeval)))
+			tmpret = append(tmpret, tmprune...)
+			i += 5 //jump %uXXXX
+
+		} else if val[i] == 37 { //control character or other
+			tmpret = append(tmpret, s.unHex(val[i+1])<<4|s.unHex(val[i+2]))
+			i += 2
+		} else {
+			tmpret = append(tmpret, val[i])
+		}
+	}
+
+	return string(tmpret), nil
+}
+
+// DecodeURLEncoded Decodes URL-encoded string (including unicode entities)
+// NOTE : golang.url.unescape not support unicode entities (%uXXXX)
+func (s *StringProc) DecodeURLEncoded(val string) (string, error) {
+
+	var tmpret []byte
+
+	l := len(val)
+	for i := 0; i < l; i++ {
+
+		// 37 = %, 117 = u (UnicodeEntity)
+		if val[i] == 37 && val[i+1] != 117 && l >= i+3 && s.isHex(val[i+1]) && s.isHex(val[i+2]) {
+
+			tmpret = append(tmpret, s.unHex(val[i+1])<<4|s.unHex(val[i+2]))
+			i += 2
+			continue
+		}
+
+		if val[i] == 37 && val[i+1] == 117 && l >= i+6 { // % + u
+
+			var tmpval []byte
+			tmpval = append(tmpval, val[i+2], val[i+3], val[i+4], val[i+5])
+
+			runeval, err := strconv.ParseInt(string(tmpval), 16, 64)
+			if err != nil {
+				return "", err
+			}
+
+			tmprune := []byte(string(rune(runeval)))
+			tmpret = append(tmpret, tmprune...)
+			i += 5
+			continue
+		}
+
+		tmpret = append(tmpret, val[i])
+	}
+
+	return string(tmpret), nil
+}
+
 // StripTags is remove all tag in string
 func (s *StringProc) StripTags(str string) (string, error) {
 
@@ -864,7 +960,15 @@ ENTITY_DECODE:
 			str = tmpstr
 			goto ENTITY_DECODE
 		} else {
-			return str, err
+
+			//url.QueryUnescape not support UnicodeEntities
+			tmpstr, err := s.DecodeURLEncoded(str)
+			if err == nil {
+				str = tmpstr
+				goto ENTITY_DECODE
+			} else {
+				return str, err
+			}
 		}
 	}
 
