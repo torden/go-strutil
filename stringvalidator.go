@@ -184,7 +184,8 @@ func (s *StringValidator) IsPureTextStrict(str string) (bool, error) {
 		c := str[i]
 
 		// deny : control char (00-31 without 9(TAB) and Single 10(LF),13(CR)
-		if c >= 0 && c <= 31 && c != 9 && c != 10 && c != 13 {
+		//if c >= 0 && c <= 31 && c != 9 && c != 10 && c != 13 { unsinged value is always >= 0
+		if c <= 31 && c != 9 && c != 10 && c != 13 {
 			return false, errors.New("Detect Control Character")
 		}
 
