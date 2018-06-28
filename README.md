@@ -30,6 +30,8 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
     - [HumanByteSize](#humanbytesize)
     - [HumanFileSize](#humanfilesize)
     - [AnyCompare](#anycompare)
+    - [DecodeUnicodeEntities](#decodeunicodeentities)
+    - [DecodeURLEncoded](#decodeurlencoded)
     - [StripTags](#striptags)
     - [ConvertToStr](#converttostr)
     - [ReverseStr](#reversestr)
