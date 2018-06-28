@@ -26,7 +26,7 @@ func NewAssert() *Assert {
 	return obj
 }
 
-//TurnOffUnitTestMode is turn off unitTestMode
+//TurnOnUnitTestMode is turn on unitTestMode
 func (a *Assert) TurnOnUnitTestMode() {
 
 	a.mutx.Lock()
@@ -34,7 +34,7 @@ func (a *Assert) TurnOnUnitTestMode() {
 	a.unitTestMode = true
 }
 
-//RevertUnitTestMode is revert unitTestMode
+//TurnOffUnitTestMode is turn off unitTestMode
 func (a *Assert) TurnOffUnitTestMode() {
 
 	a.mutx.Lock()

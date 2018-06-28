@@ -24,7 +24,9 @@ var tagElementsPattern = regexp.MustCompile(`(?ims)(?P<tag><(/*\s*|\?*|\!*)(figc
 var whiteSpacePattern = regexp.MustCompile(`(?im)\s{2,}`)
 var entityEncodedPattern = regexp.MustCompile(`(?ims)(&(?:[a-z0-9]{2,8}|#[0-9]{2,3});)`)
 var urlEncodedPattern = regexp.MustCompile(`(?ims)(%[a-zA-Z0-9]{2})`)
-var detectUnicodeEntities = regexp.MustCompile(`(?ims)u([0-9a-z]{4})`)
+
+// for debug
+//var detectUnicodeEntities = regexp.MustCompile(`(?ims)u([0-9a-z]{4})`)
 
 // StringProc is String processing methods, All operations on this object
 type StringProc struct {
