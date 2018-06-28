@@ -3,6 +3,7 @@ package strutils_test
 import (
 	"io/ioutil"
 	"math"
+	"net/url"
 	"os"
 	"strings"
 	"testing"
@@ -37,7 +38,6 @@ func Test_strutils_AddSlashes(t *testing.T) {
 func Test_strutils_StripSlashes(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		`대한민국만세`:       `대한민국만세`,
@@ -60,7 +60,6 @@ func Test_strutils_StripSlashes(t *testing.T) {
 func Test_strutils_Nl2Br(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"대한\n민국만세":     "대한<br />민국만세",
@@ -86,7 +85,6 @@ func Test_strutils_Nl2Br(t *testing.T) {
 func Test_strutils_Br2Nl(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"대한<br />민국만세":   "대한\n민국만세",
@@ -138,7 +136,6 @@ type wordwrapTestVal struct {
 func Test_strutils_WordWrapSimple(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := make(map[int]wordwrapTestVal)
 
@@ -187,7 +184,6 @@ func Test_strutils_WordWrapSimple(t *testing.T) {
 func Test_strutils_WordWrapAround(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := make(map[int]wordwrapTestVal)
 
@@ -246,7 +242,6 @@ func Test_strutils_WordWrapAround(t *testing.T) {
 func Test_strutils_NumbertFmt(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[interface{}]string{
 		123456789101112: "123,456,789,101,112",
@@ -329,7 +324,6 @@ type paddingTestVal struct {
 func Test_strutils_Padding(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := make(map[int]paddingTestVal)
 
@@ -363,7 +357,6 @@ func Test_strutils_Padding(t *testing.T) {
 func Test_strutils_UppercaseFirstWords(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"o say, can you see, by the dawn’s early light,":                    "O Say, Can You See, By The Dawn’s Early Light,",
@@ -387,7 +380,6 @@ func Test_strutils_UppercaseFirstWords(t *testing.T) {
 func Test_strutils_LowercaseFirstWords(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,":                    "o sAY, cAN yOU sEE, bY tHE dAWN’S eARLY lIGHT,",
@@ -411,7 +403,6 @@ func Test_strutils_LowercaseFirstWords(t *testing.T) {
 func Test_strutils_SwapCaseFirstWords(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,":                    "o sAY, cAN yOU sEE, bY tHE dAWN’S eARLY lIGHT,",
@@ -452,7 +443,6 @@ func Test_strutils_SwapCaseFirstWords(t *testing.T) {
 func Test_strutils_HumanByteSize(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[interface{}]string{
 		1.7976931348623157e+308: "152270531428124968725096603469261934082567927321390584004196605238063615198482718997460353589210907119043200911085747810785909744915680620242659147418948017662928903247753430023357200398869394856103928002466673473125884404826265988290381563441726944871732658253337089007918982991007711232.00Yb",
@@ -514,7 +504,6 @@ func Test_strutils_HumanByteSize(t *testing.T) {
 func Test_strutils_HumanFileSize(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	const tmpFilePath = "./filesizecheck.touch"
 	const tmpPath = "./testdir"
@@ -578,7 +567,6 @@ func Test_strutils_HumanFileSize(t *testing.T) {
 func Test_strutils_AnyCompare(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	var retval bool
 	var err error
@@ -1065,10 +1053,149 @@ func Test_strutils_AnyCompare(t *testing.T) {
 	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison : %v", err)
 }
 
+func Test_strutils_DecodeUnicodeEntities(t *testing.T) {
+
+	t.Parallel()
+
+	str_oneline_ok := `안녕하세요.  방갑습니다.  감사합니다.  おはようございます こんにちは． こんばんは． おやすみなさい． ありがとうございます 你好 再見 谢谢!สวัสดีครับ แล้วเจอกันครับ ขอบคุณครับ Сайн байнауу`
+	str_mutipleline_ok := `안녕하세요.
+방갑습니다.
+감사합니다.
+おはようございます
+こんにちは．
+こんばんは．
+おやすみなさい．
+ありがとうございます
+你好
+再見
+谢谢!สวัสดีครับ
+แล้วเจอกันครับ
+ขอบคุณครับ
+Сайн байнауу`
+
+	var retval string
+	var err error
+
+	tmpStrUnicodeEntityEncodedOneLine := "%uC548%uB155%uD558%uC138%uC694.%20%20%uBC29%uAC11%uC2B5%uB2C8%uB2E4.%20%20%uAC10%uC0AC%uD569%uB2C8%uB2E4.%20%20%u304A%u306F%u3088%u3046%u3054%u3056%u3044%u307E%u3059%20%u3053%u3093%u306B%u3061%u306F%uFF0E%20%u3053%u3093%u3070%u3093%u306F%uFF0E%20%u304A%u3084%u3059%u307F%u306A%u3055%u3044%uFF0E%20%u3042%u308A%u304C%u3068%u3046%u3054%u3056%u3044%u307E%u3059%20%u4F60%u597D%20%u518D%u898B%20%u8C22%u8C22%21%u0E2A%u0E27%u0E31%u0E2A%u0E14%u0E35%u0E04%u0E23%u0E31%u0E1A%20%u0E41%u0E25%u0E49%u0E27%u0E40%u0E08%u0E2D%u0E01%u0E31%u0E19%u0E04%u0E23%u0E31%u0E1A%20%u0E02%u0E2D%u0E1A%u0E04%u0E38%u0E13%u0E04%u0E23%u0E31%u0E1A%20%u0421%u0430%u0439%u043D%20%u0431%u0430%u0439%u043D%u0430%u0443%u0443"
+	tmpStrUnicodeEntityEncodedMultipleLine := "%uC548%uB155%uD558%uC138%uC694.%0A%uBC29%uAC11%uC2B5%uB2C8%uB2E4.%0A%uAC10%uC0AC%uD569%uB2C8%uB2E4.%0A%u304A%u306F%u3088%u3046%u3054%u3056%u3044%u307E%u3059%0A%u3053%u3093%u306B%u3061%u306F%uFF0E%0A%u3053%u3093%u3070%u3093%u306F%uFF0E%0A%u304A%u3084%u3059%u307F%u306A%u3055%u3044%uFF0E%0A%u3042%u308A%u304C%u3068%u3046%u3054%u3056%u3044%u307E%u3059%0A%u4F60%u597D%0A%u518D%u898B%0A%u8C22%u8C22%21%u0E2A%u0E27%u0E31%u0E2A%u0E14%u0E35%u0E04%u0E23%u0E31%u0E1A%0A%u0E41%u0E25%u0E49%u0E27%u0E40%u0E08%u0E2D%u0E01%u0E31%u0E19%u0E04%u0E23%u0E31%u0E1A%0A%u0E02%u0E2D%u0E1A%u0E04%u0E38%u0E13%u0E04%u0E23%u0E31%u0E1A%0A%u0421%u0430%u0439%u043D%20%u0431%u0430%u0439%u043D%u0430%u0443%u0443"
+
+	retval, err = strproc.DecodeUnicodeEntities(tmpStrUnicodeEntityEncodedOneLine)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, str_oneline_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_oneline_ok)
+
+	retval, err = strproc.DecodeUnicodeEntities(tmpStrUnicodeEntityEncodedMultipleLine)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, str_mutipleline_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_mutipleline_ok)
+}
+
+func Test_strutils_DecodeURLEncoded(t *testing.T) {
+
+	t.Parallel()
+
+	url_ok := "https://www.google.com/search?source=hp&ei=ChM0W462AYbs8wXAwIaQCw&q=대한민국&oq=대한민국&gs_l=psy-ab.3..0i131k1l3j0l7.930.2247.0.2376.12.11.0.0.0.0.116.955.10j1.11.0....0...1.1j4.64.psy-ab..2.10.874.0...0.2DIo94YBWPI"
+
+	tmpJSURLEncode := "https%3A%2F%2Fwww.google.com%2Fsearch%3Fsource%3Dhp%26ei%3DChM0W462AYbs8wXAwIaQCw%26q%3D%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%26oq%3D%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%26gs_l%3Dpsy-ab.3..0i131k1l3j0l7.930.2247.0.2376.12.11.0.0.0.0.116.955.10j1.11.0....0...1.1j4.64.psy-ab..2.10.874.0...0.2DIo94YBWPI"
+	tmpJSEncodeURIComponent := "https%3A%2F%2Fwww.google.com%2Fsearch%3Fsource%3Dhp%26ei%3DChM0W462AYbs8wXAwIaQCw%26q%3D%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%26oq%3D%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%26gs_l%3Dpsy-ab.3..0i131k1l3j0l7.930.2247.0.2376.12.11.0.0.0.0.116.955.10j1.11.0....0...1.1j4.64.psy-ab..2.10.874.0...0.2DIo94YBWPI"
+	tmpJSencodeURI := "https://www.google.com/search?source=hp&ei=ChM0W462AYbs8wXAwIaQCw&q=%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD&oq=%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD&gs_l=psy-ab.3..0i131k1l3j0l7.930.2247.0.2376.12.11.0.0.0.0.116.955.10j1.11.0....0...1.1j4.64.psy-ab..2.10.874.0...0.2DIo94YBWPI"
+	tmpJSEscape := "https%3A//www.google.com/search%3Fsource%3Dhp%26ei%3DChM0W462AYbs8wXAwIaQCw%26q%3D%uB300%uD55C%uBBFC%uAD6D%26oq%3D%uB300%uD55C%uBBFC%uAD6D%26gs_l%3Dpsy-ab.3..0i131k1l3j0l7.930.2247.0.2376.12.11.0.0.0.0.116.955.10j1.11.0....0...1.1j4.64.psy-ab..2.10.874.0...0.2DIo94YBWPI"
+	tmpPHPurlEncode := "https%3A%2F%2Fwww.google.com%2Fsearch%3Fsource%3Dhp%26ei%3DChM0W462AYbs8wXAwIaQCw%26q%3D%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%26oq%3D%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%26gs_l%3Dpsy-ab.3..0i131k1l3j0l7.930.2247.0.2376.12.11.0.0.0.0.116.955.10j1.11.0....0...1.1j4.64.psy-ab..2.10.874.0...0.2DIo94YBWPI"
+	tmpPHPrawurlEncode := "https%3A%2F%2Fwww.google.com%2Fsearch%3Fsource%3Dhp%26ei%3DChM0W462AYbs8wXAwIaQCw%26q%3D%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%26oq%3D%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%26gs_l%3Dpsy-ab.3..0i131k1l3j0l7.930.2247.0.2376.12.11.0.0.0.0.116.955.10j1.11.0....0...1.1j4.64.psy-ab..2.10.874.0...0.2DIo94YBWPI"
+
+	tmpPyURLlibQuote := "https%3A//www.google.com/search%3Fsource%3Dhp%26ei%3DChM0W462AYbs8wXAwIaQCw%26q%3D%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%26oq%3D%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%26gs_l%3Dpsy-ab.3..0i131k1l3j0l7.930.2247.0.2376.12.11.0.0.0.0.116.955.10j1.11.0....0...1.1j4.64.psy-ab..2.10.874.0...0.2DIo94YBWPI"
+
+	url_with_japan_world_ok := "http://hello.世界.com/foo"
+	url_with_japna_keyword_ok := "https://www.google.co.kr/search?q=アパルトヘイトで世界せかいから孤立していた南アフリカ共和国には多くの企業が進出し、以前から比較的密接な関係を築いていた。&oq=アパルトヘイトで世界せかいから孤立していた南アフリカ共和国には多くの企業が進出し、以前から比較的密接な関係を築いていた。&aqs=chrome..69i57.417j0j4&sourceid=chrome&ie=UTF-8"
+
+	tmpURLWithJapanWorld := "http://hello.%E4%B8%96%E7%95%8C.com/foo"
+	tmpURLWithJapanKeyword := "https://www.google.co.kr/search?q=%E3%82%A2%E3%83%91%E3%83%AB%E3%83%88%E3%83%98%E3%82%A4%E3%83%88%E3%81%A7%E4%B8%96%E7%95%8C%E3%81%9B%E3%81%8B%E3%81%84%E3%81%8B%E3%82%89%E5%AD%A4%E7%AB%8B%E3%81%97%E3%81%A6%E3%81%84%E3%81%9F%E5%8D%97%E3%82%A2%E3%83%95%E3%83%AA%E3%82%AB%E5%85%B1%E5%92%8C%E5%9B%BD%E3%81%AB%E3%81%AF%E5%A4%9A%E3%81%8F%E3%81%AE%E4%BC%81%E6%A5%AD%E3%81%8C%E9%80%B2%E5%87%BA%E3%81%97%E3%80%81%E4%BB%A5%E5%89%8D%E3%81%8B%E3%82%89%E6%AF%94%E8%BC%83%E7%9A%84%E5%AF%86%E6%8E%A5%E3%81%AA%E9%96%A2%E4%BF%82%E3%82%92%E7%AF%89%E3%81%84%E3%81%A6%E3%81%84%E3%81%9F%E3%80%82&oq=%E3%82%A2%E3%83%91%E3%83%AB%E3%83%88%E3%83%98%E3%82%A4%E3%83%88%E3%81%A7%E4%B8%96%E7%95%8C%E3%81%9B%E3%81%8B%E3%81%84%E3%81%8B%E3%82%89%E5%AD%A4%E7%AB%8B%E3%81%97%E3%81%A6%E3%81%84%E3%81%9F%E5%8D%97%E3%82%A2%E3%83%95%E3%83%AA%E3%82%AB%E5%85%B1%E5%92%8C%E5%9B%BD%E3%81%AB%E3%81%AF%E5%A4%9A%E3%81%8F%E3%81%AE%E4%BC%81%E6%A5%AD%E3%81%8C%E9%80%B2%E5%87%BA%E3%81%97%E3%80%81%E4%BB%A5%E5%89%8D%E3%81%8B%E3%82%89%E6%AF%94%E8%BC%83%E7%9A%84%E5%AF%86%E6%8E%A5%E3%81%AA%E9%96%A2%E4%BF%82%E3%82%92%E7%AF%89%E3%81%84%E3%81%A6%E3%81%84%E3%81%9F%E3%80%82&aqs=chrome..69i57.417j0j4&sourceid=chrome&ie=UTF-8"
+
+	str_ok := `안녕하세요.
+방갑습니다.
+감사합니다.
+おはようございます
+こんにちは．
+こんばんは．
+おやすみなさい．
+ありがとうございます
+你好
+再見
+谢谢!สวัสดีครับ
+แล้วเจอกันครับ
+ขอบคุณครับ
+Сайн байнауу`
+
+	tmpStrUnicodeEntityEncoded := "%uC548%uB155%uD558%uC138%uC694.%0A%uBC29%uAC11%uC2B5%uB2C8%uB2E4.%0A%uAC10%uC0AC%uD569%uB2C8%uB2E4.%0A%u304A%u306F%u3088%u3046%u3054%u3056%u3044%u307E%u3059%0A%u3053%u3093%u306B%u3061%u306F%uFF0E%0A%u3053%u3093%u3070%u3093%u306F%uFF0E%0A%u304A%u3084%u3059%u307F%u306A%u3055%u3044%uFF0E%0A%u3042%u308A%u304C%u3068%u3046%u3054%u3056%u3044%u307E%u3059%0A%u4F60%u597D%0A%u518D%u898B%0A%u8C22%u8C22%21%u0E2A%u0E27%u0E31%u0E2A%u0E14%u0E35%u0E04%u0E23%u0E31%u0E1A%0A%u0E41%u0E25%u0E49%u0E27%u0E40%u0E08%u0E2D%u0E01%u0E31%u0E19%u0E04%u0E23%u0E31%u0E1A%0A%u0E02%u0E2D%u0E1A%u0E04%u0E38%u0E13%u0E04%u0E23%u0E31%u0E1A%0A%u0421%u0430%u0439%u043D%20%u0431%u0430%u0439%u043D%u0430%u0443%u0443"
+
+	tmpStrEncodedJSURIComponent := "%EC%95%88%EB%85%95%ED%95%98%EC%84%B8%EC%9A%94.%0A%EB%B0%A9%EA%B0%91%EC%8A%B5%EB%8B%88%EB%8B%A4.%0A%EA%B0%90%EC%82%AC%ED%95%A9%EB%8B%88%EB%8B%A4.%0A%E3%81%8A%E3%81%AF%E3%82%88%E3%81%86%E3%81%94%E3%81%96%E3%81%84%E3%81%BE%E3%81%99%0A%E3%81%93%E3%82%93%E3%81%AB%E3%81%A1%E3%81%AF%EF%BC%8E%0A%E3%81%93%E3%82%93%E3%81%B0%E3%82%93%E3%81%AF%EF%BC%8E%0A%E3%81%8A%E3%82%84%E3%81%99%E3%81%BF%E3%81%AA%E3%81%95%E3%81%84%EF%BC%8E%0A%E3%81%82%E3%82%8A%E3%81%8C%E3%81%A8%E3%81%86%E3%81%94%E3%81%96%E3%81%84%E3%81%BE%E3%81%99%0A%E4%BD%A0%E5%A5%BD%0A%E5%86%8D%E8%A6%8B%0A%E8%B0%A2%E8%B0%A2!%E0%B8%AA%E0%B8%A7%E0%B8%B1%E0%B8%AA%E0%B8%94%E0%B8%B5%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%9A%0A%E0%B9%81%E0%B8%A5%E0%B9%89%E0%B8%A7%E0%B9%80%E0%B8%88%E0%B8%AD%E0%B8%81%E0%B8%B1%E0%B8%99%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%9A%0A%E0%B8%82%E0%B8%AD%E0%B8%9A%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%9A%0A%D0%A1%D0%B0%D0%B9%D0%BD%20%D0%B1%D0%B0%D0%B9%D0%BD%D0%B0%D1%83%D1%83"
+
+	var retval, valid_ok string
+	var err error
+	retval, err = strproc.DecodeURLEncoded(tmpJSURLEncode)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, url_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, url_ok)
+
+	retval, err = strproc.DecodeURLEncoded(tmpJSEncodeURIComponent)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, url_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, url_ok)
+
+	retval, err = strproc.DecodeURLEncoded(tmpJSencodeURI)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, url_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, url_ok)
+
+	retval, err = strproc.DecodeURLEncoded(tmpJSEscape)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, url_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, url_ok)
+
+	retval, err = strproc.DecodeURLEncoded(tmpPHPurlEncode)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, url_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, url_ok)
+
+	retval, err = strproc.DecodeURLEncoded(tmpPHPrawurlEncode)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, url_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, url_ok)
+
+	retval, err = strproc.DecodeURLEncoded(tmpPyURLlibQuote)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, url_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, url_ok)
+
+	retval, err = strproc.DecodeURLEncoded(tmpURLWithJapanWorld)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, url_with_japan_world_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, url_with_japan_world_ok)
+
+	retval, err = strproc.DecodeURLEncoded(tmpURLWithJapanKeyword)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, url_with_japna_keyword_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, url_with_japna_keyword_ok)
+
+	retval, err = strproc.DecodeURLEncoded(tmpStrUnicodeEntityEncoded)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, str_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
+
+	retval, err = strproc.DecodeURLEncoded(tmpStrEncodedJSURIComponent)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, str_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
+
+	tmpW3schoolsAsciiEncodingReferenceFromWindows1252 := "%20 %21 %22 %23 %24 %25 %26 %27 %28 %29 %2A %2B %2C %2D %2E %2F %30 %31 %32 %33 %34 %35 %36 %37 %38 %39 %3A %3B %3C %3D %3E %3F %40 %41 %42 %43 %44 %45 %46 %47 %48 %49 %4A %4B %4C %4D %4E %4F %50 %51 %52 %53 %54 %55 %56 %57 %58 %59 %5A %5B %5C %5D %5E %5F %60 %61 %62 %63 %64 %65 %66 %67 %68 %69 %6A %6B %6C %6D %6E %6F %70 %71 %72 %73 %74 %75 %76 %77 %78 %79 %7A %7B %7C %7D %7E %7F %80 %81 %82 %83 %84 %85 %86 %87 %88 %89 %8A %8B %8C %8D %8E %8F %90 %91 %92 %93 %94 %95 %96 %97 %98 %99 %9A %9B %9C %9D %9E %9F %A0 %A1 %A2 %A3 %A4 %A5 %A6 %A7 %A8 %A9 %AA %AB %AC %AD %AE %AF %B0 %B1 %B2 %B3 %B4 %B5 %B6 %B7 %B8 %B9 %BA %BB %BC %BD %BE %BF %C0 %C1 %C2 %C3 %C4 %C5 %C6 %C7 %C8 %C9 %CA %CB %CC %CD %CE %CF %D0 %D1 %D2 %D3 %D4 %D5 %D6 %D7 %D8 %D9 %DA %DB %DC %DD %DE %DF %E0 %E1 %E2 %E3 %E4 %E5 %E6 %E7 %E8 %E9 %EA %EB %EC %ED %EE %EF %F0 %F1 %F2 %F3 %F4 %F5 %F6 %F7 %F8 %F9 %FA %FB %FC %FD %FE %FF"
+
+	tmpW3schoolsAsciiEncodingReferenceFromUTF8 := "%20 %21 %22 %23 %24 %25 %26 %27 %28 %29 %2A %2B %2C %2D %2E %2F %30 %31 %32 %33 %34 %35 %36 %37 %38 %39 %3A %3B %3C %3D %3E %3F %40 %41 %42 %43 %44 %45 %46 %47 %48 %49 %4A %4B %4C %4D %4E %4F %50 %51 %52 %53 %54 %55 %56 %57 %58 %59 %5A %5B %5C %5D %5E %5F %60 %61 %62 %63 %64 %65 %66 %67 %68 %69 %6A %6B %6C %6D %6E %6F %70 %71 %72 %73 %74 %75 %76 %77 %78 %79 %7A %7B %7C %7D %7E %7F %E2%82%AC %81 %E2%80%9A %C6%92 %E2%80%9E %E2%80%A6 %E2%80%A0 %E2%80%A1 %CB%86 %E2%80%B0 %C5%A0 %E2%80%B9 %C5%92 %C5%8D %C5%BD %8F %C2%90 %E2%80%98 %E2%80%99 %E2%80%9C %E2%80%9D %E2%80%A2 %E2%80%93 %E2%80%94 %CB%9C %E2%84 %C5%A1 %E2%80 %C5%93 %9D %C5%BE %C5%B8 %C2%A0 %C2%A1 %C2%A2 %C2%A3 %C2%A4 %C2%A5 %C2%A6 %C2%A7 %C2%A8 %C2%A9 %C2%AA %C2%AB %C2%AC %C2%AD %C2%AE %C2%AF %C2%B0 %C2%B1 %C2%B2 %C2%B3 %C2%B4 %C2%B5 %C2%B6 %C2%B7 %C2%B8 %C2%B9 %C2%BA %C2%BB %C2%BC %C2%BD %C2%BE %C2%BF %C3%80 %C3%81 %C3%82 %C3%83 %C3%84 %C3%85 %C3%86 %C3%87 %C3%88 %C3%89 %C3%8A %C3%8B %C3%8C %C3%8D %C3%8E %C3%8F %C3%90 %C3%91 %C3%92 %C3%93 %C3%94 %C3%95 %C3%96 %C3%97 %C3%98 %C3%99 %C3%9A %C3%9B %C3%9C %C3%9D %C3%9E %C3%9F %C3%A0 %C3%A1 %C3%A2 %C3%A3 %C3%A4 %C3%A5 %C3%A6 %C3%A7 %C3%A8 %C3%A9 %C3%AA %C3%AB %C3%AC %C3%AD %C3%AE %C3%AF %C3%B0 %C3%B1 %C3%B2 %C3%B3 %C3%B4 %C3%B5 %C3%B6 %C3%B7 %C3%B8 %C3%B9 %C3%BA %C3%BB %C3%BC %C3%BD %C3%BE %C3%BF"
+
+	retval, err = strproc.DecodeURLEncoded(tmpW3schoolsAsciiEncodingReferenceFromWindows1252)
+	assert.AssertNil(t, err, "Error : %v", err)
+	valid_ok, err = url.QueryUnescape(tmpW3schoolsAsciiEncodingReferenceFromWindows1252)
+
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, valid_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, valid_ok)
+
+	retval, err = strproc.DecodeURLEncoded(tmpW3schoolsAsciiEncodingReferenceFromUTF8)
+	assert.AssertNil(t, err, "Error : %v", err)
+	valid_ok, err = url.QueryUnescape(tmpW3schoolsAsciiEncodingReferenceFromUTF8)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, valid_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, valid_ok)
+
+}
+
 func Test_strutils_StripTags(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	str_ok := `
 Just! a String Processing Library for Go-lang
@@ -1170,18 +1297,11 @@ README.md haven’t contain all the examples. Please refer to the the XXXtest.go
 	retval, err = strproc.StripTags(str_urlencoded_htmlentity)
 	assert.AssertNil(t, err, "Error : %v", err)
 	assert.AssertEquals(t, retval, str_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
-
-	// check : failure at urldecode
-	failTestStr := `html%26gt%3` // clear str is `html%26gt%3B`
-	_, err = strproc.StripTags(failTestStr)
-	assert.AssertNotNil(t, err, "Failure : Couldn't check the `failure at url decoding`")
-
 }
 
 func Test_strutils_ConvertToStr(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[interface{}]string{
 		string("1234567"): "1234567",
@@ -1234,7 +1354,6 @@ func Test_strutils_ConvertToStr(t *testing.T) {
 func Test_strutils_ConvertToArByte(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[interface{}]string{
 		string("1234567"): "1234567",
@@ -1286,7 +1405,6 @@ func Test_strutils_ConvertToArByte(t *testing.T) {
 func Test_strutils_ReverseStr(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"0123456789": "9876543210",
@@ -1305,7 +1423,6 @@ func Test_strutils_ReverseStr(t *testing.T) {
 func Test_strutils_ReverseNormalStr(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"0123456789": "9876543210",
@@ -1322,7 +1439,6 @@ func Test_strutils_ReverseNormalStr(t *testing.T) {
 func Test_strutils_ReverseReverseUnicode(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"0123456789": "9876543210",
@@ -1342,7 +1458,6 @@ func Test_strutils_ReverseReverseUnicode(t *testing.T) {
 func Test_strutils_FileMD5Hash(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	var retval string
 	var err error
@@ -1362,7 +1477,6 @@ func Test_strutils_FileMD5Hash(t *testing.T) {
 func Test_strutils_MD5Hash(t *testing.T) {
 
 	t.Parallel()
-	assert.TurnOnUnitTestMode()
 
 	dataset := map[string]string{
 		"0123456789": "781e5e245d69b566979b86e28d23f2c7",

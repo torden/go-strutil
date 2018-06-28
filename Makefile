@@ -101,7 +101,7 @@ strictlint: setup
 ## Run Go Test with Data Race Detection
 testassert: clean
 	@$(CMD_ECHO)  -e "\033[1;40;32mRun Go Test.\033[01;m\x1b[0m"
-	@$(CMD_GO) test -tags unittest -v -test.parallel 4 -race -run Test_strutils_Assert*
+	@$(CMD_GO) test -v -test.parallel 4 -race -run Test_strutils_Assert*
 	@$(CMD_ECHO) -e "\033[1;40;36mGenerated a report of data race detection in $(PATH_REPORT)/doc/$(PATH_RACE_REPORT).pid\033[01;m\x1b[0m"
 	@$(CMD_ECHO) -e "\033[1;40;36mDone\033[01;m\x1b[0m"
 
