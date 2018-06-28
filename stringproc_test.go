@@ -535,7 +535,7 @@ func Test_strutils_HumanFileSize(t *testing.T) {
 	//check : lost file description
 	go func() {
 		time.Sleep(time.Nanosecond * 10)
-		err = os.Remove(tmpFilePath)
+		err := os.Remove(tmpFilePath)
 		assert.AssertLog(t, err, "lost file : %s but it's OK", tmpFilePath)
 
 	}()
@@ -543,7 +543,7 @@ func Test_strutils_HumanFileSize(t *testing.T) {
 	assert.AssertLog(t, err, "PASS")
 
 	defer func(t *testing.T) {
-		err = os.Remove(tmpFilePath)
+		err := os.Remove(tmpFilePath)
 		assert.AssertLog(t, err, "lost file : %s but it's OK", tmpFilePath)
 
 	}(t)
