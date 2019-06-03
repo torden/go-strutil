@@ -946,9 +946,15 @@ func (s *StringProc) DecodeURLEncoded(val string) (string, error) {
 func (s *StringProc) StripTags(str string) (string, error) {
 
 	var retval bool
+	notproccnt := 0
 
 	//looking for html entities code in str
 ENTITY_DECODE:
+
+	if notproccnt > 3 {
+		goto END
+	}
+
 	retval = entityEncodedPattern.MatchString(str)
 	if retval {
 		str = html.UnescapeString(str)
@@ -959,6 +965,10 @@ ENTITY_DECODE:
 	if retval {
 		tmpstr, err := url.QueryUnescape(str)
 		if err == nil {
+			if tmpstr == str {
+				notproccnt++
+			}
+
 			str = tmpstr
 			goto ENTITY_DECODE
 		} else {
@@ -966,6 +976,9 @@ ENTITY_DECODE:
 			//url.QueryUnescape not support UnicodeEntities
 			tmpstr, err := s.DecodeURLEncoded(str)
 			if err == nil {
+				if tmpstr == str {
+					notproccnt++
+				}
 				str = tmpstr
 				goto ENTITY_DECODE
 			} else {
@@ -973,6 +986,7 @@ ENTITY_DECODE:
 			}
 		}
 	}
+END:
 
 	//remove tag elements
 	cleanedStr := tagElementsPattern.ReplaceAllString(str, "")
