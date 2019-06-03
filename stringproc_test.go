@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/torden/go-strutil"
+	strutils "github.com/torden/go-strutil"
 )
 
 func Test_strutils_AddSlashes(t *testing.T) {
@@ -446,26 +446,26 @@ func Test_strutils_HumanByteSize(t *testing.T) {
 
 	dataset := map[interface{}]string{
 		1.7976931348623157e+308: "152270531428124968725096603469261934082567927321390584004196605238063615198482718997460353589210907119043200911085747810785909744915680620242659147418948017662928903247753430023357200398869394856103928002466673473125884404826265988290381563441726944871732658253337089007918982991007711232.00Yb",
-		1170:         "1.14Kb",
-		72125099:     "68.78Mb",
-		3276537856:   "3.05Gb",
-		27:           "27.00B",
-		93735736:     "89.39Mb",
-		937592:       "915.62Kb",
-		6715287:      "6.40Mb",
-		2856906752:   "2.66Gb",
-		7040152:      "6.71Mb",
-		22016:        "21.50Kb",
-		"1170":       "1.14Kb",
-		"72125099":   "68.78Mb",
-		"3276537856": "3.05Gb",
-		"27":         "27.00B",
-		"93735736":   "89.39Mb",
-		"937592":     "915.62Kb",
-		"6715287":    "6.40Mb",
-		"2856906752": "2.66Gb",
-		"7040152":    "6.71Mb",
-		"22016":      "21.50Kb",
+		1170:                    "1.14Kb",
+		72125099:                "68.78Mb",
+		3276537856:              "3.05Gb",
+		27:                      "27.00B",
+		93735736:                "89.39Mb",
+		937592:                  "915.62Kb",
+		6715287:                 "6.40Mb",
+		2856906752:              "2.66Gb",
+		7040152:                 "6.71Mb",
+		22016:                   "21.50Kb",
+		"1170":                  "1.14Kb",
+		"72125099":              "68.78Mb",
+		"3276537856":            "3.05Gb",
+		"27":                    "27.00B",
+		"93735736":              "89.39Mb",
+		"937592":                "915.62Kb",
+		"6715287":               "6.40Mb",
+		"2856906752":            "2.66Gb",
+		"7040152":               "6.71Mb",
+		"22016":                 "21.50Kb",
 		3.40282346638528859811704183484516925440e+38:                                   "288230358971842560.00Yb",
 		"12121212121212121212121212121212121212121211212121212211212121212121.1234e+3": "0.00NaN",
 	}
@@ -1270,6 +1270,9 @@ README.md haven’t contain all the examples. Please refer to the the XXXtest.go
 %26lt%3B%21DOCTYPE+html%26gt%3B%0A%26lt%3Bhtml+lang%3D%26quot%3Ben-us%26quot%3B%26gt%3B%0A%26lt%3Bhead%26gt%3B%0A%26lt%3Bmeta+charset%3D%26quot%3BUTF-8%26quot%3B%26gt%3B%0A%26lt%3Btitle%26gt%3B++++++++++++++++++++++++++++Just%21+a+String+Processing+Library+for+Go-lang%26lt%3B%2Ftitle%26gt%3B%0A%26lt%3Bmeta+name%3D%26quot%3Bviewport%26quot%3B+content%3D%26quot%3Bwidth%3Ddevice-width%2C+initial-scale%3D1%26quot%3B%26gt%3B%0A%26lt%3Bmeta+name%3D%26quot%3Btheme-color%26quot%3B+content%3D%26quot%3B%23157878%26quot%3B%26gt%3B%0A%26lt%3Blink+href%3D%27https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DOpen%2BSans%3A400%2C700%27+rel%3D%27stylesheet%27+type%3D%27text%2Fcss%27%26gt%3B%0A%26lt%3Blink+rel%3D%26quot%3Bstylesheet%26quot%3B+href%3D%26quot%3B%2Fgo-strutil%2Fassets%2Fcss%2Fstyle.css%3Fv%3Ddae229423409070462d2ce364eba3b5721930df0%26quot%3B%26gt%3B%0A%26lt%3B%2Fhead%26gt%3B%0A%26lt%3Bbody%26gt%3B%0A%26lt%3Bsection+class%3D%26quot%3Bpage-header%26quot%3B%26gt%3B%0A%26lt%3Bh1+class%3D%26quot%3Bproject-name%26quot%3B%26gt%3BJust%21+a+String+Processing+Library+for+Go-lang%26lt%3B%2Fh1%26gt%3B%0A%26lt%3Bh2+class%3D%26quot%3Bproject-tagline%26quot%3B%26gt%3BJust+a+few+methods+for+helping+processing+and+validation+the+string%26lt%3B%2Fh2%26gt%3B%0A%26lt%3Ba+href%3D%26quot%3Bhttps%3A%2F%2Fgithub.com%2Ftorden%2Fgo-strutil%26quot%3B+class%3D%26quot%3Bbtn%26quot%3B%26gt%3BView+on+GitHub%26lt%3B%2Fa%26gt%3B%0A%26lt%3B%2Fsection%26gt%3B%0A%26lt%3Bsection+class%3D%26quot%3Bmain-content%26quot%3B%26gt%3B%0A%26lt%3Bh1+id%3D%26quot%3Bjust-a-string-processing-library-for-go-lang%26quot%3B%26gt%3BJust%21+a+String+Processing+Library+for+Go-lang%26lt%3B%2Fh1%26gt%3B%0A%26lt%3Bp%26gt%3BJust+a+few+methods+for+helping+processing+the+string%26lt%3B%2Fp%26gt%3B%0A%26lt%3Bp%26gt%3BREADME.md+haven%26rsquo%3Bt+contain+all+the+examples.+Please+refer+to+the+the+XXXtest.go+files.%26lt%3B%2Fp%26gt%3B%0A%26lt%3B%2Fbody%26gt%3B%0A%26lt%3B%2Fhtml%26gt%3B
 `
 
+	// similar html entity tag
+	str_infinity_loop_test1 := `ABC PERC%NT DEF`
+
 	var retval string
 	var err error
 
@@ -1297,6 +1300,12 @@ README.md haven’t contain all the examples. Please refer to the the XXXtest.go
 	retval, err = strproc.StripTags(str_urlencoded_htmlentity)
 	assert.AssertNil(t, err, "Error : %v", err)
 	assert.AssertEquals(t, retval, str_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
+
+	// check : #77 - infinity loop
+	retval, err = strproc.StripTags(str_infinity_loop_test1)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, str_infinity_loop_test1, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_infinity_loop_test1)
+
 }
 
 func Test_strutils_ConvertToStr(t *testing.T) {
