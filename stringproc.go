@@ -1156,4 +1156,34 @@ func (s *StringProc) closeFd(fd *os.File) {
 	if err != nil {
 		fmt.Printf("Error : %+v\n", err)
 	}
+
+}
+
+// RegExpNamedGroups is Named capturing groups
+// NOTE : Not Support Multiple Groups with The Same Name
+func RegExpNamedGroups(regex *regexp.Regexp, val string) (map[string]string, error) {
+
+	ok := false
+	err := errors.New("not all success patterns were matched")
+
+	retval := map[string]string{}
+	extractSubExpNames := regex.SubexpNames()
+
+	ret := regex.FindStringSubmatch(val)
+	if len(ret) > 0 {
+		for no, val := range ret {
+			if no != 0 && val != "" {
+				if extractSubExpNames[no] != "" {
+					retval[extractSubExpNames[no]] = val
+					ok = true
+				}
+			}
+		}
+	}
+
+	if ok {
+		err = nil
+	}
+
+	return retval, err
 }
