@@ -5,6 +5,8 @@ import (
 	"math"
 	"net/url"
 	"os"
+	"regexp"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -1500,4 +1502,23 @@ func Test_strutils_MD5Hash(t *testing.T) {
 		assert.AssertNil(t, err, "Error : %v", err)
 		assert.AssertEquals(t, retval, v, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
+}
+
+func Test_strutils_RegExpNamedGroups(t *testing.T) {
+
+	t.Parallel()
+
+	var ok bool
+
+	//refer : https://golang.org/doc/devel/release.html#policy
+	var regexGoVersion = regexp.MustCompile(`go(?P<major>([0-9]{1,3}))\.(?P<minor>([0-9]{1,3}))(\.(?P<rev>([0-9]{1,3})))?`)
+
+	verdic, err := strproc.RegExpNamedGroups(regexGoVersion, runtime.Version())
+	assert.AssertNil(t, err, "Error : %v", err)
+
+	_, ok = verdic["major"]
+	assert.AssertTrue(t, ok, "Not Exists Major ver. in Return Value")
+
+	_, ok = verdic["minor"]
+	assert.AssertTrue(t, ok, "Not Exists Minor ver. in Return Value")
 }

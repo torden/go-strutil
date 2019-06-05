@@ -1160,8 +1160,8 @@ func (s *StringProc) closeFd(fd *os.File) {
 }
 
 // RegExpNamedGroups is Named capturing groups
-// NOTE : Not Support Multiple Groups with The Same Name
-func RegExpNamedGroups(regex *regexp.Regexp, val string) (map[string]string, error) {
+// NOTE : Not Support the Multiple Groups with The Same Name
+func (s *StringProc) RegExpNamedGroups(regex *regexp.Regexp, val string) (map[string]string, error) {
 
 	ok := false
 	err := errors.New("not all success patterns were matched")
