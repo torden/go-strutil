@@ -8,3 +8,4 @@
 *.report
 report/
 vendor/
+tt.go
