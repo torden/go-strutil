@@ -39,6 +39,7 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
     - [ReverseUnicode](#reverseunicode)
     - [FileMD5Hash](#filemd5hash)
     - [MD5Hash](#md5hash)
+    - [RegExpNamedGroups](#RegExpNamedGroups)
   - [Validation Methods](#validation-methods)
     - [IsValidEmail](#isvalidemail)
     - [IsValidDomain](#isvaliddomain)
@@ -782,6 +783,35 @@ The above example will output:
 781e5e245d69b566979b86e28d23f2c7
 7ac66c0f148de9519b8bd264312c4d64
 15f764f21d09b11102eb015fc8824d00
+```
+
+
+### RegExpNamedGroups
+
+RegExpNamedGroups is Captures the text matched by regex into the group name
+
+```go
+func (s *StringProc) RegExpNamedGroups(regex *regexp.Regexp, val string) (map[string]string, error)
+```
+
+Example:
+
+```go
+strproc := strutils.NewStringProc()
+
+regexGoVersion := regexp.MustCompile(`go(?P<major>([0-9]{1,3}))\.(?P<minor>([0-9]{1,3}))(\.(?P<rev>([0-9]{1,3})))?`)
+retval, err := getGroupMatched(regexGoVersion, runtime.Version())
+if err != nil {
+	return 0, err
+}
+
+fmt.Println(retval)
+```
+
+The above example will output:
+
+```bash
+map[major:1 minor:11 rev:5]
 ```
 
 ----

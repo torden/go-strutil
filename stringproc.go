@@ -1159,7 +1159,7 @@ func (s *StringProc) closeFd(fd *os.File) {
 
 }
 
-// RegExpNamedGroups is Named capturing groups
+// RegExpNamedGroups is Captures the text matched by regex into the group name
 // NOTE : Not Support the Multiple Groups with The Same Name
 func (s *StringProc) RegExpNamedGroups(regex *regexp.Regexp, val string) (map[string]string, error) {
 
