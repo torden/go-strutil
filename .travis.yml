@@ -21,6 +21,8 @@ before_install:
 
 before_script:
     - go fmt ./...
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
 script:
     - make test
     - make coveralls
