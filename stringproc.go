@@ -912,6 +912,11 @@ func (s *StringProc) DecodeURLEncoded(val string) (string, error) {
 	l := len(val)
 	for i := 0; i < l; i++ {
 
+		if l <= i+1 { // panic: runtime error: index out of range
+			tmpret = append(tmpret, val[i])
+			break
+		}
+
 		// 37 = %, 117 = u (UnicodeEntity)
 		if val[i] == 37 && val[i+1] != 117 && l >= i+3 && s.isHex(val[i+1]) && s.isHex(val[i+2]) {
 

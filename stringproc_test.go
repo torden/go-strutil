@@ -1275,6 +1275,11 @@ README.md haven’t contain all the examples. Please refer to the the XXXtest.go
 	// similar html entity tag
 	str_infinity_loop_test1 := `ABC PERC%NT DEF`
 
+	//fb url encoded
+	str_fb_urlencoded := `https://m.facebook.com/story.php?story_fbid=2566258156763959&id=636551103068017&ref=page_internal&_ft_=mf_story_key.2566258156763959%3Atop_level_post_id.2566258156763959%3Atl_objid.2566258156763959%3Acontent_owner_id_new.636551103068017%3Athrowback_story_fbid.2566258156763959%3Apage_id.636551103068017%3Aphoto_attachments_list.%5B2566257123430729%2C2566257250097383%2C2566257386764036%2C2566257496764025%5D%3Astory_location.4%3Astory_attachment_style.album%3Apage_insights.%7B%22636551103068017%22%3A%7B%22page_id%22%3A636551103068017%2C%22actor_id%`
+
+	str_fb_urlencoded_ok := `https://m.facebook.com/story.php?story_fbid=2566258156763959&id=636551103068017&ref=page_internal&_ft_=mf_story_key.2566258156763959:top_level_post_id.2566258156763959:tl_objid.2566258156763959:content_owner_id_new.636551103068017:throwback_story_fbid.2566258156763959:page_id.636551103068017:photo_attachments_list.[2566257123430729,2566257250097383,2566257386764036,2566257496764025]:story_location.4:story_attachment_style.album:page_insights.{"636551103068017":{"page_id":636551103068017,"actor_id%`
+
 	var retval string
 	var err error
 
@@ -1307,6 +1312,11 @@ README.md haven’t contain all the examples. Please refer to the the XXXtest.go
 	retval, err = strproc.StripTags(str_infinity_loop_test1)
 	assert.AssertNil(t, err, "Error : %v", err)
 	assert.AssertEquals(t, retval, str_infinity_loop_test1, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_infinity_loop_test1)
+
+	// check : singular point
+	retval, err = strproc.StripTags(str_fb_urlencoded)
+	assert.AssertNil(t, err, "Error : %v", err)
+	assert.AssertEquals(t, retval, str_fb_urlencoded_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_fb_urlencoded_ok)
 
 }
 
