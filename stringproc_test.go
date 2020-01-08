@@ -539,6 +539,7 @@ func Test_strutils_HumanFileSize(t *testing.T) {
 		time.Sleep(time.Nanosecond * 10)
 		err := os.Remove(tmpFilePath)
 		assert.AssertLog(t, err, "lost file : %s but it's OK", tmpFilePath)
+		return // fix: panic: Log in goroutine after Test_strutils_HumanFileSize has completed
 
 	}()
 	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseDouble)
@@ -547,7 +548,7 @@ func Test_strutils_HumanFileSize(t *testing.T) {
 	defer func(t *testing.T) {
 		err := os.Remove(tmpFilePath)
 		assert.AssertLog(t, err, "lost file : %s but it's OK", tmpFilePath)
-
+		return // fix: panic: Log in goroutine after Test_strutils_HumanFileSize has completed
 	}(t)
 
 	//check : isDir
