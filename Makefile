@@ -68,7 +68,6 @@ else
 	@$(CMD_GO) get github.com/davecgh/go-spew/spew
 	@$(CMD_GO) get github.com/k0kubun/pp
 	@$(CMD_GO) get github.com/mattn/goveralls
-	@$(CMD_GO) get golang.org/x/tools/cmd/cover
 	@$(CMD_GO) get github.com/modocache/gover
 	@$(CMD_GO) get github.com/dustin/go-humanize
 	@$(CMD_GO) get golang.org/x/lint/golint
