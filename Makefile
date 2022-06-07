@@ -64,7 +64,6 @@ ifeq ($(GOMOD_SUPPORT),1)
 	@$(CMD_GO) mod verify
 else
 	@$(CMD_GO) get github.com/Masterminds/glide
-	@$(CMD_GO) get github.com/Songmu/make2help/cmd/make2help
 	@$(CMD_GO) get github.com/davecgh/go-spew/spew
 	@$(CMD_GO) get github.com/k0kubun/pp
 	@$(CMD_GO) get github.com/mattn/goveralls
@@ -172,6 +171,7 @@ endif
 
 ## Show Help
 help::
+	@$(CMD_GO) get github.com/Songmu/make2help/cmd/make2help
 	@$(CMD_MAKE2HELP) $(MAKEFILE_LIST)
 
 ## Clean-up
