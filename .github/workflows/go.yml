@@ -1,0 +1,46 @@
+name: go-strutil
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+       symbol-list: [1.18.4, 1.17.15, 1.16.15, 1.15.15, 1.14.15, 1.13.15, 1.12.15, 1.11.15, 1.10.15, 1.9.15, 1.8.15, 1.7.15, 1.6.15, 1.5.15, 1.4.15]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    # Setup Go
+    - name: $
+      uses: actions/setup-go@v2
+      with:
+        go-version: '$'
+    
+    # Install all the dependencies
+    - name: Install dependencies
+      run: |
+        go version
+        go get github.com/mattn/goveralls
+        go get golang.org/x/tools/cmd/cover
+        go get github.com/mattn/goveralls
+        go get github.com/modocache/gover
+        go get github.com/dustin/go-humanize
+        go get get github.com/k0kubun/pp
+        go get github.com/awalterschulze/gographviz
+        
+    # Run build of the application
+    - name: Run build
+      run: go build . 
+      
+    # Run vet & lint on the code
+    - name: Run vet & lint
+      run: |
+        go vet .
+        golint .
+    
+    # Run testing on the code
+    - name: Run testing
+      run: |
+        go test -v -test.parallel 4 -race -run Test_strutils_Assert*
