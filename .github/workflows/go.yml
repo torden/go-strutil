@@ -1,5 +1,7 @@
 name: go-strutil
 on:
+  schedule:
+    - cron:  '*/15 * * * *'    # At every 15th minute
   push:
   pull_request:
 
