@@ -47,7 +47,7 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
       - uses: actions/checkout@v3
-      - run: go test -v -coverprofile=profile.cov -test.parallel 4 -race -run Test_strutils_Assert* 
+      - run: go test -v -coverprofile=profile.cov -test.parallel 4 -race
 
       - name: Send coverage
         uses: shogo82148/actions-goveralls@v1
