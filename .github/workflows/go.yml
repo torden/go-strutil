@@ -26,6 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         go version
+        go get get github.com/Masterminds/glide
         go get github.com/mattn/goveralls
         go get golang.org/x/tools/cmd/cover
         go get github.com/mattn/goveralls
@@ -39,10 +40,9 @@ jobs:
       run: go build . 
       
     # Run vet & lint on the code
-    - name: Run vet & lint
+    - name: Run vet
       run: |
         go vet .
-        golint .
     
     # Run testing on the code
     - name: Run testing
