@@ -4,7 +4,7 @@ Just Several methods for helping processing/handling the string in Go (go-lang)
 
 README.md haven't contain all the examples. Please refer to the the XXXtest.go files.
 
-[![Build Status](https://travis-ci.org/torden/go-strutil.svg?branch=master)](https://travis-ci.org/torden/go-strutil)
+[![Build Status]([https://travis-ci.org/torden/go-strutil.svg?branch=master](https://github.com/torden/go-strutil/actions/workflows/go.yml/badge.svg))]([https://travis-ci.org/torden/go-strutil](https://github.com/torden/go-strutil/actions))
 [![Go Report Card](https://goreportcard.com/badge/github.com/torden/go-strutil)](https://goreportcard.com/report/github.com/torden/go-strutil)
 [![GoDoc](https://godoc.org/github.com/torden/go-strutil?status.svg)](https://godoc.org/github.com/torden/go-strutil)
 [![codecov](https://codecov.io/gh/torden/go-strutil/branch/master/graph/badge.svg)](https://codecov.io/gh/torden/go-strutil)
