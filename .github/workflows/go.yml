@@ -18,7 +18,7 @@ jobs:
     - name: $
       uses: actions/setup-go@v2
       with:
-        go-version: '$'
+        go-version: $
     
     # Install all the dependencies
     - name: Install dependencies
