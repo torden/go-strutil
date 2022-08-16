@@ -35,11 +35,6 @@ jobs:
     - name: Run vet
       run: |
         find . -type f \( -iname "*.go" ! -iname "*test.go" \) | xargs go vet
-    
-    # Run testing on the code
-    - name: Run testing
-      run: |
-        go test -v -test.parallel 4 -race -run Test_strutils_Assert* 
 
   test:
     runs-on: ubuntu-latest
@@ -52,7 +47,7 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
       - uses: actions/checkout@v3
-      - run: go test -v -coverprofile=profile.cov ./...
+      - run: go test -v -coverprofile=profile.cov -test.parallel 4 -race -run Test_strutils_Assert* 
 
       - name: Send coverage
         uses: shogo82148/actions-goveralls@v1
