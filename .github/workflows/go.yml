@@ -42,6 +42,7 @@ jobs:
     - name: Run vet
       run: |
         go vet .
+        find . -type f \( -iname "*.go" ! -iname "*test.go" \) | xargs go vet
     
     # Run testing on the code
     - name: Run testing
