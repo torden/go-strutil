@@ -26,7 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         go version
-        go get get github.com/Masterminds/glide
+        go get github.com/Masterminds/glide
         go get github.com/mattn/goveralls
         go get golang.org/x/tools/cmd/cover
         go get github.com/mattn/goveralls
