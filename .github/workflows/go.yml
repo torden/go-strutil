@@ -52,7 +52,7 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
       - uses: actions/checkout@v3
-      - run: go test -v -coverprofile=profile.cov -test.parallel 4 -race
+      - run: go test -v -coverprofile=profile.cov
 
       - name: Send coverage
         uses: shogo82148/actions-goveralls@v1
