@@ -1,6 +1,4 @@
 name: go-strutil
-env:
-  GO_VER_LIST: ['1.19', '1.18', '1.17', '1.16', '1.15', '1.14']
 on:
   schedule:
     - cron:  '*/15 * * * *'    # At every 15th minute
@@ -11,7 +9,7 @@ jobs:
   build:
     strategy:
       matrix:
-       go: $GO_VER_LIST
+       go: ['1.19', '1.18', '1.17', '1.16', '1.15', '1.14']
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -53,7 +51,7 @@ jobs:
   golangci:
     strategy:
       matrix:
-        go: $GO_VER_LIST
+        go: ['1.19', '1.18', '1.17', '1.16', '1.15', '1.14']
         os: [ubuntu-latest, macos-latest, windows-latest]
     name: lint
     runs-on: ${{ matrix.os }}
