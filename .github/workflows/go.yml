@@ -4,7 +4,7 @@ jobs:
   build_and_test:
     strategy:
       matrix:
-       go: ['1.19', '1.18', '1.17', '1.16', '1.15', '1.14']
+       go: ['1.17', '1.16', '1.15', '1.14']
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -40,15 +40,35 @@ jobs:
     - name: Run testing
       run: |
         go test -v -test.parallel 4 -race -run Test_strutils_Assert* 
-        go test -v -coverprofile=profile.cov
 
-    - name: Coveralls Parallel
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.github_token }}
-        path-to-profile: profile.cov
-        parallel: true
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ['1.19','1.18', 1.17', '1.16', '1.15', '1.14']
+    steps:
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+      - uses: actions/checkout@v3
+      - run: go test -v -coverprofile=profile.cov ./...
 
+      - name: Send coverage
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          path-to-profile: profile.cov
+          flag-name: Go-${{ matrix.go }}
+          parallel: true
+
+  # notifies that all test jobs are finished.
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shogo82148/actions-goveralls@v1
+        with:
+          parallel-finished: true
 
   # golangci:
   #   strategy:
