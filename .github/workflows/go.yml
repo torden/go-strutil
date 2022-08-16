@@ -9,17 +9,18 @@ jobs:
   build:
     strategy:
       matrix:
-       symbol-list: [1.19.0, 1.18.0, 1.17.0, 1.16.0, 1.15.0, 1.14.0]
+       go: ['1.19', '1.18', '1.17', '1.16', '1.15', '1.14']
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     
     # Setup Go
-    - name: $
+    - name: Go v${{ matrix.go }} 
       uses: actions/setup-go@v2
       with:
-        go-version: '>=$'
+        go-version: ${{ matrix.go }} 
         check-latest: true
+        cache: true
     
     # Install all the dependencies
     - name: Install dependencies
