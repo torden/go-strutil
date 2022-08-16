@@ -1,7 +1,7 @@
 name: go-strutil
 on: ["push", "pull_request"]
 jobs:
-  build:
+  build_and_test:
     strategy:
       matrix:
        go: ['1.19', '1.18', '1.17', '1.16', '1.15', '1.14']
@@ -39,12 +39,14 @@ jobs:
     # Run testing on the code
     - name: Run testing
       run: |
-        go test -v -test.parallel 4 -race -run Test_strutils_Assert*
+        go test -v -test.parallel 4 -race -run Test_strutils_Assert* 
+        go test -v -coverprofile=profile.cov
 
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.github_token }}
+        path-to-profile: profile.cov
         parallel: true
 
 
