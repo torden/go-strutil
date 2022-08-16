@@ -31,7 +31,7 @@ jobs:
         go get github.com/mattn/goveralls
         go get github.com/modocache/gover
         go get github.com/dustin/go-humanize
-        go get get github.com/k0kubun/pp
+        go get github.com/k0kubun/pp
         go get github.com/awalterschulze/gographviz
         
     # Run build of the application
