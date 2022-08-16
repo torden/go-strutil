@@ -38,10 +38,9 @@ jobs:
     - name: Run build
       run: go build . 
       
-    # Run vet & lint on the code
+    # Run vet
     - name: Run vet
       run: |
-        go vet .
         find . -type f \( -iname "*.go" ! -iname "*test.go" \) | xargs go vet
     
     # Run testing on the code
