@@ -36,10 +36,10 @@ jobs:
       run: |
         find . -type f \( -iname "*.go" ! -iname "*test.go" \) | xargs go vet
 
-    - name: Run test
-      run: |
-        go test -v -test.parallel 4 -race -run Test_strutils_Assert*
-        go test -tags unittest -v -test.parallel 4 -race
+#    - name: Run test
+#      run: |
+#        go test -v -test.parallel 4 -race -run Test_strutils_Assert*
+#        go test -tags unittest -v -test.parallel 4 -race
 
   test:
     runs-on: ubuntu-latest
