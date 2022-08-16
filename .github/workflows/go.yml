@@ -46,7 +46,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        go: ['1.19','1.18', 1.17', '1.16', '1.15', '1.14']
+        go: ['1.19','1.18', '1.17', '1.16', '1.15', '1.14']
     steps:
       - uses: actions/setup-go@v3
         with:
