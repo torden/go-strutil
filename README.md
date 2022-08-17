@@ -10,6 +10,8 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
 [![codecov](https://codecov.io/gh/torden/go-strutil/branch/master/graph/badge.svg?token=tyG0IJBH11)](https://codecov.io/gh/torden/go-strutil)
 [![Coverage Status](https://coveralls.io/repos/github/torden/go-strutil/badge.svg?branch=master)](https://coveralls.io/github/torden/go-strutil?branch=master)
 [![GitHub version](https://badge.fury.io/gh/torden%2Fgo-strutil.svg)](https://badge.fury.io/gh/torden%2Fgo-strutil)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 ## Table of Contents
 
