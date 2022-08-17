@@ -52,14 +52,16 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
       - uses: actions/checkout@v3
-      - run: go test -v -coverprofile=profile.cov
+      - run: |
+          go test -v -coverprofile=coverage.txt  -covermode=atomic
 
-      - name: Send coverage
-        uses: shogo82148/actions-goveralls@v1
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v1.0.2
         with:
-          path-to-profile: profile.cov
-          flag-name: Go-${{ matrix.go }}
-          parallel: true
+          token: b532fd17-cdea-46b6-a52a-cf1a8bf325c1
+          file: ./coverage.txt
+          flags: unittests
+          name: go-strutil
 
   # notifies that all test jobs are finished.
   finish:
