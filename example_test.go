@@ -68,7 +68,7 @@ func Example_strutils_WordWrapAround() {
 	// The quick*brown fox*jumped*over the*lazy*dog.
 }
 
-func Example_strutils_NumberFmt() {
+func Example_strutils_NumberFmt_number() {
 	strproc := strutils.NewStringProc()
 
 	var retval string
@@ -76,106 +76,232 @@ func Example_strutils_NumberFmt() {
 	retval, _ = strproc.NumberFmt(123456789101112)
 	fmt.Println(retval)
 	// Output: 123,456,789,101,112
+}
+
+func Example_strutils_NumberFmt_float() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt(123456.1234)
 	fmt.Println(retval)
-	// 123,456.1234
+	// Output: 123,456.1234
+}
+
+func Example_strutils_NumberFmt_negative_number() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt(-123456.1234)
 	fmt.Println(retval)
-	//-123,456.1234
+	// Output: -123,456.1234
+}
+
+func Example_strutils_NumberFmt_long_float() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt(1.1234561e+06)
 	fmt.Println(retval)
-	// 1.1234561e+06
+	// Output: 1.1234561e+06
+}
+
+func Example_strutils_NumberFmt_float2() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt(1234.1234)
 	fmt.Println(retval)
-	// 1,234.1234
+	// Output: 1,234.1234
+}
+
+func Example_strutils_NumberFmt_float3() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt(12345.1234)
 	fmt.Println(retval)
-	// 12,345.1234
+	// Output: 12,345.1234
+}
+
+func Example_strutils_NumberFmt_negative_float() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt(-1.1234561e+06)
 	fmt.Println(retval)
-	//-1.1234561e+06
+	// Output: -1.1234561e+06
+}
+
+func Example_strutils_NumberFmt_negative_float2() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt(-12345.16)
 	fmt.Println(retval)
-	//-12,345.16
+	// Output: -12,345.16
+}
+
+func Example_strutils_NumberFmt_float4() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt(12345.16)
 	fmt.Println(retval)
-	// 12,345.16
+	// Output: 12,345.16
+}
+
+func Example_strutils_NumberFmt_number2() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt(1234)
 	fmt.Println(retval)
-	// 1,234
+	// Output: 1,234
+}
+
+func Example_strutils_NumberFmt_float5() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt(12.12123098123)
 	fmt.Println(retval)
-	// 12.12123098123
+	// Output: 12.12123098123
+}
+
+func Example_strutils_NumberFmt_float6() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt(1.212e+24)
 	fmt.Println(retval)
-	// 1.212e+24
+	// Output: 1.212e+24
+}
+
+func Example_strutils_NumberFmt_number3() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt(123456789)
 	fmt.Println(retval)
-	// 123,456,789
+	// Output: 123,456,789
+}
+
+func Example_strutils_NumberFmt_string_number() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("123456789101112")
 	fmt.Println(retval)
-	// 123,456,789,101,112
+	// Output: 123,456,789,101,112
+}
+
+func Example_strutils_NumberFmt_string_float() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("123456.1234")
 	fmt.Println(retval)
-	// 123,456.1234
+	// Output: 123,456.1234
+}
+
+func Example_strutils_NumberFmt_string_negative_float() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("-123456.1234")
 	fmt.Println(retval)
-	//-123,456.1234
+	// Output: -123,456.1234
+}
+
+func Example_strutils_NumberFmt_string_float2() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("1.1234561e+06")
 	fmt.Println(retval)
-	// 1.1234561e+06
+	// Output: 1.1234561e+06
+}
+
+func Example_strutils_NumberFmt_string_float3() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("1234.1234")
 	fmt.Println(retval)
-	// 1,234.1234
+	// Output: 1,234.1234
+}
+
+func Example_strutils_NumberFmt_string_float4() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("12345.1234")
 	fmt.Println(retval)
-	// 12,345.1234
+	// Output: 12,345.1234
+}
+
+func Example_strutils_NumberFmt_string_negative_float2() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("-1.1234561e+06")
 	fmt.Println(retval)
-	//-1.1234561e+06
+	// Output: -1.1234561e+06
+}
+
+func Example_strutils_NumberFmt_string_negative_float3() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("-12345.16")
 	fmt.Println(retval)
-	//-12,345.16
+	// Output: -12,345.16
+}
+
+func Example_strutils_NumberFmt_string_float5() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("12345.16")
 	fmt.Println(retval)
-	// 12,345.16
+	// Output: 12,345.16
+
+}
+
+func Example_strutils_NumberFmt_string_number2() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("1234")
 	fmt.Println(retval)
-	// 1,234
+	// Output: 1,234
+}
+
+func Example_strutils_NumberFmt_string_float6() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("12.12123098123")
 	fmt.Println(retval)
-	// 12.12123098123
+	// Output: 12.12123098123
+}
+
+func Example_strutils_NumberFmt_string_float7() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("1.212e+24")
 	fmt.Println(retval)
-	// 1.212e+24
+	// Output: 1.212e+24
+}
+
+func Example_strutils_NumberFmt_string_number3() {
+	strproc := strutils.NewStringProc()
+	var retval string
 
 	retval, _ = strproc.NumberFmt("123456789")
 	fmt.Println(retval)
-	// 123,456,789
+	// Output: 123,456,789
 }
 
 func Example_strutils_PaddingBoth() {
@@ -320,9 +446,14 @@ func Example_strutils_AnyCompare() {
 	retval, err = strproc.AnyCompare(testComplexMap1, testComplexMap2)
 	fmt.Println("Return : ", retval)
 	fmt.Println("Error : ", err)
-
 	// Output: Return :  false
 	// Error :  Different Value : (obj1[F][name][first] := 1) != (obj2[F][name][first] := 11)
+}
+
+func Example_strutils_AnyCompare2() {
+
+	var retval bool
+	var err error
 
 	testSliceInt1 := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	testSliceInt2 := []int{1, 2, 3, 4, 5, 6, 7, 8, 8}
@@ -332,6 +463,12 @@ func Example_strutils_AnyCompare() {
 	fmt.Println("Error : ", err)
 	// Return :  false
 	// Error :  Different Value : (obj1[8] := 9) != (obj2[8] := 8)
+}
+
+func Example_strutils_AnyCompare3() {
+
+	var retval bool
+	var err error
 
 	testSliceStr1 := []string{"a", "b", "c"}
 	testSliceNotStr1 := []int{1, 2, 3, 4, 5, 6, 7, 8, 8}
@@ -339,7 +476,6 @@ func Example_strutils_AnyCompare() {
 	retval, err = strproc.AnyCompare(testSliceStr1, testSliceNotStr1)
 	fmt.Println("Return : ", retval)
 	fmt.Println("Error : ", err)
-
 	// Return :  false
 	// Error :  Not Compare type, obj1.([a b c]) != obj2.([1 2 3 4 5 6 7 8 8])
 }
