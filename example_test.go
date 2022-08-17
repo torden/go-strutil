@@ -5,11 +5,10 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/torden/go-strutil"
+	strutils "github.com/torden/go-strutil"
 )
 
 func Example_strutils_AddSlashes() {
-
 	strproc := strutils.NewStringProc()
 	example_str := `a\bcdefgz`
 	fmt.Println(strproc.AddSlashes(example_str))
@@ -17,7 +16,6 @@ func Example_strutils_AddSlashes() {
 }
 
 func Example_strutils_StripSlashes() {
-
 	strproc := strutils.NewStringProc()
 	example_str := "a\\bcdefgz"
 	fmt.Println(strproc.StripSlashes(example_str))
@@ -25,7 +23,6 @@ func Example_strutils_StripSlashes() {
 }
 
 func Example_strutils_Nl2Br() {
-
 	strproc := strutils.NewStringProc()
 	example_str := "abc\ndefgh"
 	fmt.Println(strproc.Nl2Br(example_str))
@@ -33,7 +30,6 @@ func Example_strutils_Nl2Br() {
 }
 
 func Example_strutils_WordWrapSimple() {
-
 	strproc := strutils.NewStringProc()
 	example_str := "The quick brown fox jumped over the lazy dog."
 
@@ -49,7 +45,6 @@ func Example_strutils_WordWrapSimple() {
 }
 
 func Example_strutils_WordWrapAround() {
-
 	strproc := strutils.NewStringProc()
 	example_str := "The quick brown fox jumped over the lazy dog."
 
@@ -74,7 +69,6 @@ func Example_strutils_WordWrapAround() {
 }
 
 func Example_strutils_NumberFmt() {
-
 	strproc := strutils.NewStringProc()
 
 	var retval string
@@ -85,7 +79,7 @@ func Example_strutils_NumberFmt() {
 
 	retval, _ = strproc.NumberFmt(123456.1234)
 	fmt.Println(retval)
-	//123,456.1234
+	// 123,456.1234
 
 	retval, _ = strproc.NumberFmt(-123456.1234)
 	fmt.Println(retval)
@@ -93,15 +87,15 @@ func Example_strutils_NumberFmt() {
 
 	retval, _ = strproc.NumberFmt(1.1234561e+06)
 	fmt.Println(retval)
-	//1.1234561e+06
+	// 1.1234561e+06
 
 	retval, _ = strproc.NumberFmt(1234.1234)
 	fmt.Println(retval)
-	//1,234.1234
+	// 1,234.1234
 
 	retval, _ = strproc.NumberFmt(12345.1234)
 	fmt.Println(retval)
-	//12,345.1234
+	// 12,345.1234
 
 	retval, _ = strproc.NumberFmt(-1.1234561e+06)
 	fmt.Println(retval)
@@ -113,31 +107,31 @@ func Example_strutils_NumberFmt() {
 
 	retval, _ = strproc.NumberFmt(12345.16)
 	fmt.Println(retval)
-	//12,345.16
+	// 12,345.16
 
 	retval, _ = strproc.NumberFmt(1234)
 	fmt.Println(retval)
-	//1,234
+	// 1,234
 
 	retval, _ = strproc.NumberFmt(12.12123098123)
 	fmt.Println(retval)
-	//12.12123098123
+	// 12.12123098123
 
 	retval, _ = strproc.NumberFmt(1.212e+24)
 	fmt.Println(retval)
-	//1.212e+24
+	// 1.212e+24
 
 	retval, _ = strproc.NumberFmt(123456789)
 	fmt.Println(retval)
-	//123,456,789
+	// 123,456,789
 
 	retval, _ = strproc.NumberFmt("123456789101112")
 	fmt.Println(retval)
-	//123,456,789,101,112
+	// 123,456,789,101,112
 
 	retval, _ = strproc.NumberFmt("123456.1234")
 	fmt.Println(retval)
-	//123,456.1234
+	// 123,456.1234
 
 	retval, _ = strproc.NumberFmt("-123456.1234")
 	fmt.Println(retval)
@@ -145,15 +139,15 @@ func Example_strutils_NumberFmt() {
 
 	retval, _ = strproc.NumberFmt("1.1234561e+06")
 	fmt.Println(retval)
-	//1.1234561e+06
+	// 1.1234561e+06
 
 	retval, _ = strproc.NumberFmt("1234.1234")
 	fmt.Println(retval)
-	//1,234.1234
+	// 1,234.1234
 
 	retval, _ = strproc.NumberFmt("12345.1234")
 	fmt.Println(retval)
-	//12,345.1234
+	// 12,345.1234
 
 	retval, _ = strproc.NumberFmt("-1.1234561e+06")
 	fmt.Println(retval)
@@ -165,28 +159,26 @@ func Example_strutils_NumberFmt() {
 
 	retval, _ = strproc.NumberFmt("12345.16")
 	fmt.Println(retval)
-	//12,345.16
+	// 12,345.16
 
 	retval, _ = strproc.NumberFmt("1234")
 	fmt.Println(retval)
-	//1,234
+	// 1,234
 
 	retval, _ = strproc.NumberFmt("12.12123098123")
 	fmt.Println(retval)
-	//12.12123098123
+	// 12.12123098123
 
 	retval, _ = strproc.NumberFmt("1.212e+24")
 	fmt.Println(retval)
-	//1.212e+24
+	// 1.212e+24
 
 	retval, _ = strproc.NumberFmt("123456789")
 	fmt.Println(retval)
-	//123,456,789
-
+	// 123,456,789
 }
 
 func Example_strutils_PaddingBoth() {
-
 	strproc := strutils.NewStringProc()
 	example_str := "Life isn't always what one like."
 
@@ -198,7 +190,6 @@ func Example_strutils_PaddingBoth() {
 }
 
 func Example_strutils_PaddingLeft() {
-
 	strproc := strutils.NewStringProc()
 	example_str := "Life isn't always what one like."
 
@@ -210,7 +201,6 @@ func Example_strutils_PaddingLeft() {
 }
 
 func Example_strutils_PaddingRight() {
-
 	strproc := strutils.NewStringProc()
 	example_str := "Life isn't always what one like."
 
@@ -222,7 +212,6 @@ func Example_strutils_PaddingRight() {
 }
 
 func Example_strutils_LowerCaseFirstWords() {
-
 	strproc := strutils.NewStringProc()
 	example_str := "LIFE ISN'T ALWAYS WHAT ONE LIKE."
 	fmt.Printf("%v\n", strproc.LowerCaseFirstWords(example_str))
@@ -230,7 +219,6 @@ func Example_strutils_LowerCaseFirstWords() {
 }
 
 func Example_strutils_UpperCaseFirstWords() {
-
 	strproc := strutils.NewStringProc()
 	example_str := "life isn't always what one like."
 	fmt.Printf("%v\n", strproc.UpperCaseFirstWords(example_str))
@@ -238,7 +226,6 @@ func Example_strutils_UpperCaseFirstWords() {
 }
 
 func Example_strutils_SwapCaseFirstWords() {
-
 	strproc := strutils.NewStringProc()
 	example_str := "O SAY, CAN YOU SEE, BY THE DAWN’S EARLY LIGHT,"
 	fmt.Printf("%v\n", strproc.UpperCaseFirstWords(example_str))
@@ -246,7 +233,6 @@ func Example_strutils_SwapCaseFirstWords() {
 }
 
 func Example_strutils_HumanByteSize() {
-
 	strproc := strutils.NewStringProc()
 	example_str := 3276537856
 	retval, err := strproc.HumanByteSize(example_str, 2, strutils.CamelCaseLong)
@@ -259,12 +245,11 @@ func Example_strutils_HumanByteSize() {
 }
 
 func Example_strutils_HumanFileSize() {
-
 	const tmpFilePath = "./filesizecheck.touch"
 	var retval string
 	var err error
 
-	//generating a touch file
+	// generating a touch file
 	tmpdata := []byte("123456789")
 
 	err = ioutil.WriteFile(tmpFilePath, tmpdata, 0750)
@@ -294,11 +279,9 @@ func Example_strutils_HumanFileSize() {
 
 	// Output: 9.00Byte
 	// 9.00B
-
 }
 
 func Example_strutils_AnyCompare() {
-
 	strproc := strutils.NewStringProc()
 
 	testComplexMap1 := map[string]map[string]map[string]int{
@@ -362,7 +345,6 @@ func Example_strutils_AnyCompare() {
 }
 
 func Example_strutils_IsValidEmail() {
-
 	strvalidator := strutils.NewStringValidator()
 	example_str := "a@golang.org"
 	fmt.Printf("%v\n", strvalidator.IsValidEmail(example_str))
@@ -370,34 +352,27 @@ func Example_strutils_IsValidEmail() {
 }
 
 func Example_strutils_IsValidDomain() {
-
 	strvalidator := strutils.NewStringValidator()
 	example_str := "golang.org"
 	fmt.Printf("%v\n", strvalidator.IsValidDomain(example_str))
 	// Output: true
-
 }
 
 func Example_strutils_IsValidURL() {
-
 	strvalidator := strutils.NewStringValidator()
 	example_str := "https://www.google.co.kr/url?sa=t&rct=j&q=&esrc=s&source=web"
 	fmt.Printf("%v\n", strvalidator.IsValidURL(example_str))
 	// Output: true
-
 }
 
 func Example_strutils_IsValidMACAddr() {
-
 	strvalidator := strutils.NewStringValidator()
 	example_str := "02-f3-71-eb-9e-4b"
 	fmt.Printf("%v\n", strvalidator.IsValidMACAddr(example_str))
 	// Output: true
-
 }
 
 func Example_strutils_IsValidIPAddr() {
-
 	strvalidator := strutils.NewStringValidator()
 	example_str := "2001:470:1f09:495::3:217.126.185.21"
 	retval, err := strvalidator.IsValidIPAddr(example_str, strutils.IPv4MappedIPv6, strutils.IPv4)
@@ -410,7 +385,6 @@ func Example_strutils_IsValidIPAddr() {
 }
 
 func Example_strutils_IsValidFilePath() {
-
 	strvalidator := strutils.NewStringValidator()
 	example_str := "a-1-s-d-v-we-wd_+qwd-qwd-qwd.txt"
 	fmt.Printf("%v\n", strvalidator.IsValidFilePath(example_str))
@@ -418,7 +392,6 @@ func Example_strutils_IsValidFilePath() {
 }
 
 func Example_strutils_IsValidFilePathWithRelativePath() {
-
 	strvalidator := strutils.NewStringValidator()
 	example_str := "/asdasd/asdasdasd/qwdqwd_qwdqwd/12-12/a-1-e-r-t-_1_21234_d_1234_qwed_1423_.txt"
 	fmt.Printf("%v\n", strvalidator.IsValidFilePathWithRelativePath(example_str))
@@ -426,7 +399,6 @@ func Example_strutils_IsValidFilePathWithRelativePath() {
 }
 
 func Example_strutils_IsPureTextStrict() {
-
 	strvalidator := strutils.NewStringValidator()
 	example_str := `abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</a>qwdoijqwdoiqjd`
 	retval, err := strvalidator.IsPureTextStrict(example_str)
@@ -439,7 +411,6 @@ func Example_strutils_IsPureTextStrict() {
 }
 
 func Example_strutils_IsPureTextNormal() {
-
 	strvalidator := strutils.NewStringValidator()
 	example_str := `Foo<script type="text/javascript">alert(1337)</script>Bar`
 	retval, err := strvalidator.IsPureTextNormal(example_str)
@@ -453,7 +424,6 @@ func Example_strutils_IsPureTextNormal() {
 }
 
 func Example_strutils_StripTags() {
-
 	strproc := strutils.NewStringProc()
 	example_str := `
 <!DOCTYPE html>
@@ -486,16 +456,15 @@ func Example_strutils_StripTags() {
 	fmt.Println(retval)
 
 	// 	Output :Just! a String Processing Library for Go-lang
-	//Just! a String Processing Library for Go-lang
-	//Just a few methods for helping processing and validation the string
-	//View on GitHub
-	//Just! a String Processing Library for Go-lang
-	//Just a few methods for helping processing the string
-	//README.md haven’t contain all the examples. Please refer to the the XXXtest.go files.
+	// Just! a String Processing Library for Go-lang
+	// Just a few methods for helping processing and validation the string
+	// View on GitHub
+	// Just! a String Processing Library for Go-lang
+	// Just a few methods for helping processing the string
+	// README.md haven’t contain all the examples. Please refer to the the XXXtest.go files.
 }
 
 func Example_strutils_ConvertToStr() {
-
 	strproc := strutils.NewStringProc()
 	example_val := uint64(1234567)
 	retval, err := strproc.ConvertToStr(example_val)
@@ -508,7 +477,6 @@ func Example_strutils_ConvertToStr() {
 }
 
 func Example_strutils_ReverseStr() {
-
 	dataset := []string{
 		"0123456789",
 		"가나다라마바사",
@@ -522,13 +490,12 @@ func Example_strutils_ReverseStr() {
 	}
 
 	// Output : 9876543210
-	//사바마라다나가
-	//おえういあ
-	//荒洪宙宇黃玄地天
+	// 사바마라다나가
+	// おえういあ
+	// 荒洪宙宇黃玄地天
 }
 
 func Example_strutils_ReverseNormalStr() {
-
 	dataset := []string{
 		"0123456789",
 		"abcdefg",
@@ -540,11 +507,10 @@ func Example_strutils_ReverseNormalStr() {
 	}
 
 	// Output : 9876543210
-	//gfedcba
+	// gfedcba
 }
 
 func Example_strutils_ReverseReverseUnicode() {
-
 	dataset := []string{
 		"0123456789",
 		"가나다라마바사",
@@ -558,9 +524,9 @@ func Example_strutils_ReverseReverseUnicode() {
 	}
 
 	// Output : 9876543210
-	//사바마라다나가
-	//おえういあ
-	//荒洪宙宇黃玄地天
+	// 사바마라다나가
+	// おえういあ
+	// 荒洪宙宇黃玄地天
 }
 
 func Example_strutils_FileMD5Hash() {
@@ -577,7 +543,6 @@ func Example_strutils_FileMD5Hash() {
 }
 
 func Example_strutils_MD5Hash() {
-
 	dataset := []string{
 		"0123456789",
 		"abcdefg",
@@ -586,7 +551,7 @@ func Example_strutils_MD5Hash() {
 
 	strproc := strutils.NewStringProc()
 
-	//check : common
+	// check : common
 	for _, v := range dataset {
 		retval, err := strproc.MD5Hash(v)
 		if err != nil {
@@ -599,5 +564,4 @@ func Example_strutils_MD5Hash() {
 	// Output : 781e5e245d69b566979b86e28d23f2c7
 	// 7ac66c0f148de9519b8bd264312c4d64
 	// 15f764f21d09b11102eb015fc8824d00
-
 }

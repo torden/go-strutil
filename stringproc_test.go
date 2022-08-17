@@ -15,7 +15,6 @@ import (
 )
 
 func Test_strutils_AddSlashes(t *testing.T) {
-
 	t.Parallel()
 	assert.TurnOnUnitTestMode()
 
@@ -28,7 +27,7 @@ func Test_strutils_AddSlashes(t *testing.T) {
 		`a\\bcdefgz`: `a\\bcdefgz`,
 	}
 
-	//check : common
+	// check : common
 	var retval string
 
 	for k, v := range dataset {
@@ -38,7 +37,6 @@ func Test_strutils_AddSlashes(t *testing.T) {
 }
 
 func Test_strutils_StripSlashes(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[string]string{
@@ -50,7 +48,7 @@ func Test_strutils_StripSlashes(t *testing.T) {
 		`a\\\\bcdefgz`: `a\\bcdefgz`,
 	}
 
-	//check : common
+	// check : common
 	var retval string
 
 	for k, v := range dataset {
@@ -60,7 +58,6 @@ func Test_strutils_StripSlashes(t *testing.T) {
 }
 
 func Test_strutils_Nl2Br(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[string]string{
@@ -76,7 +73,7 @@ func Test_strutils_Nl2Br(t *testing.T) {
 		"abcdefgh\n\r": "abcdefgh<br />",
 	}
 
-	//check : common
+	// check : common
 	var retval string
 	for k, v := range dataset {
 		retval = strproc.Nl2Br(k)
@@ -85,7 +82,6 @@ func Test_strutils_Nl2Br(t *testing.T) {
 }
 
 func Test_strutils_Br2Nl(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[string]string{
@@ -120,7 +116,7 @@ func Test_strutils_Br2Nl(t *testing.T) {
 		"world peace!!<a href='http://www.president.go.kr/'><br />abcde</a><br>fgh": "world peace!!<a href='http://www.president.go.kr/'>\nabcde</a>\nfgh",
 	}
 
-	//check : common
+	// check : common
 	var retval string
 	for k, v := range dataset {
 		retval = strproc.Br2Nl(k)
@@ -136,7 +132,6 @@ type wordwrapTestVal struct {
 }
 
 func Test_strutils_WordWrapSimple(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := make(map[int]wordwrapTestVal)
@@ -171,20 +166,19 @@ func Test_strutils_WordWrapSimple(t *testing.T) {
 	dataset[23] = wordwrapTestVal{`A very long woooooooooooooooooord. and something`, 8, `_+_+_+_+_+_+_+_+_+_+_+_+`, `A very long_+_+_+_+_+_+_+_+_+_+_+_+woooooooooooooooooord._+_+_+_+_+_+_+_+_+_+_+_+and something`}
 	dataset[24] = wordwrapTestVal{`가 나 다 라 마 바 사 아 자 차 카 타 파 하`, 8, `_+_+_+_+_+_+_+_+_+_+_+_+`, `가 나 다_+_+_+_+_+_+_+_+_+_+_+_+라 마 바_+_+_+_+_+_+_+_+_+_+_+_+사 아 자_+_+_+_+_+_+_+_+_+_+_+_+차 카 타_+_+_+_+_+_+_+_+_+_+_+_+파 하`}
 
-	//check : common
+	// check : common
 	for _, v := range dataset {
 
 		retval, _ := strproc.WordWrapSimple(v.str, v.wd, v.breakstr)
 		assert.AssertEquals(t, v.okstr, retval, "Original Value : %v\nReturn Value mismatch.\nExpected: %v\nActual: %v", v.str, retval, v)
 	}
 
-	//check : wd = 0
+	// check : wd = 0
 	_, err := strproc.WordWrapSimple("test", 0, "1234")
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `wd at least 1`")
 }
 
 func Test_strutils_WordWrapAround(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := make(map[int]wordwrapTestVal)
@@ -219,7 +213,7 @@ func Test_strutils_WordWrapAround(t *testing.T) {
 	dataset[23] = wordwrapTestVal{`A very long woooooooooooooooooord. and something`, 8, `_+_+_+_+_+_+_+_+_+_+_+_+`, `A very long_+_+_+_+_+_+_+_+_+_+_+_+woooooooooooooooooord._+_+_+_+_+_+_+_+_+_+_+_+and_+_+_+_+_+_+_+_+_+_+_+_+something`}
 	dataset[24] = wordwrapTestVal{`가 나 다 라 마 바 사 아 자 차 카 타 파 하`, 8, `_+_+_+_+_+_+_+_+_+_+_+_+`, `가 나 다_+_+_+_+_+_+_+_+_+_+_+_+라 마_+_+_+_+_+_+_+_+_+_+_+_+바 사_+_+_+_+_+_+_+_+_+_+_+_+아 자_+_+_+_+_+_+_+_+_+_+_+_+차 카_+_+_+_+_+_+_+_+_+_+_+_+타 파_+_+_+_+_+_+_+_+_+_+_+_+하`}
 
-	//check : common
+	// check : common
 	for _, v := range dataset {
 
 		retval, _ := strproc.WordWrapAround(v.str, v.wd, v.breakstr)
@@ -228,21 +222,20 @@ func Test_strutils_WordWrapAround(t *testing.T) {
 
 	var err error
 
-	//check : wd = 0
+	// check : wd = 0
 	_, err = strproc.WordWrapAround("test", 0, "1234")
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `wd at least 1`")
 
-	//check : lastspc = 1
+	// check : lastspc = 1
 	_, err = strproc.WordWrapAround("ttttttt tttttttttt", 2, "1111")
 	assert.AssertNil(t, err, "Failure : Couldn't check the `lastspc = 1`")
 
-	//check : except
+	// check : except
 	_, err = strproc.WordWrapAround("t t", 1, "*")
 	assert.AssertNil(t, err, "Failure : Couldn't check the `specific except`")
 }
 
 func Test_strutils_NumbertFmt(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[interface{}]string{
@@ -276,14 +269,14 @@ func Test_strutils_NumbertFmt(t *testing.T) {
 		uint64(math.MaxUint64):   "18,446,744,073,709,551,615",
 		float32(math.MaxFloat32): "3.4028235e+38",
 		float64(math.MaxFloat64): "1.7976931348623157e+308",
-		//BUG(r) :
-		//int8(math.MinInt8):       "-128",
-		//float32(math.SmallestNonzeroFloat32): "1e-45",
-		//float64(math.SmallestNonzeroFloat64): "5e-324",
+		// BUG(r) :
+		// int8(math.MinInt8):       "-128",
+		// float32(math.SmallestNonzeroFloat32): "1e-45",
+		// float64(math.SmallestNonzeroFloat64): "5e-324",
 
 	}
 
-	//check : common
+	// check : common
 	for k, v := range dataset {
 		retval, err := strproc.NumberFmt(k)
 
@@ -293,26 +286,25 @@ func Test_strutils_NumbertFmt(t *testing.T) {
 
 	var err error
 
-	//check : ParseFloat
+	// check : ParseFloat
 	_, err = strproc.NumberFmt("12.11111111111111111111111111111111111111111111111111111111111e12e12e1p029ekj12e")
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Not Support strconv.ParseFloat`")
 
-	//check : not support obj
+	// check : not support obj
 	_, err = strproc.NumberFmt(complex128(123))
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj`")
 
-	//check : not support obj
+	// check : not support obj
 	_, err = strproc.NumberFmt(complex64(123))
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj`")
 
-	//check : not support obj
+	// check : not support obj
 	_, err = strproc.NumberFmt(true)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj`")
 
-	//check : not support numric string
+	// check : not support numric string
 	_, err = strproc.NumberFmt("1234===121212")
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj`")
-
 }
 
 type paddingTestVal struct {
@@ -324,7 +316,6 @@ type paddingTestVal struct {
 }
 
 func Test_strutils_Padding(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := make(map[int]paddingTestVal)
@@ -343,21 +334,20 @@ func Test_strutils_Padding(t *testing.T) {
 	dataset[10] = paddingTestVal{"가나다라마바사아자차카타파하", "*-=", strutils.PadLeft, 47, "*-=*-가나다라마바사아자차카타파하"}
 	dataset[11] = paddingTestVal{"가나다라마바사아자차카타파하", "*-=", strutils.PadRight, 47, "가나다라마바사아자차카타파하*-=*-"}
 
-	//check : common
+	// check : common
 	for _, v := range dataset {
 
 		retval := strproc.Padding(v.str, v.fill, v.m, v.mx)
 		assert.AssertEquals(t, v.okstr, retval, "Original Value : %v\nReturn Value mismatch.\nExpected: %v\nActual: %v", v.str, retval, v.okstr)
 	}
 
-	//check : mx >= byteStrLen
+	// check : mx >= byteStrLen
 	testStr := "test"
 	retval := strproc.Padding(testStr, "*", strutils.PadBoth, 1)
 	assert.AssertEquals(t, testStr, retval, "Failure : Couldn't check the `mx >= byteStrLen`")
 }
 
 func Test_strutils_UppercaseFirstWords(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[string]string{
@@ -372,7 +362,7 @@ func Test_strutils_UppercaseFirstWords(t *testing.T) {
 		"가나다 라 마 바사아brownd 가나":                                              "가나다 라 마 바사아brownd 가나",
 	}
 
-	//check : common
+	// check : common
 	for k, v := range dataset {
 		retval := strproc.UpperCaseFirstWords(k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
@@ -380,7 +370,6 @@ func Test_strutils_UppercaseFirstWords(t *testing.T) {
 }
 
 func Test_strutils_LowercaseFirstWords(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[string]string{
@@ -395,7 +384,7 @@ func Test_strutils_LowercaseFirstWords(t *testing.T) {
 		"가나다 라 마 바사아BROWND 가나":                                              "가나다 라 마 바사아BROWND 가나",
 	}
 
-	//check : common
+	// check : common
 	for k, v := range dataset {
 		retval := strproc.LowerCaseFirstWords(k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
@@ -403,7 +392,6 @@ func Test_strutils_LowercaseFirstWords(t *testing.T) {
 }
 
 func Test_strutils_SwapCaseFirstWords(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[string]string{
@@ -435,7 +423,7 @@ func Test_strutils_SwapCaseFirstWords(t *testing.T) {
 		"가나다 라 마 바사아BROWND 가나":                                              "가나다 라 마 바사아BROWND 가나",
 	}
 
-	//check : common
+	// check : common
 	for k, v := range dataset {
 		retval := strproc.SwapCaseFirstWords(k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
@@ -443,7 +431,6 @@ func Test_strutils_SwapCaseFirstWords(t *testing.T) {
 }
 
 func Test_strutils_HumanByteSize(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[interface{}]string{
@@ -472,7 +459,7 @@ func Test_strutils_HumanByteSize(t *testing.T) {
 		"12121212121212121212121212121212121212121211212121212211212121212121.1234e+3": "0.00NaN",
 	}
 
-	//check : common
+	// check : common
 	for k, v := range dataset {
 		retval, err := strproc.HumanByteSize(k, 2, strutils.CamelCaseDouble)
 
@@ -482,29 +469,28 @@ func Test_strutils_HumanByteSize(t *testing.T) {
 
 	var err error
 
-	//check : unit < UpperCaseSingle || unit > CamelCaseLong
+	// check : unit < UpperCaseSingle || unit > CamelCaseLong
 	_, err = strproc.HumanByteSize(`1234`, 2, 123)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `retval, err := strproc.HumanByteSize(k, 2, strutils.CamelCaseDouble)`")
 
-	//check : numberToString
+	// check : numberToString
 	_, err = strproc.HumanByteSize(`abc`, 2, strutils.UpperCaseDouble)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `can't convert number to string`")
 
-	//check : ParseFloat
+	// check : ParseFloat
 	_, err = strproc.HumanByteSize("100.7976931348623157e+308", 2, strutils.UpperCaseDouble)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `strconv.ParseFloat(strNum, 64)`")
 
-	//check : Complex64
+	// check : Complex64
 	_, err = strproc.HumanByteSize(complex64(13), 2, strutils.UpperCaseDouble)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj.(complex128)`")
 
-	//check : Complex128
+	// check : Complex128
 	_, err = strproc.HumanByteSize(complex128(2+3i), 2, strutils.UpperCaseDouble)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `not support obj.(complex128)`")
 }
 
 func Test_strutils_HumanFileSize(t *testing.T) {
-
 	t.Parallel()
 
 	const tmpFilePath = "./filesizecheck.touch"
@@ -513,7 +499,7 @@ func Test_strutils_HumanFileSize(t *testing.T) {
 	var retval string
 	var err error
 
-	//generating a touch file
+	// generating a touch file
 	tmpdata := []byte(strings.Repeat("*", 1024*1024*13))
 	err = ioutil.WriteFile(tmpFilePath, tmpdata, 0750)
 	assert.AssertNil(t, err, "Error : ", err)
@@ -527,20 +513,20 @@ func Test_strutils_HumanFileSize(t *testing.T) {
 		strutils.CamelCaseDouble: "13.00Mb",
 	}
 
-	//check : common
+	// check : common
 	for k, v := range dataset {
 		retval, err = strproc.HumanFileSize(tmpFilePath, 2, k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 		assert.AssertNil(t, err, "Error : %v", err)
 	}
 
-	//check : lost file description
+	// check : lost file description
 	go func() {
+		defer func() { recover() }()
 		time.Sleep(time.Nanosecond * 10)
 		err := os.Remove(tmpFilePath)
 		assert.AssertLog(t, err, "lost file : %s but it's OK", tmpFilePath)
-		return // fix: panic: Log in goroutine after Test_strutils_HumanFileSize has completed
-
+		return
 	}()
 	_, err = strproc.HumanFileSize(tmpFilePath, 2, strutils.CamelCaseDouble)
 	assert.AssertLog(t, err, "PASS")
@@ -548,27 +534,26 @@ func Test_strutils_HumanFileSize(t *testing.T) {
 	defer func(t *testing.T) {
 		err := os.Remove(tmpFilePath)
 		assert.AssertLog(t, err, "lost file : %s but it's OK", tmpFilePath)
-		return // fix: panic: Log in goroutine after Test_strutils_HumanFileSize has completed
+		return
 	}(t)
 
-	//check : isDir
+	// check : isDir
 	err = os.MkdirAll(tmpPath, 0777)
 	assert.AssertNil(t, err, "Failure : Couldn't Mkdir %q: %s", tmpPath, err)
 
 	_, err = strproc.HumanFileSize(tmpPath, 2, strutils.CamelCaseDouble)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `stat.IsDir()`")
 
-	//check : os.Open
+	// check : os.Open
 	_, err = strproc.HumanFileSize("/hello_word_txt", 2, strutils.CamelCaseDouble)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `os.Open()`")
 
-	//check : not support obj.(complex128)
+	// check : not support obj.(complex128)
 	_, err = strproc.HumanByteSize(complex128(1+3i), 2, strutils.CamelCaseLong)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Not Support obj.(complex129)`")
 }
 
 func Test_strutils_AnyCompare(t *testing.T) {
-
 	t.Parallel()
 
 	var retval bool
@@ -915,49 +900,49 @@ func Test_strutils_AnyCompare(t *testing.T) {
 	retval, _ = strproc.AnyCompare(testComplexMap1, testComplexMap2)
 	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
-	//check : uint in map
+	// check : uint in map
 	testMDepthUint1 := map[string]map[string]uint{"H": {"name": 1, "state": 2}}
 	testMDepthUint2 := map[string]map[string]uint{"H": {"name": 1, "state": 3}}
 	retval, _ = strproc.AnyCompare(testMDepthUint1, testMDepthUint2)
 	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
-	//check : float in map
+	// check : float in map
 	testMDepthFloat1 := map[string]map[string]float64{"H": {"name": 1, "state": 2}}
 	testMDepthFloat2 := map[string]map[string]float64{"H": {"name": 1, "state": 3}}
 	retval, _ = strproc.AnyCompare(testMDepthFloat1, testMDepthFloat2)
 	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
-	//check : complex in map
+	// check : complex in map
 	testMDepthComplex1 := map[string]map[string]complex64{"H": {"name": 1, "state": 2}}
 	testMDepthComplex2 := map[string]map[string]complex64{"H": {"name": 1, "state": 3}}
 	retval, _ = strproc.AnyCompare(testMDepthComplex1, testMDepthComplex2)
 	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
-	//check : different type
+	// check : different type
 	testDiffType1 := int(32)
 	testDiffType2 := int64(32)
 	_, err = strproc.AnyCompare(testDiffType1, testDiffType2)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Different Type`\nError : %v", err)
 
-	//check : different len
+	// check : different len
 	testDiffLen1 := []int{1, 2, 3, 4, 5, 6, 7}
 	testDiffLen2 := []int{1, 2, 3}
 	_, err = strproc.AnyCompare(testDiffLen1, testDiffLen2)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Different Len`\nError : %v", err)
 
-	//check : different len
+	// check : different len
 	testDiffMapLen1 := map[int]string{0: "A", 1: "B", 2: "C"}
 	testDiffMapLen2 := map[int]string{0: "A", 1: "B"}
 	_, err = strproc.AnyCompare(testDiffMapLen1, testDiffMapLen2)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `Different Len`\nError : %v", err)
 
-	//check : not support compre
+	// check : not support compre
 	testDiffNotSupport1 := paddingTestVal{}
 	testDiffNotSupport2 := paddingTestVal{}
 	_, err = strproc.AnyCompare(testDiffNotSupport1, testDiffNotSupport2)
 	assert.AssertNil(t, err, "Failure : Couldn't check the `Not Support Compre`\nError : %v", err)
 
-	//check : sting != string
+	// check : sting != string
 	testDiffrentStringMap1 := map[string]map[string]map[string]string{
 		"F": {
 			"name": {
@@ -979,7 +964,7 @@ func Test_strutils_AnyCompare(t *testing.T) {
 	retval, _ = strproc.AnyCompare(testDiffrentStringMap1, testDiffrentStringMap2)
 	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
-	//check : uint != uint
+	// check : uint != uint
 	testDiffrentUintMap1 := map[string]map[string]map[string]uint{
 		"F": {
 			"name": {
@@ -1001,7 +986,7 @@ func Test_strutils_AnyCompare(t *testing.T) {
 	retval, _ = strproc.AnyCompare(testDiffrentUintMap1, testDiffrentUintMap2)
 	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
-	//check : float64 != float64
+	// check : float64 != float64
 	testDiffrentFloatMap1 := map[string]map[string]map[string]float64{
 		"F": {
 			"name": {
@@ -1023,7 +1008,7 @@ func Test_strutils_AnyCompare(t *testing.T) {
 	retval, _ = strproc.AnyCompare(testDiffrentFloatMap1, testDiffrentFloatMap2)
 	assert.AssertFalse(t, retval, "Couldn't make an accurate comparison.")
 
-	//check : complex64 != complex64
+	// check : complex64 != complex64
 	testDiffrentComplexMap1 := map[string]map[string]map[string]complex64{
 		"F": {
 			"name": {
@@ -1057,7 +1042,6 @@ func Test_strutils_AnyCompare(t *testing.T) {
 }
 
 func Test_strutils_DecodeUnicodeEntities(t *testing.T) {
-
 	t.Parallel()
 
 	str_oneline_ok := `안녕하세요.  방갑습니다.  감사합니다.  おはようございます こんにちは． こんばんは． おやすみなさい． ありがとうございます 你好 再見 谢谢!สวัสดีครับ แล้วเจอกันครับ ขอบคุณครับ Сайн байнауу`
@@ -1092,7 +1076,6 @@ func Test_strutils_DecodeUnicodeEntities(t *testing.T) {
 }
 
 func Test_strutils_DecodeURLEncoded(t *testing.T) {
-
 	t.Parallel()
 
 	url_ok := "https://www.google.com/search?source=hp&ei=ChM0W462AYbs8wXAwIaQCw&q=대한민국&oq=대한민국&gs_l=psy-ab.3..0i131k1l3j0l7.930.2247.0.2376.12.11.0.0.0.0.116.955.10j1.11.0....0...1.1j4.64.psy-ab..2.10.874.0...0.2DIo94YBWPI"
@@ -1193,11 +1176,9 @@ func Test_strutils_DecodeURLEncoded(t *testing.T) {
 	valid_ok, err = url.QueryUnescape(tmpW3schoolsAsciiEncodingReferenceFromUTF8)
 	assert.AssertNil(t, err, "Error : %v", err)
 	assert.AssertEquals(t, retval, valid_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, valid_ok)
-
 }
 
 func Test_strutils_StripTags(t *testing.T) {
-
 	t.Parallel()
 
 	str_ok := `
@@ -1276,7 +1257,7 @@ README.md haven’t contain all the examples. Please refer to the the XXXtest.go
 	// similar html entity tag
 	str_infinity_loop_test1 := `ABC PERC%NT DEF`
 
-	//fb url encoded
+	// fb url encoded
 	str_fb_urlencoded := `https://m.facebook.com/story.php?story_fbid=2566258156763959&id=636551103068017&ref=page_internal&_ft_=mf_story_key.2566258156763959%3Atop_level_post_id.2566258156763959%3Atl_objid.2566258156763959%3Acontent_owner_id_new.636551103068017%3Athrowback_story_fbid.2566258156763959%3Apage_id.636551103068017%3Aphoto_attachments_list.%5B2566257123430729%2C2566257250097383%2C2566257386764036%2C2566257496764025%5D%3Astory_location.4%3Astory_attachment_style.album%3Apage_insights.%7B%22636551103068017%22%3A%7B%22page_id%22%3A636551103068017%2C%22actor_id%`
 
 	str_fb_urlencoded_ok := `https://m.facebook.com/story.php?story_fbid=2566258156763959&id=636551103068017&ref=page_internal&_ft_=mf_story_key.2566258156763959:top_level_post_id.2566258156763959:tl_objid.2566258156763959:content_owner_id_new.636551103068017:throwback_story_fbid.2566258156763959:page_id.636551103068017:photo_attachments_list.[2566257123430729,2566257250097383,2566257386764036,2566257496764025]:story_location.4:story_attachment_style.album:page_insights.{"636551103068017":{"page_id":636551103068017,"actor_id%`
@@ -1318,11 +1299,9 @@ README.md haven’t contain all the examples. Please refer to the the XXXtest.go
 	retval, err = strproc.StripTags(str_fb_urlencoded)
 	assert.AssertNil(t, err, "Error : %v", err)
 	assert.AssertEquals(t, retval, str_fb_urlencoded_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_fb_urlencoded_ok)
-
 }
 
 func Test_strutils_ConvertToStr(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[interface{}]string{
@@ -1366,7 +1345,7 @@ func Test_strutils_ConvertToStr(t *testing.T) {
 		false: "false",
 	}
 
-	//check : common
+	// check : common
 	for k, v := range dataset {
 		retval, err := strproc.ConvertToStr(k)
 		assert.AssertEquals(t, retval, v, "Return Value mismatch.\nExpected: %v\nActual: %v\nError : %v", retval, v, err)
@@ -1374,7 +1353,6 @@ func Test_strutils_ConvertToStr(t *testing.T) {
 }
 
 func Test_strutils_ConvertToArByte(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[interface{}]string{
@@ -1425,7 +1403,6 @@ func Test_strutils_ConvertToArByte(t *testing.T) {
 }
 
 func Test_strutils_ReverseStr(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[string]string{
@@ -1435,7 +1412,7 @@ func Test_strutils_ReverseStr(t *testing.T) {
 		"天地玄黃宇宙洪荒":   "荒洪宙宇黃玄地天",
 	}
 
-	//check : common
+	// check : common
 	for k, v := range dataset {
 		retval := strproc.ReverseStr(k)
 		assert.AssertEquals(t, retval, v, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
@@ -1443,7 +1420,6 @@ func Test_strutils_ReverseStr(t *testing.T) {
 }
 
 func Test_strutils_ReverseNormalStr(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[string]string{
@@ -1451,7 +1427,7 @@ func Test_strutils_ReverseNormalStr(t *testing.T) {
 		"abcdefg":    "gfedcba",
 	}
 
-	//check : common
+	// check : common
 	for k, v := range dataset {
 		retval := strproc.ReverseNormalStr(k)
 		assert.AssertEquals(t, retval, v, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
@@ -1459,7 +1435,6 @@ func Test_strutils_ReverseNormalStr(t *testing.T) {
 }
 
 func Test_strutils_ReverseReverseUnicode(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[string]string{
@@ -1470,7 +1445,7 @@ func Test_strutils_ReverseReverseUnicode(t *testing.T) {
 		"天地玄黃宇宙洪荒":   "荒洪宙宇黃玄地天",
 	}
 
-	//check : common
+	// check : common
 	for k, v := range dataset {
 		retval := strproc.ReverseUnicode(k)
 		assert.AssertEquals(t, retval, v, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
@@ -1478,26 +1453,24 @@ func Test_strutils_ReverseReverseUnicode(t *testing.T) {
 }
 
 func Test_strutils_FileMD5Hash(t *testing.T) {
-
 	t.Parallel()
 
 	var retval string
 	var err error
 
-	//check : common
+	// check : common
 	retval, err = strproc.FileMD5Hash("./LICENSE")
 	assert.AssertNil(t, err, "Error : %v", err)
 
 	str_ok := "64e17a4e1c96bbfce57ab19cd0153e6a"
 	assert.AssertEquals(t, retval, str_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
 
-	//check : os.Open
+	// check : os.Open
 	_, err = strproc.FileMD5Hash("./HELLO_GOLANG")
 	assert.AssertNotNil(t, err, "Couldn't check the `os.Open`\nError : %v", err)
 }
 
 func Test_strutils_MD5Hash(t *testing.T) {
-
 	t.Parallel()
 
 	dataset := map[string]string{
@@ -1506,7 +1479,7 @@ func Test_strutils_MD5Hash(t *testing.T) {
 		"abcdefgqwdoisef;oijawe;fijq2039jdfs.dnc;oa283hr08uj3o;ijwaef;owhjefo;uhwefwef": "15f764f21d09b11102eb015fc8824d00",
 	}
 
-	//check : common
+	// check : common
 	for k, v := range dataset {
 		retval, err := strproc.MD5Hash(k)
 
@@ -1516,13 +1489,12 @@ func Test_strutils_MD5Hash(t *testing.T) {
 }
 
 func Test_strutils_RegExpNamedGroups(t *testing.T) {
-
 	t.Parallel()
 
 	var ok bool
 
-	//refer : https://golang.org/doc/devel/release.html#policy
-	var regexGoVersion = regexp.MustCompile(`go(?P<major>([0-9]{1,3}))\.(?P<minor>([0-9]{1,3}))(\.(?P<rev>([0-9]{1,3})))?`)
+	// refer : https://golang.org/doc/devel/release.html#policy
+	regexGoVersion := regexp.MustCompile(`go(?P<major>([0-9]{1,3}))\.(?P<minor>([0-9]{1,3}))(\.(?P<rev>([0-9]{1,3})))?`)
 
 	verdic, err := strproc.RegExpNamedGroups(regexGoVersion, runtime.Version())
 	assert.AssertNil(t, err, "Error : %v", err)
