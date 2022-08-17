@@ -36,11 +36,6 @@ jobs:
       run: |
         find . -type f \( -iname "*.go" ! -iname "*test.go" \) | xargs go vet
 
-#    - name: Run test
-#      run: |
-#        go test -v -test.parallel 4 -race -run Test_strutils_Assert*
-#        go test -tags unittest -v -test.parallel 4 -race
-
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -53,7 +48,7 @@ jobs:
           go-version: ${{ matrix.go }}
       - uses: actions/checkout@v3
       - run: |
-          go test -v -coverprofile=coverage.txt  -covermode=atomic
+          go test -v -test.parallel 4 -race -coverprofile=coverage.txt  -covermode=atomic
 
       - name: Upload coverage report
         uses: codecov/codecov-action@v1.0.2
@@ -63,14 +58,6 @@ jobs:
           flags: unittests
           name: go-strutil
 
-  # notifies that all test jobs are finished.
-  finish:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: shogo82148/actions-goveralls@v1
-        with:
-          parallel-finished: true
 
   # golangci:
   #   strategy:
