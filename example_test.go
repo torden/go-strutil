@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/torden/go-strutil"
+	strutils "github.com/torden/go-strutil"
 )
 
 func Example_strutils_AddSlashes() {
