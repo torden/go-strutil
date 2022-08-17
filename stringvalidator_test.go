@@ -7,8 +7,7 @@ import (
 )
 
 func ipaddrTest(t *testing.T, cktype int, dataset map[string]bool, errfmt string) {
-
-	//check : common
+	// check : common
 	for k, v := range dataset {
 		retval, _ := strvalidator.IsValidIPAddr(k, cktype)
 
@@ -18,32 +17,29 @@ func ipaddrTest(t *testing.T, cktype int, dataset map[string]bool, errfmt string
 }
 
 func Test_strutils_IPAddrFalse(t *testing.T) {
-
 	t.Parallel()
 
 	var err error
 
-	//check : wrong IP Addr
+	// check : wrong IP Addr
 	_, err = strvalidator.IsValidIPAddr("A.B.C.D", strutils.IPv4)
 	assert.AssertNotNil(t, err, "Failured : Couldn't check the `wrong IP Addr`")
 
-	//check : wrong options
+	// check : wrong options
 	_, err = strvalidator.IsValidIPAddr("127.0.0.1", 7)
 	assert.AssertNotNil(t, err, "Failured : Couldn't check the `wrong option`")
 
-	//check : getIPType
+	// check : getIPType
 	_, err = strvalidator.IsValidIPAddr(":F", strutils.IPv6CIDR, strutils.IPv6)
 	assert.AssertNotNil(t, err, "Failured : Couldn't check the `wrong IP Addr`")
 
-	//check : getIPType
+	// check : getIPType
 	_, err = strvalidator.IsValidIPAddr("127127127127", strutils.IPv6CIDR, strutils.IPv6)
 	assert.AssertNotNil(t, err, "Failured : Couldn't check the `wrong IP Addr`")
-
 }
 
 func Test_strutils_IPAddr(t *testing.T) {
-
-	//IPv4
+	// IPv4
 	testIpv4Ipaddrs := map[string]bool{
 		"192.168.1.1":     true,
 		"127.0.0.1":       true,
@@ -55,7 +51,7 @@ func Test_strutils_IPAddr(t *testing.T) {
 		"192.192.19.999":  false,
 	}
 
-	//IPv4 with CIDR
+	// IPv4 with CIDR
 	testIpv4WithCidrIpaddrs := map[string]bool{
 		"192.168.1.1/24": true,
 		"127.0.0.1/32":   true,
@@ -69,7 +65,7 @@ func Test_strutils_IPAddr(t *testing.T) {
 		"4.4.4.4/256":    false,
 	}
 
-	//IPv6
+	// IPv6
 	testIpv6Ipaddrs := map[string]bool{
 		"2607:f0d0:1002:51::4":                    true,
 		"2607:f0d0:1002:0051:0000:0000:0000:0004": true,
@@ -89,7 +85,7 @@ func Test_strutils_IPAddr(t *testing.T) {
 		"234:23:23:23:23:23:23":                   false,
 	}
 
-	//IPv6 with CIDR
+	// IPv6 with CIDR
 	testIpv6WithCidrIpaddrs := map[string]bool{
 		"2000::/5":      true,
 		"2000::/15":     true,
@@ -98,7 +94,7 @@ func Test_strutils_IPAddr(t *testing.T) {
 		"fc00::/7":      true,
 	}
 
-	//IPv4-Mapped Embedded IPv6 Address
+	// IPv4-Mapped Embedded IPv6 Address
 	testIpv4MappedIpv6Ipaddrs := map[string]bool{
 		"2001:470:1f09:495::3:217.126.185.215":         true,
 		"2001:470:1f1d:275::1:213.0.69.132":            true,
@@ -113,14 +109,14 @@ func Test_strutils_IPAddr(t *testing.T) {
 		"12.12/12":                                     false,
 	}
 
-	//IPv4-Mapped Embedded IPv6 Address with CIDR
+	// IPv4-Mapped Embedded IPv6 Address with CIDR
 	testIpv4MappedIpv6IpaddrsCIDR := map[string]bool{
 		"2600:9000:5301:b600::1:205.251.193.182/32": true,
 		"2600:9000:5303:900::1:205.251.195.9/32":    true,
 		"0:0:0:0:0:FFFF:222.1.41.90/32":             true,
 	}
 
-	//check : common
+	// check : common
 	ipaddrTest(t, strutils.IPv4, testIpv4Ipaddrs, "invalid (%s) IPv4 address")
 	ipaddrTest(t, strutils.IPv4CIDR, testIpv4WithCidrIpaddrs, "invalid (%s) IPv4 with CIDR address")
 
@@ -132,7 +128,6 @@ func Test_strutils_IPAddr(t *testing.T) {
 }
 
 func Test_strutils_MacAddr(t *testing.T) {
-
 	macaddrList := map[string]bool{
 		"02:f3:71:eb:9e:4b": true,
 		"02-f3-71-eb-9e-4b": true,
@@ -150,19 +145,18 @@ func Test_strutils_MacAddr(t *testing.T) {
 
 	t.Parallel()
 
-	//check : common
+	// check : common
 	for k, v := range macaddrList {
 		retval := strvalidator.IsValidMACAddr(k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
 	}
 
-	//check : return FALSE
+	// check : return FALSE
 	retval := strvalidator.IsValidMACAddr("127.0.0.1")
 	assert.AssertFalse(t, retval, "Failured : Couldn't check the `return false`")
 }
 
 func Test_strutils_Domain(t *testing.T) {
-
 	testDomains := map[string]bool{
 		"대한민국.xn-korea.co.kr":           true,
 		"google.com":                    true,
@@ -218,7 +212,7 @@ func Test_strutils_Domain(t *testing.T) {
 
 	t.Parallel()
 
-	//check : common
+	// check : common
 	for k, v := range testDomains {
 		retval := strvalidator.IsValidDomain(k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
@@ -226,7 +220,6 @@ func Test_strutils_Domain(t *testing.T) {
 }
 
 func Test_strutils_URL(t *testing.T) {
-
 	testUrls := map[string]bool{
 		"https://www.google.co.kr/url?sa=t&rct=j&q=&esrc=s&source=web":                                                         true,
 		"http://stackoverflow.com/questions/27812164/can-i-import-3rd-party-package-into-golang-playground":                    true,
@@ -244,7 +237,7 @@ func Test_strutils_URL(t *testing.T) {
 
 	t.Parallel()
 
-	//check : common
+	// check : common
 	for k, v := range testUrls {
 		retval := strvalidator.IsValidURL(k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, v)
@@ -252,7 +245,6 @@ func Test_strutils_URL(t *testing.T) {
 }
 
 func Test_strutils_PureTextNormal(t *testing.T) {
-
 	testTxts := map[string]bool{
 		`<script ?>qwdpijqwd</script>qd08j123lneqw\t\nqwedojiqwd\rqwdoihjqwd1d[08jaedl;jkqwd\r\nqdolijqdwqwd`:       false,
 		`a\r\nb<script ?>qwdpijqwd</script>qd08j123lneqw\t\nqwedojiqwd\rqwdoihjqwd1d[08jaedl;jkqwd\r\nqdolijqdwqwd`: false,
@@ -292,7 +284,7 @@ func Test_strutils_PureTextNormal(t *testing.T) {
 
 	t.Parallel()
 
-	//check : common
+	// check : common
 	for k, v := range testTxts {
 		retval, _ := strvalidator.IsPureTextNormal(k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nTest Value : %#v\nExpected: %v\nActual: %v", k, retval, v)
@@ -300,7 +292,6 @@ func Test_strutils_PureTextNormal(t *testing.T) {
 }
 
 func Test_strutils_PureTextStrict(t *testing.T) {
-
 	testTxts := map[string]bool{
 		`<script ?>qwdpijqwd</script>qd08j123lneqw\t\nqwedojiqwd\rqwdoihjqwd1d[08jaedl;jkqwd\r\nqdolijqdwqwd`:       false,
 		`a\r\nb<script ?>qwdpijqwd</script>qd08j123lneqw\t\nqwedojiqwd\rqwdoihjqwd1d[08jaedl;jkqwd\r\nqdolijqdwqwd`: false,
@@ -339,16 +330,14 @@ func Test_strutils_PureTextStrict(t *testing.T) {
 
 	t.Parallel()
 
-	//check : common
+	// check : common
 	for k, v := range testTxts {
 		retval, _ := strvalidator.IsPureTextStrict(k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nTest Value : %#v\nExpected: %v\nActual: %v", k, retval, v)
 	}
-
 }
 
 func Test_strutils_FilePathOnlyFilePath(t *testing.T) {
-
 	testFilepaths := map[string]bool{
 		"../../qwdqwdqwd/../qwdqwdqwd.txt": false,
 		`../../qwdqwdqwd/..
@@ -367,7 +356,7 @@ func Test_strutils_FilePathOnlyFilePath(t *testing.T) {
 
 	t.Parallel()
 
-	//check : common
+	// check : common
 	for k, v := range testFilepaths {
 		retval := strvalidator.IsValidFilePath(k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nTest Value : %#v\nExpected: %v\nActual: %v", k, retval, v)
@@ -375,7 +364,6 @@ func Test_strutils_FilePathOnlyFilePath(t *testing.T) {
 }
 
 func Test_strutils_FilePathAllowRelativePath(t *testing.T) {
-
 	testFilepaths := map[string]bool{
 		"../../qwdqwdqwd/../qwdqwdqwd.txt": true,
 		`../../qwdqwdqwd/..
@@ -395,7 +383,7 @@ func Test_strutils_FilePathAllowRelativePath(t *testing.T) {
 
 	t.Parallel()
 
-	//check : common
+	// check : common
 	for k, v := range testFilepaths {
 		retval := strvalidator.IsValidFilePathWithRelativePath(k)
 		assert.AssertEquals(t, v, retval, "Return Value mismatch.\nTest Value : %#v\nExpected: %v\nActual: %v", k, retval, v)
