@@ -176,7 +176,6 @@ func Example_strutils_NumberFmt() {
 	retval, _ = strproc.NumberFmt("123456789")
 	fmt.Println(retval)
 	// 123,456,789
-
 }
 
 func Example_strutils_PaddingBoth() {
