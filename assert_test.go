@@ -6,7 +6,6 @@ import (
 )
 
 func Test_strutils_AssertLog(t *testing.T) {
-
 	assert.TurnOffUnitTestMode()
 
 	assert.AssertLog(t, nil, "test : %s", "hello")
@@ -14,7 +13,6 @@ func Test_strutils_AssertLog(t *testing.T) {
 }
 
 func Test_strutils_AssertEquals(t *testing.T) {
-
 	assert.TurnOffUnitTestMode()
 
 	assert.AssertEquals(t, 1, 1, "hello")
@@ -27,7 +25,6 @@ func Test_strutils_AssertEquals(t *testing.T) {
 }
 
 func Test_strutils_AssertNotEquals(t *testing.T) {
-
 	assert.TurnOffUnitTestMode()
 
 	assert.AssertNotEquals(t, 1, 2, "hello")
@@ -40,7 +37,6 @@ func Test_strutils_AssertNotEquals(t *testing.T) {
 }
 
 func Test_strutils_AssertFalse(t *testing.T) {
-
 	assert.TurnOffUnitTestMode()
 
 	assert.AssertFalse(t, false, "hello")
@@ -48,7 +44,6 @@ func Test_strutils_AssertFalse(t *testing.T) {
 }
 
 func Test_strutils_AssertTrue(t *testing.T) {
-
 	assert.TurnOffUnitTestMode()
 
 	assert.AssertTrue(t, false, "hello")
@@ -56,7 +51,6 @@ func Test_strutils_AssertTrue(t *testing.T) {
 }
 
 func Test_strutils_AssertNil(t *testing.T) {
-
 	assert.TurnOffUnitTestMode()
 
 	assert.AssertNil(t, nil, "hello")
@@ -64,7 +58,6 @@ func Test_strutils_AssertNil(t *testing.T) {
 }
 
 func Test_strutils_AssertNotNil(t *testing.T) {
-
 	assert.TurnOffUnitTestMode()
 
 	assert.AssertNotNil(t, nil, "hello")
@@ -72,7 +65,6 @@ func Test_strutils_AssertNotNil(t *testing.T) {
 }
 
 func Test_strutils_AssertLessThan(t *testing.T) {
-
 	assert.TurnOffUnitTestMode()
 
 	assert.AssertLessThan(t, "a", "a", "hello")
@@ -112,7 +104,6 @@ func Test_strutils_AssertLessThan(t *testing.T) {
 }
 
 func Test_strutils_AssertLessThanEqualTo(t *testing.T) {
-
 	assert.TurnOffUnitTestMode()
 
 	assert.AssertLessThanEqualTo(t, "a", "a", "hello")
@@ -152,7 +143,6 @@ func Test_strutils_AssertLessThanEqualTo(t *testing.T) {
 }
 
 func Test_strutils_AssertGreaterThan(t *testing.T) {
-
 	assert.TurnOffUnitTestMode()
 
 	assert.AssertGreaterThan(t, "a", "a", "hello")
@@ -189,11 +179,9 @@ func Test_strutils_AssertGreaterThan(t *testing.T) {
 	assert.AssertGreaterThan(t, math.Log(-1.0), math.Log(-1.0), "hello")
 	assert.AssertGreaterThan(t, math.Log(-1.0), nil, "hello")
 	assert.AssertGreaterThan(t, math.Log(1.0), nil, "hello")
-
 }
 
 func Test_strutils_AssertGreaterThanEqualTo(t *testing.T) {
-
 	assert.TurnOffUnitTestMode()
 
 	assert.AssertGreaterThanEqualTo(t, 1, 2, "hello")
@@ -229,7 +217,6 @@ func Test_strutils_AssertGreaterThanEqualTo(t *testing.T) {
 }
 
 func Test_strutils_AssertLengthOf(t *testing.T) {
-
 	assert.TurnOffUnitTestMode()
 
 	assert.AssertLengthOf(t, "asdfg456", 8, "hello")
@@ -243,5 +230,4 @@ func Test_strutils_AssertLengthOf(t *testing.T) {
 	}
 
 	assert.AssertLengthOf(t, chans, 9, "hello")
-
 }
