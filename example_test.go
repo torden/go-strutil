@@ -265,7 +265,6 @@ func Example_strutils_NumberFmt_string_float5() {
 	retval, _ = strproc.NumberFmt("12345.16")
 	fmt.Println(retval)
 	// Output: 12,345.16
-
 }
 
 func Example_strutils_NumberFmt_string_number2() {
@@ -451,7 +450,6 @@ func Example_strutils_AnyCompare() {
 }
 
 func Example_strutils_AnyCompare2() {
-
 	var retval bool
 	var err error
 
@@ -466,7 +464,6 @@ func Example_strutils_AnyCompare2() {
 }
 
 func Example_strutils_AnyCompare3() {
-
 	var retval bool
 	var err error
 
