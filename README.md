@@ -9,7 +9,7 @@ README.md haven't contain all the examples. Please refer to the the XXXtest.go f
 [![GoDoc](https://godoc.org/github.com/torden/go-strutil?status.svg)](https://godoc.org/github.com/torden/go-strutil)
 [![codecov](https://codecov.io/gh/torden/go-strutil/branch/master/graph/badge.svg?token=tyG0IJBH11)](https://codecov.io/gh/torden/go-strutil)
 [![Coverage Status](https://coveralls.io/repos/github/torden/go-strutil/badge.svg?branch=master)](https://coveralls.io/github/torden/go-strutil?branch=master)
-[![GitHub version](https://img.shields.io/github/v/release/torden/go-strutil)]
+[![GitHub version](https://img.shields.io/github/v/release/torden/go-strutil)](https://github.com/torden/go-strutil)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
