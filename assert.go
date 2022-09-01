@@ -67,7 +67,7 @@ func (a *Assert) printMsg(t *testing.T, v1 interface{}, v2 interface{}, msgfmt s
 
 /*
 //TODO: will remove below, numericTypeUpCase better than below
-//isCompareableNum asserts the specified objects are can compareble
+//isComparableNum asserts the specified objects are can compareble
 func (a *Assert) isComparableNum(t *testing.T, v1 interface{}, v2 interface{}) bool {
 
 	if !reflect.ValueOf(v1).IsValid() || !reflect.ValueOf(v2).IsValid() {
