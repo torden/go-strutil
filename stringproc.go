@@ -49,19 +49,40 @@ func (s *StringProc) AddSlashes(str string) string {
 
 	for i := 0; i < l; i++ {
 
-		buf = append(buf, str[i])
-
 		switch str[i] {
-		case 92: // Dec : /
+		case 7: // Beep
+			buf = append(buf, 92, 92, 97)
+			continue
+		case 8: // Backspace
+			buf = append(buf, 92, 92, 98)
+			continue
+		case 9: // Horizontal Tab
+			buf = append(buf, 92, 92, 116)
+			continue
+		case 10: // NewLine
+			buf = append(buf, 92, 92, 110)
+			continue
+		case 11: // Vertical Tabulation
+			buf = append(buf, 92, 92, 118)
+			continue
+		case 13: // Carriage Return
+			buf = append(buf, 92, 92, 114)
+			continue
+		case 12: // Formfeed Page Break
+			buf = append(buf, 92, 92, 102)
+			continue
 
+		case 92: // Dec : /
 			if l >= i+1 {
 				buf = append(buf, 92)
-
 				if l > i+1 && str[i+1] == 92 {
 					i++
 				}
 			}
 		}
+
+		buf = append(buf, str[i])
+
 	}
 
 	return string(buf)
