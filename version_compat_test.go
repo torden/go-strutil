@@ -57,10 +57,7 @@ func Test_VersionCompatibility_Legacy(t *testing.T) {
 		}
 
 		// Test padding
-		padded, err := strproc.PaddingBoth("test", " ", 10)
-		if err != nil {
-			t.Errorf("PaddingBoth failed: %v", err)
-		}
+		padded := strproc.PaddingBoth("test", " ", 10)
 		if len(padded) != 10 {
 			t.Errorf("PaddingBoth length mismatch: got %d, expected 10", len(padded))
 		}
