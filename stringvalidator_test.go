@@ -274,12 +274,12 @@ func Test_strutils_PureTextNormal(t *testing.T) {
 		`%E6%8A%8A%E7%99%BE%E5%BA%A6%E8%AE%BE%E4%B8%BA%E4%B8%BB%E9%A1%B5%E5%85%B3%E4%BA%8E%E7%99%BE%E5%BA%A6About%20%20Baidu%E7%99%BE%E5%BA%A6%E6%8E%A8%E5%B9%BF`: true,
 		`abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</>qwdoijqwdoiqjd`:  true,
 		`abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</a>qwdoijqwdoiqjd`: false,
-		"\tq\tq\t\nq": false,
-		"": false,
+		"\tq\tq\t\nq":                        false,
+		"":                                     false,
 		"aaaaaaqwdqwdqwwdqwdqw	qwdqwdqwqdw": false,
 		"AbcEd-=qwdoijqdwoijaaaaaaqwdqwdqwwdqwdqw	qwdqwdqwqdw": false,
-		`<img src="Bar" onerror="alert(123)" />`: false,
-		`<img src="javascript:alert('abc')">`:    false,
+		`<img src="Bar" onerror="alert(123)" />`:                      false,
+		`<img src="javascript:alert('abc')">`:                         false,
 	}
 
 	t.Parallel()
@@ -320,12 +320,12 @@ func Test_strutils_PureTextStrict(t *testing.T) {
 		`%E6%8A%8A%E7%99%BE%E5%BA%A6%E8%AE%BE%E4%B8%BA%E4%B8%BB%E9%A1%B5%E5%85%B3%E4%BA%8E%E7%99%BE%E5%BA%A6About%20%20Baidu%E7%99%BE%E5%BA%A6%E6%8E%A8%E5%B9%BF`: true,
 		`abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</>qwdoijqwdoiqjd`:  true,
 		`abcd/>qwdqwdoijhwer/>qwdojiqwdqwd</a>qwdoijqwdoiqjd`: false,
-		"\tq\tq\t\nq": false,
-		"": false,
+		"\tq\tq\t\nq":                        false,
+		"":                                     false,
 		"aaaaaaqwdqwdqwwdqwdqw	qwdqwdqwqdw": false,
 		"AbcEd-=qwdoijqdwoijaaaaaaqwdqwdqwwdqwdqw	qwdqwdqwqdw": false,
-		`<img src="Bar" onerror="alert(123)" />`: false,
-		`<img src="javascript:alert('abc')">`:    false,
+		`<img src="Bar" onerror="alert(123)" />`:                      false,
+		`<img src="javascript:alert('abc')">`:                         false,
 	}
 
 	t.Parallel()
@@ -342,9 +342,9 @@ func Test_strutils_FilePathOnlyFilePath(t *testing.T) {
 		"../../qwdqwdqwd/../qwdqwdqwd.txt": false,
 		`../../qwdqwdqwd/..
 				        /qwdqwdqwd.txt`: false,
-		"\t../../qwdqwdqwd/../qwdqwdqwd.txt": false,
-		`../../qwdqwdqwd/../qwdqwdqwd.txt`: false,
-		`../../qwdqwdqwd/../qwdqwdqwd.txt`: false,
+		"\t../../qwdqwdqwd/../qwdqwdqwd.txt":       false,
+		`../../qwdqwdqwd/../qwdqwdqwd.txt`:        false,
+		`../../qwdqwdqwd/../qwdqwdqwd.txt`:        false,
 		"../../etc/passwd":                         false,
 		"a.txt;rm -rf /":                           false,
 		"sudo rm -rf ../":                          false,
@@ -368,9 +368,9 @@ func Test_strutils_FilePathAllowRelativePath(t *testing.T) {
 		"../../qwdqwdqwd/../qwdqwdqwd.txt": true,
 		`../../qwdqwdqwd/..
 				        /qwdqwdqwd.txt`: false,
-		"\t../../qwdqwdqwd/../qwdqwdqwd.txt": false,
-		`../../qwdqwdqwd/../qwdqwdqwd.txt`: false,
-		`../../qwdqwdqwd/../qwdqwdqwd.txt`: false,
+		"\t../../qwdqwdqwd/../qwdqwdqwd.txt":       false,
+		`../../qwdqwdqwd/../qwdqwdqwd.txt`:        false,
+		`../../qwdqwdqwd/../qwdqwdqwd.txt`:        false,
 		"../../etc/passwd":                         true,
 		"a.txt;rm -rf /":                           false,
 		"sudo rm -rf ../":                          true,

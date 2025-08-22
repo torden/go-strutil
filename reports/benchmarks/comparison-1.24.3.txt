@@ -1,0 +1,8 @@
+goos: darwin
+goarch: amd64
+pkg: github.com/torden/go-strutil
+cpu: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+BenchmarkBasicPerformance/GenericVsInterface/Generic-12 	 2323226	       517.6 ns/op	      72 B/op	       5 allocs/op
+BenchmarkBasicPerformance/GenericVsInterface/Interface-12         	11063679	       109.6 ns/op	      64 B/op	       4 allocs/op
+PASS
+ok  	github.com/torden/go-strutil	3.360s

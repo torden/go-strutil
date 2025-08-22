@@ -8,13 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    
+
     # Setup Go
-    - name: Go v${{ matrix.go }} 
+    - name: Go v${{ matrix.go }}
       uses: actions/setup-go@v2
       with:
-        go-version: ${{ matrix.go }} 
-    
+        go-version: ${{ matrix.go }}
+
     # Install all the dependencies
     - name: Install dependencies
       run: |
@@ -26,11 +26,11 @@ jobs:
         go get github.com/dustin/go-humanize
         go get github.com/k0kubun/pp
         go get github.com/awalterschulze/gographviz
-        
+
     # Run build of the application
     - name: Run build
-      run: go build . 
-      
+      run: go build .
+
     # Run vet
     - name: Run vet
       run: |

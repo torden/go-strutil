@@ -409,44 +409,18 @@ func Example_strutils_HumanFileSize() {
 func Example_strutils_AnyCompare() {
 	strproc := strutils.NewStringProc()
 
-	testComplexMap1 := map[string]map[string]map[string]int{
-		"F": {
-			"name": {
-				"first": 1,
-				"last":  2,
-			},
-		},
-		"A": {
-			"name": {
-				"first": 11,
-				"last":  21,
-			},
-		},
-	}
-
-	testComplexMap2 := map[string]map[string]map[string]int{
-		"F": {
-			"name": {
-				"first": 11,
-				"last":  12222,
-			},
-		},
-		"A": {
-			"name": {
-				"first": 11,
-				"last":  21,
-			},
-		},
-	}
+	// Use slices instead of maps for deterministic output
+	testSlice1 := []string{"hello", "world", "test"}
+	testSlice2 := []string{"hello", "world", "different"}
 
 	var retval bool
 	var err error
 
-	retval, err = strproc.AnyCompare(testComplexMap1, testComplexMap2)
+	retval, err = strproc.AnyCompare(testSlice1, testSlice2)
 	fmt.Println("Return : ", retval)
 	fmt.Println("Error : ", err)
 	// Output: Return :  false
-	// Error :  Different Value : (obj1[F][name][first] := 1) != (obj2[F][name][first] := 11)
+	// Error :  Different Value : (obj1[2] := test) != (obj2[2] := different)
 }
 
 func Example_strutils_AnyCompare2() {

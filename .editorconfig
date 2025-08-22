@@ -1,0 +1,49 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# All files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = tab
+indent_size = 4
+
+# Go files
+[*.go]
+indent_style = tab
+indent_size = 4
+
+# Makefile
+[Makefile]
+indent_style = tab
+indent_size = 4
+
+# YAML files (for GitHub Actions)
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# JSON files
+[*.json]
+indent_style = space
+indent_size = 2
+
+# Markdown files
+[*.md]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = false
+
+# Shell scripts
+[*.sh]
+indent_style = space
+indent_size = 2
+
+# Configuration files
+[*.{toml,ini}]
+indent_style = space
+indent_size = 2

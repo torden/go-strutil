@@ -1,0 +1,20 @@
+goos: darwin
+goarch: amd64
+pkg: github.com/torden/go-strutil
+cpu: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Benchmark_strutils_ReverseStr-12                          	  912735	      1152 ns/op	    2048 B/op	       2 allocs/op
+Benchmark_strutils_ReverseNormalStr-12                    	 2011201	       612.5 ns/op	    2048 B/op	       2 allocs/op
+Benchmark_strutils_ReverseReverseUnicode-12               	  169058	      7179 ns/op	    5120 B/op	       2 allocs/op
+Benchmark_strutils_ReverseStrSwap-12                      	 1946642	       614.5 ns/op	    2048 B/op	       2 allocs/op
+Benchmark_strutils_Nl2Br-12                               	 1000000	      1053 ns/op	     720 B/op	      29 allocs/op
+Benchmark_strutils_Nl2BrUseStringReplace-12               	 1000000	      1016 ns/op	     184 B/op	       9 allocs/op
+Benchmark_strutils_TestNumbertFmt-12                      	  335082	      3254 ns/op	     765 B/op	      58 allocs/op
+Benchmark_strutils_TestNumbertFmtInt64-12                 	 5258350	       217.1 ns/op	      80 B/op	       4 allocs/op
+Benchmark_strutils_TestNumbertFmtInt64UseHumanUnits-12    	 4356402	       267.7 ns/op	      40 B/op	       6 allocs/op
+BenchmarkBasicPerformance/StringProcessing/AddSlashes-12  	17761916	        67.33 ns/op	      48 B/op	       1 allocs/op
+BenchmarkBasicPerformance/StringProcessing/ReverseStr-12  	29739768	        39.31 ns/op	      16 B/op	       1 allocs/op
+BenchmarkBasicPerformance/StringProcessing/NumberFmt-12   	11233218	       114.5 ns/op	      64 B/op	       4 allocs/op
+BenchmarkBasicPerformance/GenericVsInterface/Generic-12   	 2417239	       498.2 ns/op	      72 B/op	       5 allocs/op
+BenchmarkBasicPerformance/GenericVsInterface/Interface-12 	11274969	       110.6 ns/op	      64 B/op	       4 allocs/op
+PASS
+ok  	github.com/torden/go-strutil	19.335s
