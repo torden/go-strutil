@@ -11,13 +11,7 @@ jobs:
     strategy:
       matrix:
         go-version: ['1.18', '1.19', '1.20', '1.21', '1.22', '1.23']
-        os: [ubuntu-latest, windows-latest]
-        include:
-          # Add macOS for selected versions
-          - go-version: '1.21'
-            os: macos-latest
-          - go-version: '1.23'
-            os: macos-latest
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -82,13 +76,17 @@ jobs:
     strategy:
       matrix:
         go-version: ['1.13', '1.14', '1.15', '1.16', '1.17']
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         exclude:
-          # Exclude very old versions on Windows for stability
+          # Exclude very old versions on Windows and macOS for stability
           - go-version: '1.13'
             os: windows-latest
           - go-version: '1.14'
             os: windows-latest
+          - go-version: '1.13'
+            os: macos-latest
+          - go-version: '1.14'
+            os: macos-latest
     
     runs-on: ${{ matrix.os }}
 
@@ -113,6 +111,9 @@ jobs:
         # Run basic compatibility tests for legacy versions
         if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
           echo "Running Windows legacy tests"
+          go test -run Test_VersionCompatibility_Legacy -short -v ./...
+        elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+          echo "Running macOS legacy tests"
           go test -run Test_VersionCompatibility_Legacy -short -v ./...
         else
           echo "Running Linux legacy tests"
