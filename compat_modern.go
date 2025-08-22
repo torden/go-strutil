@@ -1,4 +1,5 @@
 //go:build go1.7
+// +build go1.7
 
 package strutils
 
@@ -11,8 +12,8 @@ import (
 // ModernContext aliases the standard context for Go >= 1.7
 type ModernContext = context.Context
 
-// Background returns the standard context.Background for modern Go versions
-func Background() ModernContext {
+// GetBackground returns the standard context.Background for modern Go versions
+func GetBackground() ModernContext {
 	return context.Background()
 }
 

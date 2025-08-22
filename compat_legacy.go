@@ -1,4 +1,5 @@
 //go:build !go1.7
+// +build !go1.7
 
 package strutils
 
@@ -23,8 +24,8 @@ type legacyContext struct {
 	values map[interface{}]interface{}
 }
 
-// Background returns a basic context for legacy Go versions
-func Background() LegacyContext {
+// GetBackground returns a basic context for legacy Go versions
+func GetBackground() LegacyContext {
 	return &legacyContext{
 		done:   make(chan struct{}),
 		values: make(map[interface{}]interface{}),
