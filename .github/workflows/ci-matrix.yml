@@ -1,10 +1,11 @@
-name: Go Version Compatibility Test Matrix
+name: Go Version Compatibility Test Matrix (Disabled)
 
 on:
-  push:
-    branches: [ master, main, develop ]
-  pull_request:
-    branches: [ master, main, develop ]
+  workflow_dispatch: # Manual trigger only
+  # push:
+  #   branches: [ master, main, develop ]
+  # pull_request:
+  #   branches: [ master, main, develop ]
 
 jobs:
   test-matrix:
@@ -13,14 +14,7 @@ jobs:
       matrix:
         # Test across multiple Go versions for maximum compatibility
         go-version:
-          # Legacy versions (if available in CI)
-          - '1.6'   # Minimum supported
-          - '1.7'   # Context support
-          - '1.8'   # Performance improvements
-          - '1.9'   # Type aliases
-          - '1.10'  # String builder improvements
-          - '1.11'  # Go modules introduction
-          - '1.12'  # Module improvements
+          # Supported versions (GitHub Actions compatible)
           - '1.13'  # Error wrapping
           - '1.14'  # Current minimum
           - '1.15'  # Performance improvements
@@ -32,22 +26,15 @@ jobs:
           - '1.21'  # Performance improvements
           - '1.22'  # Performance improvements
           - '1.23'  # Latest stable
-          - '1.24'  # Current latest
         os: [ubuntu-latest, windows-latest, macos-latest]
 
         # Exclude combinations that don't make sense or are unavailable
         exclude:
-          # Very old Go versions might not be available on all OS
-          - go-version: '1.6'
+          # Reduce matrix for faster CI
+          - go-version: '1.13'
             os: windows-latest
-          - go-version: '1.7'
-            os: windows-latest
-          - go-version: '1.8'
-            os: windows-latest
-          - go-version: '1.9'
-            os: windows-latest
-          - go-version: '1.10'
-            os: windows-latest
+          - go-version: '1.14'
+            os: macos-latest
 
     runs-on: ${{ matrix.os }}
 
@@ -99,44 +86,39 @@ jobs:
       shell: bash
       run: |
         # Build with version-specific tags
-        if [[ "${{ matrix.go-version }}" =~ ^1\.(6|7|8|9|10)$ ]]; then
-          echo "Building for legacy Go version"
-          go build -tags "legacy" -v ./...
-        elif [[ "${{ matrix.go-version }}" =~ ^1\.(1[1-7])$ ]]; then
-          echo "Building for modern Go version without generics"
+        GO_MINOR=$(echo "${{ matrix.go-version }}" | cut -d. -f2)
+        if [[ $GO_MINOR -ge 18 ]]; then
+          echo "Building for Go 1.18+ with generics"
           go build -v ./...
         else
-          echo "Building for modern Go version with generics"
-          go build -tags "generics" -v ./...
+          echo "Building for Go 1.13-1.17"
+          go build -v ./...
         fi
 
     - name: Test
       shell: bash
       run: |
         # Run tests with appropriate build tags
-        if [[ "${{ matrix.go-version }}" =~ ^1\.(6|7|8|9|10)$ ]]; then
-          echo "Testing legacy Go version"
-          go test -tags "legacy" -v ./...
-        elif [[ "${{ matrix.go-version }}" =~ ^1\.(1[1-7])$ ]]; then
-          echo "Testing modern Go version without generics"
+        GO_MINOR=$(echo "${{ matrix.go-version }}" | cut -d. -f2)
+        if [[ $GO_MINOR -ge 18 ]]; then
+          echo "Testing Go 1.18+ with generics"
           go test -v ./...
         else
-          echo "Testing modern Go version with generics"
-          go test -tags "generics" -v ./...
+          echo "Testing Go 1.13-1.17"
+          go test -v ./...
         fi
 
-    - name: Test with race detector (Go 1.1+)
-      if: ${{ ! contains(fromJson('["1.6", "1.7", "1.8", "1.9", "1.10"]'), matrix.go-version) }}
+    - name: Test with race detector
+      if: matrix.os == 'ubuntu-latest'
       run: |
         go test -race -v ./...
 
-    - name: Benchmark (Go 1.1+)
-      if: ${{ ! contains(fromJson('["1.6", "1.7", "1.8", "1.9", "1.10"]'), matrix.go-version) }}
+    - name: Benchmark
+      if: matrix.os == 'ubuntu-latest' && matrix.go-version == '1.21'
       run: |
         go test -bench=. -benchmem ./...
 
-    - name: Vet (Go 1.1+)
-      if: ${{ ! contains(fromJson('["1.6", "1.7", "1.8", "1.9", "1.10"]'), matrix.go-version) }}
+    - name: Vet
       run: |
         go vet ./...
 

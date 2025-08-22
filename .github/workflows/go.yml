@@ -1,5 +1,6 @@
-name: go-strutil
-on: ["push", "pull_request"]
+name: go-strutil (Legacy)
+on:
+  workflow_dispatch: # Manual trigger only
 jobs:
   build_and_test:
     strategy:

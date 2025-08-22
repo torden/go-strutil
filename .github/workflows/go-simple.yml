@@ -1,0 +1,103 @@
+name: Go Build and Test
+
+on:
+  push:
+    branches: [ master, main, develop, features/* ]
+  pull_request:
+    branches: [ master, main, develop ]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version: [1.18, 1.19, 1.20, 1.21, 1.22, 1.23]
+        os: [ubuntu-latest]
+        include:
+          # Add Windows and macOS for latest versions only
+          - go-version: 1.21
+            os: windows-latest
+          - go-version: 1.21
+            os: macos-latest
+          - go-version: 1.23
+            os: windows-latest
+          - go-version: 1.23
+            os: macos-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go ${{ matrix.go-version }}
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/go/pkg/mod
+          ~/.cache/go-build
+        key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-${{ matrix.go-version }}-
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Verify dependencies
+      run: go mod verify
+
+    - name: Format check
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        if [ -n "$(gofmt -l .)" ]; then
+          echo "Go code is not formatted:"
+          gofmt -d .
+          exit 1
+        fi
+
+    - name: Vet
+      run: go vet ./...
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
+
+    - name: Test with race detector
+      if: matrix.os == 'ubuntu-latest'
+      run: go test -race -v ./...
+
+    - name: Benchmark
+      if: matrix.os == 'ubuntu-latest' && matrix.go-version == '1.21'
+      run: go test -bench=. -benchmem ./...
+
+  build-legacy:
+    # Test legacy Go versions with reduced scope
+    strategy:
+      matrix:
+        go-version: [1.13, 1.14, 1.15, 1.16, 1.17]
+    
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go ${{ matrix.go-version }}
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
