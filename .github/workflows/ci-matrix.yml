@@ -65,6 +65,12 @@ jobs:
       run: |
         go version
         go env
+      
+    - name: Setup Windows tools (Windows only)
+      if: matrix.os == 'windows-latest'
+      run: |
+        # Ensure proper line endings for Windows
+        git config --global core.autocrlf true
 
     - name: Cache Go modules
       uses: actions/cache@v3
@@ -77,6 +83,7 @@ jobs:
           ${{ runner.os }}-go-${{ matrix.go-version }}-
 
     - name: Download dependencies
+      shell: bash
       run: |
         # Handle different module systems
         if go help mod >/dev/null 2>&1; then
@@ -89,6 +96,7 @@ jobs:
         fi
 
     - name: Build
+      shell: bash
       run: |
         # Build with version-specific tags
         if [[ "${{ matrix.go-version }}" =~ ^1\.(6|7|8|9|10)$ ]]; then
@@ -103,6 +111,7 @@ jobs:
         fi
 
     - name: Test
+      shell: bash
       run: |
         # Run tests with appropriate build tags
         if [[ "${{ matrix.go-version }}" =~ ^1\.(6|7|8|9|10)$ ]]; then

@@ -544,8 +544,8 @@ func Test_strutils_HumanFileSize(t *testing.T) {
 	_, err = strproc.HumanFileSize(tmpPath, 2, strutils.CamelCaseDouble)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `stat.IsDir()`")
 
-	// check : os.Open
-	_, err = strproc.HumanFileSize("/hello_word_txt", 2, strutils.CamelCaseDouble)
+	// check : os.Open (cross-platform invalid path)
+	_, err = strproc.HumanFileSize("nonexistent_file_path", 2, strutils.CamelCaseDouble)
 	assert.AssertNotNil(t, err, "Failure : Couldn't check the `os.Open()`")
 
 	// check : not support obj.(complex128)
@@ -1465,8 +1465,8 @@ func Test_strutils_FileMD5Hash(t *testing.T) {
 	str_ok := "64e17a4e1c96bbfce57ab19cd0153e6a"
 	assert.AssertEquals(t, retval, str_ok, "Return Value mismatch.\nExpected: %v\nActual: %v", retval, str_ok)
 
-	// check : os.Open
-	_, err = strproc.FileMD5Hash("./HELLO_GOLANG")
+	// check : os.Open (cross-platform invalid path)
+	_, err = strproc.FileMD5Hash("nonexistent_file")
 	assert.AssertNotNil(t, err, "Couldn't check the `os.Open`\nError : %v", err)
 }
 
