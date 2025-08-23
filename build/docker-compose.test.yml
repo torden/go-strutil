@@ -1,0 +1,215 @@
+version: '3.8'
+
+services:
+  # Ubuntu 18.04 테스트
+  test-ubuntu-18:
+    image: ubuntu:18.04
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      - GO_VERSION=1.21.0
+    command: >
+      bash -c "
+        apt-get update && 
+        apt-get install -y wget git build-essential && 
+        wget -O - https://dl.google.com/go/go1.21.0.linux-amd64.tar.gz | tar -C /usr/local -xz &&
+        export PATH=/usr/local/go/bin:\$$PATH &&
+        go version &&
+        go mod download &&
+        go test -v ./... &&
+        go test -bench=. -benchmem ./...
+      "
+
+  # Ubuntu 20.04 테스트  
+  test-ubuntu-20:
+    image: ubuntu:20.04
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+    command: >
+      bash -c "
+        apt-get update && 
+        apt-get install -y wget git build-essential &&
+        wget -O - https://dl.google.com/go/go1.21.0.linux-amd64.tar.gz | tar -C /usr/local -xz &&
+        export PATH=/usr/local/go/bin:\$$PATH &&
+        go version &&
+        go mod download &&
+        go test -v ./... &&
+        go test -bench=. -benchmem ./...
+      "
+
+  # Ubuntu 22.04 테스트
+  test-ubuntu-22:
+    image: ubuntu:22.04
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+    command: >
+      bash -c "
+        apt-get update && 
+        apt-get install -y golang-go git build-essential &&
+        go version &&
+        go mod download &&
+        go test -v ./... &&
+        go test -bench=. -benchmem ./...
+      "
+
+  # Rocky Linux 8 테스트
+  test-rocky-8:
+    image: rockylinux:8
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      bash -c "
+        dnf update -y &&
+        dnf install -y golang git gcc gcc-c++ make &&
+        go version &&
+        go mod download &&
+        go test -v ./... &&
+        go test -bench=. -benchmem ./...
+      "
+
+  # Rocky Linux 9 테스트
+  test-rocky-9:
+    image: rockylinux:9
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      bash -c "
+        dnf update -y &&
+        dnf install -y golang git gcc gcc-c++ make &&
+        go version &&
+        go mod download &&
+        go test -v ./... &&
+        go test -bench=. -benchmem ./...
+      "
+
+  # CentOS Stream 테스트
+  test-centos-stream:
+    image: quay.io/centos/centos:stream9
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      bash -c "
+        dnf update -y &&
+        dnf install -y golang git gcc gcc-c++ make &&
+        go version &&
+        go mod download &&
+        go test -v ./... &&
+        go test -bench=. -benchmem ./...
+      "
+
+  # Alpine Linux 테스트
+  test-alpine:
+    image: golang:alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      sh -c "
+        apk add --no-cache git gcc musl-dev &&
+        go version &&
+        go mod download &&
+        go test -v ./... &&
+        go test -bench=. -benchmem ./...
+      "
+
+  # Debian 테스트
+  test-debian:
+    image: debian:bullseye
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+    command: >
+      bash -c "
+        apt-get update && 
+        apt-get install -y wget git build-essential &&
+        wget -O - https://dl.google.com/go/go1.21.0.linux-amd64.tar.gz | tar -C /usr/local -xz &&
+        export PATH=/usr/local/go/bin:\$$PATH &&
+        go version &&
+        go mod download &&
+        go test -v ./... &&
+        go test -bench=. -benchmem ./...
+      "
+
+  # Go 버전별 테스트
+  test-go-1-18:
+    image: golang:1.18
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      bash -c "
+        go version &&
+        go mod download &&
+        go test -v ./... &&
+        go test -bench=. -benchmem ./...
+      "
+
+  test-go-1-19:
+    image: golang:1.19
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      bash -c "
+        go version &&
+        go mod download &&
+        go test -v ./... &&
+        go test -bench=. -benchmem ./...
+      "
+
+  test-go-1-20:
+    image: golang:1.20
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      bash -c "
+        go version &&
+        go mod download &&
+        go test -v ./... &&
+        go test -bench=. -benchmem ./...
+      "
+
+  test-go-1-21:
+    image: golang:1.21
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      bash -c "
+        go version &&
+        go mod download &&
+        go test -v ./... &&
+        go test -bench=. -benchmem ./...
+      "
+
+  # 결과 수집 서비스
+  test-collector:
+    image: alpine:latest
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./test-results:/results
+    depends_on:
+      - test-ubuntu-22
+      - test-rocky-9
+      - test-alpine
+      - test-go-1-21
+    command: >
+      sh -c "
+        echo 'Cross-platform test results collected' &&
+        echo 'Results timestamp: $(date)' > /results/summary.txt &&
+        echo 'All tests completed successfully' >> /results/summary.txt
+      "

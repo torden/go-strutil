@@ -1,0 +1,203 @@
+name: Cross-Platform Tests
+
+on:
+  push:
+    branches: [ master, main, develop ]
+  pull_request:
+    branches: [ master, main, develop ]
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }} with Go ${{ matrix.go-version }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        go-version: ['1.6', '1.7', '1.18', '1.19', '1.20', '1.21']
+        
+        # OS별 추가 테스트 환경
+        include:
+          - os: ubuntu-20.04
+            go-version: '1.18'
+          - os: ubuntu-22.04  
+            go-version: '1.20'
+        
+        # 특정 조합 제외 (예: 구버전 Go는 최신 OS에서 지원 안함)
+        exclude:
+          - os: windows-latest
+            go-version: '1.6'
+          - os: macos-latest
+            go-version: '1.6'
+
+    steps:
+    - name: Set up Go ${{ matrix.go-version }}
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Check out code
+      uses: actions/checkout@v4
+
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/go/pkg/mod
+          ~/.cache/go-build
+        key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-${{ matrix.go-version }}-
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Run tests with race detection
+      run: go test -race -v -coverprofile=coverage.out ./...
+      
+    - name: Run benchmarks
+      run: go test -bench=. -benchmem ./...
+      
+    - name: Generate coverage report
+      run: go tool cover -html=coverage.out -o coverage.html
+      
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.out
+        flags: ${{ matrix.os }}-go${{ matrix.go-version }}
+        name: ${{ matrix.os }}-go${{ matrix.go-version }}
+
+  # Rocky Linux 테스트 (Docker 컨테이너 사용)
+  test-rocky:
+    name: Test on Rocky Linux
+    runs-on: ubuntu-latest
+    container:
+      image: rockylinux:9
+      
+    strategy:
+      matrix:
+        go-version: ['1.18', '1.19', '1.20', '1.21']
+        
+    steps:
+    - name: Install dependencies
+      run: |
+        dnf update -y
+        dnf install -y git wget tar gzip
+        
+    - name: Install Go ${{ matrix.go-version }}
+      run: |
+        cd /tmp
+        wget https://golang.org/dl/go${{ matrix.go-version }}.linux-amd64.tar.gz
+        tar -C /usr/local -xzf go${{ matrix.go-version }}.linux-amd64.tar.gz
+        echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+        
+    - name: Check out code
+      uses: actions/checkout@v4
+      
+    - name: Run tests
+      run: |
+        export PATH=$PATH:/usr/local/go/bin
+        go version
+        go mod download
+        go test -v ./...
+
+  # RHEL계열 추가 테스트 (CentOS Stream)
+  test-centos:
+    name: Test on CentOS Stream
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/centos/centos:stream9
+      
+    steps:
+    - name: Install dependencies
+      run: |
+        dnf update -y
+        dnf install -y git golang
+        
+    - name: Check out code
+      uses: actions/checkout@v4
+      
+    - name: Run tests
+      run: |
+        go version
+        go mod download
+        go test -v ./...
+
+  # Windows에서 PowerShell 스크립트 테스트
+  test-windows-powershell:
+    name: Test Windows PowerShell Integration
+    runs-on: windows-latest
+    
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+      
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Test with PowerShell
+      shell: powershell
+      run: |
+        Write-Host "Testing Go strutil on Windows PowerShell"
+        go version
+        go mod download
+        go test -v ./...
+        
+        # Windows 특화 테스트
+        go test -run "Test.*Windows" -v ./...
+
+  # macOS ARM64 테스트
+  test-macos-arm:
+    name: Test on macOS ARM64 (M1/M2)
+    runs-on: macos-latest
+    
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+      
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Check architecture
+      run: |
+        echo "Architecture: $(uname -m)"
+        echo "OS Version: $(sw_vers)"
+        
+    - name: Run tests
+      run: |
+        go version
+        GOARCH=arm64 go test -v ./...
+
+  # 성능 벤치마크 비교 (OS별)
+  benchmark-comparison:
+    name: Benchmark Comparison
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+      
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Run benchmarks
+      run: |
+        go test -bench=. -benchmem -count=5 ./... > benchmark-${{ matrix.os }}.txt
+        
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmarks
+        path: benchmark-${{ matrix.os }}.txt
