@@ -1,0 +1,101 @@
+# Windows-specific Makefile for Go-Strutil
+# Run with: make -f Makefile.windows <target>
+
+PKG_NAME = go-strutil
+MODULE_NAME = github.com/torden/go-strutil
+
+# Windows command equivalents
+POWERSHELL = powershell -NoProfile -Command
+MKDIR = if not exist "$(1)" mkdir "$(1)"
+RM = if exist "$(1)" rmdir /s /q "$(1)"
+CP = copy
+
+# Version information (Windows compatible)
+VERSION = $(shell git describe --tags --always --dirty=-dev 2>nul || echo v0.0.0-dev)
+COMMIT = $(shell git rev-parse --short HEAD 2>nul || echo unknown)
+
+# Go version detection (simplified for Windows)
+GO_VERSION_FULL = $(shell go version)
+HAS_MODULES = 1
+HAS_GENERICS = 1
+BUILD_TAGS = generics
+
+# Directories
+BUILD_DIR = build
+REPORT_DIR = reports
+BENCH_DIR = $(REPORT_DIR)\benchmarks
+COVER_DIR = $(REPORT_DIR)\coverage
+
+# Build flags
+LDFLAGS = -ldflags="-s -w -X '$(MODULE_NAME).Version=$(VERSION)' -X '$(MODULE_NAME).Commit=$(COMMIT)'"
+
+.PHONY: help clean build test bench lint fmt vet deps
+
+help: ## Show this help message
+	@echo Available targets:
+	@echo   build    - Build the project
+	@echo   test     - Run all tests
+	@echo   bench    - Run benchmarks
+	@echo   lint     - Run golangci-lint (if available)
+	@echo   fmt      - Format code
+	@echo   vet      - Run go vet
+	@echo   clean    - Clean build artifacts
+	@echo   deps     - Download dependencies
+
+clean: ## Clean build artifacts
+	@if exist "$(BUILD_DIR)" rmdir /s /q "$(BUILD_DIR)"
+	@if exist "$(REPORT_DIR)" rmdir /s /q "$(REPORT_DIR)"
+	@echo Build artifacts cleaned
+
+deps: ## Download dependencies
+	@echo Downloading dependencies...
+	@go mod download
+	@go mod verify
+
+fmt: ## Format Go code
+	@echo Formatting code...
+	@go fmt ./...
+	@echo Code formatted
+
+vet: ## Run go vet
+	@echo Running go vet...
+	@go vet ./...
+	@echo Vet check passed
+
+build: deps ## Build the project
+	@echo Building project...
+	@if not exist "$(BUILD_DIR)" mkdir "$(BUILD_DIR)"
+	@go build -tags="$(BUILD_TAGS)" $(LDFLAGS) -v ./...
+	@echo Build completed
+
+test: deps ## Run all tests
+	@echo Running tests...
+	@go test -tags="$(BUILD_TAGS)" -v ./...
+	@echo All tests passed
+
+test-cover: deps ## Run tests with coverage
+	@echo Running tests with coverage...
+	@if not exist "$(COVER_DIR)" mkdir "$(COVER_DIR)"
+	@go test -tags="$(BUILD_TAGS)" -coverprofile="$(COVER_DIR)\coverage.out" -covermode=atomic ./...
+	@go tool cover -html="$(COVER_DIR)\coverage.out" -o "$(COVER_DIR)\coverage.html"
+	@echo Coverage report generated: $(COVER_DIR)\coverage.html
+
+bench: deps ## Run benchmarks
+	@echo Running benchmarks...
+	@if not exist "$(BENCH_DIR)" mkdir "$(BENCH_DIR)"
+	@go test -tags="$(BUILD_TAGS)" -bench=. -benchmem ./... > "$(BENCH_DIR)\bench-windows.txt"
+	@echo Benchmarks completed: $(BENCH_DIR)\bench-windows.txt
+
+lint: ## Run golangci-lint if available
+	@echo Running linter...
+	@where golangci-lint >nul 2>&1 && golangci-lint run || echo golangci-lint not found, skipping
+
+all: clean fmt vet build test ## Run all main tasks
+
+windows-build: ## Windows-specific build with all checks
+	@echo Starting Windows build process...
+	@$(MAKE) -f Makefile.windows fmt
+	@$(MAKE) -f Makefile.windows vet
+	@$(MAKE) -f Makefile.windows build
+	@$(MAKE) -f Makefile.windows test
+	@echo Windows build completed successfully
