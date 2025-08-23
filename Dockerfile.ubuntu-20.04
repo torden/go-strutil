@@ -1,0 +1,19 @@
+FROM ubuntu:20.04
+
+RUN apt-get update && apt-get install -y \
+    golang-go \
+    git \
+    wget \
+    curl \
+    build-essential
+
+# Go 최신 버전 설치 (시스템 Go가 오래된 경우)
+RUN if [ "20.04" = "18.04" ] || [ "20.04" = "20.04" ]; then \
+        wget -O - https://dl.google.com/go/go1.21.0.linux-amd64.tar.gz | tar -C /usr/local -xz && \
+        echo 'export PATH=/usr/local/go/bin:$PATH' >> /etc/profile; \
+    fi
+
+WORKDIR /app
+COPY . .
+
+CMD ["bash", "-c", "source /etc/profile && go version && go mod download && go test -v -race ./... && go test -bench=. -benchmem ./..."]
