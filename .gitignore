@@ -9,3 +9,4 @@
 report/
 vendor/
 tt.go
+*.sh
