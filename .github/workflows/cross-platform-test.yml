@@ -44,9 +44,10 @@ jobs:
         path: |
           ~/go/pkg/mod
           ~/.cache/go-build
-        key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+        key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('go.mod', 'go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-${{ matrix.go-version }}-
+          ${{ runner.os }}-go-
 
     - name: Download dependencies
       run: go mod download
@@ -101,24 +102,36 @@ jobs:
         go mod download
         go test -v ./tests/
 
-  # RHEL계열 추가 테스트 (CentOS Stream)
-  test-centos:
-    name: Test on CentOS Stream
+  # RHEL계열 추가 테스트 (AlmaLinux)
+  test-almalinux:
+    name: Test on AlmaLinux
     runs-on: ubuntu-latest
     container:
-      image: quay.io/centos/centos:stream9
+      image: almalinux:9
       
+    strategy:
+      matrix:
+        go-version: ['1.20', '1.21']
+        
     steps:
     - name: Install dependencies
       run: |
         dnf update -y
-        dnf install -y git golang
+        dnf install -y git wget tar gzip
+        
+    - name: Install Go ${{ matrix.go-version }}
+      run: |
+        cd /tmp
+        wget https://golang.org/dl/go${{ matrix.go-version }}.linux-amd64.tar.gz
+        tar -C /usr/local -xzf go${{ matrix.go-version }}.linux-amd64.tar.gz
+        echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
         
     - name: Check out code
       uses: actions/checkout@v4
       
     - name: Run tests
       run: |
+        export PATH=$PATH:/usr/local/go/bin
         go version
         go mod download
         go test -v ./tests/
