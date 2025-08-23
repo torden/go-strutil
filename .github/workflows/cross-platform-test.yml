@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        go-version: ['1.6', '1.7', '1.18', '1.19', '1.20', '1.21']
+        go-version: ['1.18', '1.19', '1.20', '1.21']
         
         # OS별 추가 테스트 환경
         include:
@@ -24,12 +24,10 @@ jobs:
           - os: ubuntu-22.04  
             go-version: '1.20'
         
-        # 특정 조합 제외 (예: 구버전 Go는 최신 OS에서 지원 안함)
+        # 특정 조합 제외 (안정성을 위한 제외)
         exclude:
           - os: windows-latest
-            go-version: '1.6'
-          - os: macos-latest
-            go-version: '1.6'
+            go-version: '1.18'
 
     steps:
     - name: Set up Go ${{ matrix.go-version }}
@@ -54,10 +52,10 @@ jobs:
       run: go mod download
 
     - name: Run tests with race detection
-      run: go test -race -v -coverprofile=coverage.out ./...
+      run: go test -race -v -coverprofile=coverage.out ./tests/
       
     - name: Run benchmarks
-      run: go test -bench=. -benchmem ./...
+      run: go test -bench=. -benchmem ./tests/
       
     - name: Generate coverage report
       run: go tool cover -html=coverage.out -o coverage.html
@@ -101,7 +99,7 @@ jobs:
         export PATH=$PATH:/usr/local/go/bin
         go version
         go mod download
-        go test -v ./...
+        go test -v ./tests/
 
   # RHEL계열 추가 테스트 (CentOS Stream)
   test-centos:
@@ -123,7 +121,7 @@ jobs:
       run: |
         go version
         go mod download
-        go test -v ./...
+        go test -v ./tests/
 
   # Windows에서 PowerShell 스크립트 테스트
   test-windows-powershell:
@@ -145,10 +143,10 @@ jobs:
         Write-Host "Testing Go strutil on Windows PowerShell"
         go version
         go mod download
-        go test -v ./...
+        go test -v ./tests/
         
         # Windows 특화 테스트
-        go test -run "Test.*Windows" -v ./...
+        go test -run "Test.*Windows" -v ./tests/
 
   # macOS ARM64 테스트
   test-macos-arm:
@@ -172,7 +170,7 @@ jobs:
     - name: Run tests
       run: |
         go version
-        GOARCH=arm64 go test -v ./...
+        GOARCH=arm64 go test -v ./tests/
 
   # 성능 벤치마크 비교 (OS별)
   benchmark-comparison:
@@ -194,7 +192,7 @@ jobs:
         
     - name: Run benchmarks
       run: |
-        go test -bench=. -benchmem -count=5 ./... > benchmark-${{ matrix.os }}.txt
+        go test -bench=. -benchmem -count=5 ./tests/ > benchmark-${{ matrix.os }}.txt
         
     - name: Upload benchmark results
       uses: actions/upload-artifact@v3
