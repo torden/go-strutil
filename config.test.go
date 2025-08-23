@@ -1,4 +1,5 @@
 //go:build unittest
+// +build unittest
 
 package strutils
 

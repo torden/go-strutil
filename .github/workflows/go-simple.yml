@@ -1,0 +1,128 @@
+name: Go Build and Test
+
+on:
+  push:
+    branches: [ master, main, develop, features/* ]
+  pull_request:
+    branches: [ master, main, develop ]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version: ['1.18', '1.19', '1.20', '1.21', '1.22', '1.23']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go ${{ matrix.go-version }}
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/go/pkg/mod
+          ~/.cache/go-build
+        key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum', '**/go.mod') }}-v2
+        restore-keys: |
+          ${{ runner.os }}-go-${{ matrix.go-version }}-v2
+          ${{ runner.os }}-go-${{ matrix.go-version }}-
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Verify dependencies
+      run: go mod verify
+
+    - name: Format check
+      if: matrix.os == 'ubuntu-latest'
+      continue-on-error: true
+      run: |
+        echo "Checking code formatting..."
+        if [ -n "$(gofmt -l .)" ]; then
+          echo "Go code formatting issues found:"
+          gofmt -d .
+          echo "Warning: Code formatting issues detected but continuing..."
+        else
+          echo "Code formatting is correct"
+        fi
+
+    - name: Vet
+      run: go vet ./...
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
+
+    - name: Test with race detector
+      if: matrix.os == 'ubuntu-latest'
+      run: go test -race -v ./...
+
+    - name: Benchmark
+      if: matrix.os == 'ubuntu-latest' && matrix.go-version == '1.21'
+      run: go test -bench=. -benchmem ./...
+
+  build-legacy:
+    # Test essential legacy Go versions on multiple platforms
+    strategy:
+      matrix:
+        go-version: ['1.13', '1.14', '1.15', '1.16', '1.17']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        exclude:
+          # Exclude very old versions on Windows and macOS for stability
+          - go-version: '1.13'
+            os: windows-latest
+          - go-version: '1.14'
+            os: windows-latest
+          - go-version: '1.13'
+            os: macos-latest
+          - go-version: '1.14'
+            os: macos-latest
+          # Exclude Go 1.15-1.17 on macOS due to arm64 architecture unavailability
+          - go-version: '1.15'
+            os: macos-latest
+          - go-version: '1.16'
+            os: macos-latest
+          - go-version: '1.17'
+            os: macos-latest
+    
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go ${{ matrix.go-version }}
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test (basic only)
+      shell: bash
+      run: |
+        # Run basic compatibility tests for legacy versions
+        if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+          echo "Running Windows legacy tests"
+          go test -run Test_VersionCompatibility_Legacy -short -v ./...
+        elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+          echo "Running macOS legacy tests"
+          go test -run Test_VersionCompatibility_Legacy -short -v ./...
+        else
+          echo "Running Linux legacy tests"
+          go test -run Test_VersionCompatibility_Legacy -v ./...
+        fi

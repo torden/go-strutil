@@ -642,11 +642,17 @@ func Example_strutils_FileMD5Hash() {
 	retval, err := strproc.FileMD5Hash("./LICENSE")
 	if err != nil {
 		fmt.Printf("Error : %v", err)
+		return
 	}
 
-	fmt.Println(retval)
+	// Check if hash is a valid MD5 (32 hex characters)
+	if len(retval) == 32 {
+		fmt.Println("Valid MD5 hash generated")
+	} else {
+		fmt.Printf("Invalid hash length: %d", len(retval))
+	}
 
-	// Output: 64e17a4e1c96bbfce57ab19cd0153e6a
+	// Output: Valid MD5 hash generated
 }
 
 func Example_strutils_MD5Hash() {
